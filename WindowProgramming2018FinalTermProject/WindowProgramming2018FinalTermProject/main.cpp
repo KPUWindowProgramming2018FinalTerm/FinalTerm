@@ -56,6 +56,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 
 		EndPaint(hWnd, &ps);
 		break;
+	case WM_KEYDOWN:
+		MessageBox(hWnd, L"«ı≤Û «ı≤Û", L"±∏∑°««¿Ã¿Õ", NULL);
+		break;
 
 	case WM_DESTROY: //Destroy ∏ﬁºº¡ˆ ∫“∑»¿ª ∂ß
 		PostQuitMessage(0); //√¢ ¡æ∑·
