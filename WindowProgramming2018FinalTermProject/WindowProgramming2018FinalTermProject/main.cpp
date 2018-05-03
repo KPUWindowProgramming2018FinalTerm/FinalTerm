@@ -49,6 +49,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 	int x = 0, y = 0;
 	switch (iMessage)
 	{
+	case WM_CREATE:
+		break;
 	case WM_PAINT: //Paint 메세지 불렸을 때
 		hDC = BeginPaint(hWnd, &ps);
 
