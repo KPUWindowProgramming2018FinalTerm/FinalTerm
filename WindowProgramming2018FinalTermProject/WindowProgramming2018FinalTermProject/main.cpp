@@ -3,8 +3,13 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define windowX 700
-#define windowY 700
+//윈도우 창의 크기입니다. 메뉴를 고려하여 Y축을 20픽셀 증가시켰습니다.
+#define windowX 1920
+#define windowY 1100
+
+//게임이 나오는 스크린 창 입니다.
+#define screenX 1920
+#define screenY 1080
 
 HINSTANCE g_hInst;
 LPCTSTR lpszClass = _T("Window Class Name");
