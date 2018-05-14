@@ -140,6 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="USERINTERFACE.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe_HAEIN.txt" />
