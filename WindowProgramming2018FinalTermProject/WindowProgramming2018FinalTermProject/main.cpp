@@ -2,6 +2,7 @@
 #include <tchar.h>
 #include <stdlib.h>
 #include <time.h>
+#include "USERINTERFACE.h"
 
 //윈도우 창의 크기입니다. 메뉴를 고려하여 Y축을 20픽셀 증가시켰습니다.
 #define windowX 1920
@@ -15,6 +16,8 @@ HINSTANCE g_hInst;
 LPCTSTR lpszClass = _T("Window Class Name");
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam);
+
+USER_INTERFACE UI;
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpszCmdParam, int nCmdShow) //메인
 {
@@ -59,17 +62,146 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 	case WM_PAINT: //Paint 메세지 불렸을 때
 		hDC = BeginPaint(hWnd, &ps);
 
+		switch (UI.returnScene())
+		{
+		case TITLE:
+			
+			break;
+		case MAIN_LOBBY:
+			break;
+		case CONTROL_TIP:
+			break;
+		case SELECT_MODE:
+			break;
+		case SELECT_CHAR:
+			break;
+		case INGAME:
+			break;
+		case SCOREBOARD:
+			break;
+		default:
+			if (MessageBox(hWnd, _T("오류입니다. 초기위치로 돌아가시겠습니까?\n만약 NO를 누르면 게임이 종료됩니다."), _T("오류"), MB_YESNO)) {
+				UI.ALLReset();
+			}
+			else {
+				PostQuitMessage(0);
+			}
+			break;
+		}
+		
+
+
+
 		//TextOut 텍스트 출력 함수
 
 		EndPaint(hWnd, &ps);
 		break;
+
 	case WM_KEYDOWN:
-		MessageBox(hWnd, L"혁뀨 혁뀨", L"구래피이익", NULL);
+		switch (UI.returnScene())
+		{
+		case TITLE:
+			//아무키나 입력하면 넘어감
+			UI.nextScene();
+			break;
+
+		case MAIN_LOBBY:
+
+			break;
+
+		case CONTROL_TIP:
+
+			break;
+
+		case SELECT_MODE:
+
+			break;
+
+		case SELECT_CHAR:
+
+			break;
+
+		case INGAME:
+
+			break;
+
+		case SCOREBOARD:
+
+			break;
+		}
 		break;
 
 	case WM_DESTROY: //Destroy 메세지 불렸을 때
 		PostQuitMessage(0); //창 종료
 		return 0;
+	
+	case WM_MOUSEMOVE:
+		switch (UI.returnScene())
+		{
+		
+		case MAIN_LOBBY:
+
+			break;
+
+		case CONTROL_TIP:
+
+			break;
+
+		case SELECT_MODE:
+
+			break;
+
+		case SELECT_CHAR:
+
+			break;
+
+		case INGAME:
+
+			break;
+
+		case SCOREBOARD:
+
+			break;
+		}
+		break;
+	case WM_LBUTTONDOWN:
+		switch (UI.returnScene())
+		{
+			
+		case TITLE:
+			//클릭해도 넘어감
+			UI.nextScene();
+			break;
+
+		case MAIN_LOBBY:
+
+			break;
+
+		case CONTROL_TIP:
+
+			break;
+
+		case SELECT_MODE:
+
+			break;
+
+		case SELECT_CHAR:
+
+			break;
+
+		case INGAME:
+
+			break;
+
+		case SCOREBOARD:
+
+			break;
+		}
+
+		break;
+	case WM_RBUTTONDOWN:
+
+		break;
 	}
 	return(DefWindowProc(hWnd, iMessage, wParam, lParam)); //처리되지 않은 메세지는 여기서 처리
 }
