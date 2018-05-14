@@ -36,8 +36,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpszCmdPar
 	WndClass.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
 	RegisterClassEx(&WndClass);
 	hWnd = CreateWindow(lpszClass, L"window program", WS_OVERLAPPEDWINDOW, 0, 0, windowX, windowY, NULL, (HMENU)NULL, hInstance, NULL);
-
-	ShowWindow(hWnd, nCmdShow);
+	//전체화면 
+	ShowWindow(hWnd, SW_MAXIMIZE);
+	//ShowWindow(hWnd, nCmdShow);
 	UpdateWindow(hWnd);
 
 	while (GetMessage(&Message, 0, 0, 0))
