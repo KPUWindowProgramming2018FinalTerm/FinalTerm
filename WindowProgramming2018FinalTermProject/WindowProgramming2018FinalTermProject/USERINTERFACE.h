@@ -14,29 +14,16 @@ enum SceneNAME {
 	TITLE = 0, MAIN_LOBBY = 1, CONTROL_TIP = 2, SELECT_MODE = 3, SELECT_CHAR = 4, INGAME = 5, SCOREBOARD = 6
 };
 
-<<<<<<< HEAD
-=======
-
-
-
->>>>>>> 98f02b041e4af96e2b53d80c9a41b7df7c8d9984
 
 
 class USER_INTERFACE {
 private:
 	//타이틀과 관련된 데이터 필드입니다.
-<<<<<<< HEAD
 	SceneNAME Scene = TITLE;
 
 	bool gameState = false;
-=======
 	//초기 값으로는 타이틀 신을 가집니다.
 	SceneNAME now = TITLE;
-
-	//게임의 상태를 나타냅니다.
-	bool gameState = false;
-
->>>>>>> 98f02b041e4af96e2b53d80c9a41b7df7c8d9984
 
 
 
