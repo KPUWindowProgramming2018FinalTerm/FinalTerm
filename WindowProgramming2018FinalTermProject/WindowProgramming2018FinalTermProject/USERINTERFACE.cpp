@@ -23,7 +23,6 @@ void USER_INTERFACE::nextScene() {
 	}
 }
 
-<<<<<<< HEAD
 //UI가 클릭 되었는지 체크합니다.
 bool USER_INTERFACE::checkInside(int x, int y, RECT rect) {
 	if (rect.top<y&&rect.bottom>y&&rect.left<x&&rect.right>y) {
@@ -34,6 +33,6 @@ bool USER_INTERFACE::checkInside(int x, int y, RECT rect) {
 	}
 }
 
-=======
->>>>>>> 98f02b041e4af96e2b53d80c9a41b7df7c8d9984
+
+
 
