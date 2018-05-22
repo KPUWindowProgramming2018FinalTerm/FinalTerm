@@ -32,10 +32,3 @@ bool USER_INTERFACE::checkInside(int x, int y, RECT rect) {
 		return false;
 	}
 }
-
-<<<<<<< HEAD
-
-
-
-=======
->>>>>>> 04af0f603ae5780de7277712e4773f2b30d52294

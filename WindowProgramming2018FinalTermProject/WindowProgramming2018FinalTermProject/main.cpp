@@ -4,10 +4,11 @@
 #include <time.h>
 #include "USERINTERFACE.h"
 
-//윈도우 창의 크기입니다. 메뉴를 고려하여 Y축을 20픽셀 증가시켰습니다.
-#define windowX 1920
-#define windowY 1100
+//윈도우 창의 크기입니다.
+int windowX = ::GetSystemMetrics(SM_CXSCREEN); //모니터 x길이
+int windowY = ::GetSystemMetrics(SM_CYSCREEN); //모니터 y길이
 
+RECT clientRECT;
 //게임이 나오는 스크린 창 입니다.
 #define screenX 1920
 #define screenY 1080
@@ -59,10 +60,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 	switch (iMessage)
 	{
 	case WM_CREATE:
+		GetClientRect(hWnd, &clientRECT);
 		break;
 	case WM_PAINT: //Paint 메세지 불렸을 때
 		hDC = BeginPaint(hWnd, &ps);
 
+		Rectangle(hDC, clientRECT.left, clientRECT.top, clientRECT.right, clientRECT.bottom);
 		switch (UI.returnScene())
 		{
 		case TITLE:
