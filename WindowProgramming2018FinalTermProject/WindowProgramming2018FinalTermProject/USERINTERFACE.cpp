@@ -1,7 +1,17 @@
 #include "USERINTERFACE.h"
 
-//기본상태에서 다음 씬을 소환합니다.
-void USER_INTERFACE::nextScene() {
+SceneNAME USER_INTERFACE::returnScene() // 현재 씬 네임을 반환
+{
+	return Scene;
+}
+
+void USER_INTERFACE::ALLReset()
+{
+
+}
+
+void USER_INTERFACE::nextScene() //다음 씬을 불러온다
+{
 	switch (USER_INTERFACE::Scene){
 	case TITLE:
 		USER_INTERFACE::Scene = MAIN_LOBBY;
@@ -11,6 +21,7 @@ void USER_INTERFACE::nextScene() {
 		break;
 	case SELECT_MODE:
 		USER_INTERFACE::Scene = SELECT_CHAR;
+		break;
 	case SELECT_CHAR:
 		USER_INTERFACE::Scene = INGAME;
 		break;
