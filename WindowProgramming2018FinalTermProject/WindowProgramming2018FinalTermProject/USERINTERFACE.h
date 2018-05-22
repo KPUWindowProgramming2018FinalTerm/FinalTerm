@@ -25,14 +25,10 @@ private:
 
 public:
 	//현재 신을 리턴합니다.
-	SceneNAME returnScene() {
-		return Scene;
-	}
+	SceneNAME returnScene();
 	
 	//신의 정보를 모두 초기화 합니다.
-	void ALLReset() {
-
-	}
+	void ALLReset();
 
 	//기본상태에서 다음 씬을 소환합니다.
 	void nextScene();

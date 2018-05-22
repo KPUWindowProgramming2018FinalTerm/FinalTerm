@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include "USERINTERFACE.h"
+#include "Ingame.h"
 
 //윈도우 창의 크기입니다.
 int windowX = ::GetSystemMetrics(SM_CXSCREEN); //모니터 x길이
@@ -19,7 +20,7 @@ LPCTSTR lpszClass = _T("Window Class Name");
 LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam);
 
 USER_INTERFACE UI;
-
+HDC hDC;
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpszCmdParam, int nCmdShow) //메인
 {
 	HWND hWnd;
@@ -55,33 +56,41 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpszCmdPar
 LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 {
 	PAINTSTRUCT ps;
-	HDC hDC;
+
 	int x = 0, y = 0;
 	switch (iMessage)
 	{
 	case WM_CREATE:
 		GetClientRect(hWnd, &clientRECT);
+
 		break;
 	case WM_PAINT: //Paint 메세지 불렸을 때
 		hDC = BeginPaint(hWnd, &ps);
 
 		Rectangle(hDC, clientRECT.left, clientRECT.top, clientRECT.right, clientRECT.bottom);
+		
 		switch (UI.returnScene())
 		{
 		case TITLE:
-			
+
 			break;
 		case MAIN_LOBBY:
+
 			break;
 		case CONTROL_TIP:
+
 			break;
 		case SELECT_MODE:
+
 			break;
 		case SELECT_CHAR:
+
 			break;
 		case INGAME:
+			
 			break;
 		case SCOREBOARD:
+
 			break;
 		default:
 			if (MessageBox(hWnd, _T("오류입니다. 초기위치로 돌아가시겠습니까?\n만약 NO를 누르면 게임이 종료됩니다."), _T("오류"), MB_YESNO)) {
@@ -92,9 +101,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 			}
 			break;
 		}
-		
-
-
 
 		//TextOut 텍스트 출력 함수
 
@@ -102,6 +108,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 		break;
 
 	case WM_KEYDOWN:
+		InvalidateRect(hWnd, NULL, true);
 		switch (UI.returnScene())
 		{
 		case TITLE:
@@ -126,7 +133,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 			break;
 
 		case INGAME:
-
+			IngameGetKey(wParam);
 			break;
 
 		case SCOREBOARD:
@@ -134,7 +141,40 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 			break;
 		}
 		break;
+	case WM_CHAR:
+		InvalidateRect(hWnd, NULL, true);
+		switch (UI.returnScene())
+		{
+		case TITLE:
+			//아무키나 입력하면 넘어감
+			UI.nextScene();
+			break;
 
+		case MAIN_LOBBY:
+
+			break;
+
+		case CONTROL_TIP:
+
+			break;
+
+		case SELECT_MODE:
+
+			break;
+
+		case SELECT_CHAR:
+
+			break;
+
+		case INGAME:
+			IngameGetChar(wParam);
+			break;
+
+		case SCOREBOARD:
+
+			break;
+		}
+		break;
 	case WM_DESTROY: //Destroy 메세지 불렸을 때
 		PostQuitMessage(0); //창 종료
 		return 0;

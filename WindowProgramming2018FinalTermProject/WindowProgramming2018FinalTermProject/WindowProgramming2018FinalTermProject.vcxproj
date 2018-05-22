@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Ingame.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="USERINTERFACE.cpp" />
   </ItemGroup>
@@ -146,6 +147,7 @@
     <Text Include="ReadMe_HAEIN.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Ingame.h" />
     <ClInclude Include="USERINTERFACE.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
