@@ -2,6 +2,7 @@
 #include <tchar.h>
 #include <stdlib.h>
 #include <time.h>
+#include <atlimage.h>
 #include "USERINTERFACE.h"
 #include "Ingame.h"
 
@@ -53,41 +54,59 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpszCmdPar
 	}
 	return Message.wParam;
 }
+
+CImage sample; // 이미지를 관리하는 클래스.
+
 LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 {
 	PAINTSTRUCT ps;
+	static WCHAR text[100];
 
-	int x = 0, y = 0;
 	switch (iMessage)
 	{
 	case WM_CREATE:
 		GetClientRect(hWnd, &clientRECT);
-
+		
+		
+		sample.Load(L"Sample\\Laharl_alphaTest.png"); //이미지 연결. 전용 DC와 Bitmap이 연결되어있는 상태.
 		break;
 	case WM_PAINT: //Paint 메세지 불렸을 때
 		hDC = BeginPaint(hWnd, &ps);
 
-		Rectangle(hDC, clientRECT.left, clientRECT.top, clientRECT.right, clientRECT.bottom);
-		
+		//Rectangle(hDC, clientRECT.left, clientRECT.top, clientRECT.right, clientRECT.bottom);
+
+		//sample.Draw(hDC, clientRECT);																//Cimage를 잘 못그릴때는 Draw해주면 알아서 그려준다
+
 		switch (UI.returnScene())
 		{
 		case TITLE:
-
+			wsprintf(text, L"%d", UI.returnScene());
+			TextOut(hDC, clientRECT.right / 2, clientRECT.bottom / 2, text, 1);
 			break;
 		case MAIN_LOBBY:
-
+			wsprintf(text, L"%d", UI.returnScene());
+			TextOut(hDC, clientRECT.right / 2, clientRECT.bottom / 2, text, 1);
 			break;
 		case CONTROL_TIP:
-
+			wsprintf(text, L"%d", UI.returnScene());
+			TextOut(hDC, clientRECT.right / 2, clientRECT.bottom / 2, text, 1);
 			break;
 		case SELECT_MODE:
-
+			wsprintf(text, L"%d", UI.returnScene());
+			TextOut(hDC, clientRECT.right / 2, clientRECT.bottom / 2, text, 1);
 			break;
 		case SELECT_CHAR:
-
+			wsprintf(text, L"%d", UI.returnScene());
+			TextOut(hDC, clientRECT.right / 2, clientRECT.bottom / 2, text, 1);
 			break;
 		case INGAME:
+		{
+			RECT p1, p2;
+
 			
+			Rectangle(hDC, clientRECT.left, clientRECT.top, clientRECT.right, clientRECT.bottom);
+
+		}
 			break;
 		case SCOREBOARD:
 
@@ -117,19 +136,19 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 			break;
 
 		case MAIN_LOBBY:
-
+			UI.nextScene();
 			break;
 
 		case CONTROL_TIP:
-
+			UI.nextScene();
 			break;
 
 		case SELECT_MODE:
-
+			UI.nextScene();
 			break;
 
 		case SELECT_CHAR:
-
+			UI.nextScene();
 			break;
 
 		case INGAME:
@@ -137,7 +156,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 			break;
 
 		case SCOREBOARD:
-
+			UI.nextScene();
 			break;
 		}
 		break;
