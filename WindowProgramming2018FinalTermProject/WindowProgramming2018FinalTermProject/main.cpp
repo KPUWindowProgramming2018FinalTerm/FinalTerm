@@ -57,10 +57,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpszCmdPar
 
 CImage sample; // 이미지를 관리하는 클래스.
 
+CImage C_TITLE;
+CImage C_MainLobby_BG, C_MainLobby_START[2], C_MainLobby_TIP[2], C_MainLobby_EXIT[2];
+CImage C_TIP;
+
 LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 {
 	PAINTSTRUCT ps;
 	static WCHAR text[100];
+	
+
 
 	switch (iMessage)
 	{
@@ -69,6 +75,21 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 		
 		
 		sample.Load(L"Sample\\Laharl_alphaTest.png"); //이미지 연결. 전용 DC와 Bitmap이 연결되어있는 상태.
+		//타이틀 이미지를 로드합시다.
+		C_TITLE.Load(L"Graphic\\UI\\Title.jpg");
+		
+		//메인 로비 이미지를 로드 합시다.
+		C_MainLobby_BG.Load(L"Graphic\\UI\\MainLobby_BG.jpg");
+		C_MainLobby_START[0].Load(L"Graphic\\UI\\START.png");
+		C_MainLobby_START[1].Load(L"Graphic\\UI\\START2.png");
+
+		C_MainLobby_TIP[0].Load(L"Graphic\\UI\\TIP.png");
+		C_MainLobby_TIP[1].Load(L"Graphic\\UI\\TIP2.png");
+
+		C_MainLobby_EXIT[0].Load(L"Graphic\\UI\\EXIT.png");
+		C_MainLobby_EXIT[1].Load(L"Graphic\\UI\\EXIT2.png");
+
+		C_TIP.Load(L"Graphic\\UI\\HINT.jpg");
 		break;
 	case WM_PAINT: //Paint 메세지 불렸을 때
 		hDC = BeginPaint(hWnd, &ps);
@@ -77,19 +98,34 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 
 		//sample.Draw(hDC, clientRECT);																//Cimage를 잘 못그릴때는 Draw해주면 알아서 그려준다
 
+
 		switch (UI.returnScene())
 		{
 		case TITLE:
-			wsprintf(text, L"%d", UI.returnScene());
-			TextOut(hDC, clientRECT.right / 2, clientRECT.bottom / 2, text, 1);
+			C_TITLE.Draw(hDC, clientRECT);
 			break;
 		case MAIN_LOBBY:
-			wsprintf(text, L"%d", UI.returnScene());
-			TextOut(hDC, clientRECT.right / 2, clientRECT.bottom / 2, text, 1);
+			C_MainLobby_BG.Draw(hDC, clientRECT);
+			C_MainLobby_TIP[0].Draw(hDC,UI.GetRect(TIP));
+			C_MainLobby_START[0].Draw(hDC, UI.GetRect(START));
+			C_MainLobby_EXIT[0].Draw(hDC, UI.GetRect(EXIT));
+
+			switch (UI.ReturnChoice()) {
+			case TIP:
+				C_MainLobby_TIP[1].Draw(hDC, UI.GetRect(TIP));
+				break;
+			case START:
+				C_MainLobby_START[1].Draw(hDC, UI.GetRect(START));
+				break;
+			case EXIT:
+				C_MainLobby_EXIT[1].Draw(hDC, UI.GetRect(EXIT));
+				break;
+			}
+
+
 			break;
 		case CONTROL_TIP:
-			wsprintf(text, L"%d", UI.returnScene());
-			TextOut(hDC, clientRECT.right / 2, clientRECT.bottom / 2, text, 1);
+			C_TIP.Draw(hDC, clientRECT);
 			break;
 		case SELECT_MODE:
 			wsprintf(text, L"%d", UI.returnScene());
@@ -140,7 +176,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 			break;
 
 		case CONTROL_TIP:
-			UI.nextScene();
+			UI.CallTip();
 			break;
 
 		case SELECT_MODE:
