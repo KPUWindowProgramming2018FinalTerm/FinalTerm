@@ -159,7 +159,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 			PlayerMemBitmap = CreateCompatibleBitmap(hDC, 6400, 6400);
 			SelectObject(PlayerMemDC, (HBITMAP)PlayerMemBitmap);
 
-			if (Tileset == FALSE)
+			if (Tileset == FALSE) // 초기화하는 부분
 			{
 				for (int i = 0; i < 100; i++)
 				{
@@ -248,7 +248,21 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 			break;
 
 		case INGAME:
-			IngameGetKey(wParam);
+			switch (wParam)
+			{
+			case VK_LEFT:
+				player2.x -= 10;
+				break;
+			case VK_UP:
+				player2.y -= 10;
+				break;
+			case VK_RIGHT:
+				player2.x += 10;
+				break;
+			case VK_DOWN:
+				player2.y += 10;
+				break;
+			}
 			break;
 
 		case SCOREBOARD:
@@ -285,30 +299,19 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 		
 			switch (wParam)
 			{
-			case 'a':
+			case 'f':
 				player1.x -= 10;
 				break;
-			case 'w':
+			case 't':
 				player1.y -= 10;
 				break;
-			case 'd':
+			case 'h':
 				player1.x += 10;
 				break;
-			case 's':
+			case 'g':
 				player1.y += 10;
 				break;
-			case 'j':
-				player2.x -= 10;
-				break;
-			case 'i':
-				player2.y -= 10;
-				break;
-			case 'l':
-				player2.x += 10;
-				break;
-			case 'k':
-				player2.y += 10;
-				break;
+			
 			}
 		case SCOREBOARD:
 
