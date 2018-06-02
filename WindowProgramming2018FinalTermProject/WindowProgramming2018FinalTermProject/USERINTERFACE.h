@@ -27,7 +27,8 @@ class USER_INTERFACE {
 private:
 	//타이틀과 관련된 데이터 필드입니다.
 	//초기 값으로는 타이틀 신을 가집니다.
-	SceneNAME Scene = TITLE;
+	//SceneNAME Scene = TITLE;
+	SceneNAME Scene = INGAME;
 	bool gameState = false;
 
 	RECT R_MainLobby[MainLobbyCount];

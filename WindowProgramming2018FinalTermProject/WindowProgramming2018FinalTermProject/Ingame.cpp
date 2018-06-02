@@ -1,5 +1,5 @@
 #include <Windows.h>
-
+#include "Ingame.h"
 void IngameGetKey(HDC hDC, WPARAM wParam)
 {
 	switch (wParam)

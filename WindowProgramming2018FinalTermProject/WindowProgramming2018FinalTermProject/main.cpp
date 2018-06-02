@@ -59,15 +59,15 @@ CImage sample; // 이미지를 관리하는 클래스.
 
 CImage C_TITLE;
 CImage C_MainLobby_BG, C_MainLobby_START[2], C_MainLobby_TIP[2], C_MainLobby_EXIT[2];
+CImage C_Tile[8];
 CImage C_TIP;
+
+PlayerData player1, player2;
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 {
 	PAINTSTRUCT ps;
 	static WCHAR text[100];
-	
-
-
 	switch (iMessage)
 	{
 	case WM_CREATE:
@@ -85,6 +85,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 
 		C_MainLobby_TIP[0].Load(L"Graphic\\UI\\TIP.png");
 		C_MainLobby_TIP[1].Load(L"Graphic\\UI\\TIP2.png");
+
+		C_Tile[0].Load(L"Graphic\\Tile\\Tile1.jpg");
 
 		C_MainLobby_EXIT[0].Load(L"Graphic\\UI\\EXIT.png");
 		C_MainLobby_EXIT[1].Load(L"Graphic\\UI\\EXIT2.png");
@@ -122,7 +124,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 				break;
 			}
 
-
 			break;
 		case CONTROL_TIP:
 			C_TIP.Draw(hDC, clientRECT);
@@ -137,11 +138,70 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 			break;
 		case INGAME:
 		{
-			RECT p1, p2;
-
 			
-			Rectangle(hDC, clientRECT.left, clientRECT.top, clientRECT.right, clientRECT.bottom);
+			//----------------------------------인게임 초기화
+			RECT p1, p2;
+			static HDC TotalMemDC,TileMemDC,PlayerMemDC;
+			static HBITMAP TotalMemBitmap,TileMemBitmap,PlayerMemBitmap;
+			static BOOL Tileset = FALSE;
 
+			int Tileindex[100][100];
+			p1.top = 0; p1.left = 0; p1.right = clientRECT.right / 2; p1.bottom = clientRECT.bottom;
+			p2.top = 0; p2.left = clientRECT.right / 2; p2.right = clientRECT.right; p2.bottom = clientRECT.bottom;
+			//--
+			
+			//--
+			TotalMemDC = CreateCompatibleDC(hDC);
+			TotalMemBitmap = CreateCompatibleBitmap(hDC,clientRECT.right,clientRECT.bottom);
+			SelectObject(TotalMemDC, (HBITMAP)TotalMemBitmap);
+
+			PlayerMemDC = CreateCompatibleDC(hDC);
+			PlayerMemBitmap = CreateCompatibleBitmap(hDC, 6400, 6400);
+			SelectObject(PlayerMemDC, (HBITMAP)PlayerMemBitmap);
+
+			if (Tileset == FALSE)
+			{
+				for (int i = 0; i < 100; i++)
+				{
+					for (int j = 0; j < 100; j++)
+					{
+						Tileindex[j][i] = 0;
+					}
+				}
+				player1.x = 500; player1.y = 500;
+				player2.x = 700; player2.y = 700;
+
+				TileMemDC = CreateCompatibleDC(TotalMemDC);
+				TileMemBitmap = CreateCompatibleBitmap(hDC, 6400, 6400);
+				SelectObject(TileMemDC, (HBITMAP)TileMemBitmap);
+
+				for (int i = 0; i < 100; i++)
+				{
+					for (int j = 0; j < 100; j++)
+					{
+						C_Tile[Tileindex[j][i]].BitBlt(TileMemDC, 64 * j, 64 * i, 64, 64, 0, 0, SRCCOPY); //타일의 가로세로크기가 64바이트
+						Tileset = TRUE;
+					}
+				}
+			}
+			
+			//------------------------------------맵 출력 TileMemDC -> PlayerMemDC
+			BitBlt(PlayerMemDC, player1.x - p1.right / 2, player1.y - p1.bottom / 2, p1.right, p1.bottom,TileMemDC,player1.x-p1.right/2,player1.y-p1.bottom/2,SRCCOPY);
+			BitBlt(PlayerMemDC, player2.x - p1.right / 2, player2.y - p1.bottom / 2, p1.right, p2.bottom, TileMemDC, player2.x - p1.right / 2, player2.y - p2.bottom / 2, SRCCOPY);
+			//------------------------------------캐릭터 출력 PlayerMemDC
+			Ellipse(PlayerMemDC, player1.x - 5, player1.y - 5, player1.x +5, player1.y +5);
+			Ellipse(PlayerMemDC, player2.x - 5, player2.y - 5, player2.x + 5, player2.y + 5);
+			//------------------------------------캐릭터 total로 복사 PlayerMemDC -> TileMemDC
+			BitBlt(TotalMemDC, p1.left, p1.top, p1.right, p1.bottom, PlayerMemDC, player1.x - p1.right / 2, player1.y - p1.bottom / 2, SRCCOPY);
+			BitBlt(TotalMemDC, p2.left, p2.top, p1.right, p2.bottom, PlayerMemDC, player2.x - p1.right / 2, player2.y - p2.bottom / 2, SRCCOPY);
+			//------------------------------------
+			//Rectangle(hDC, clientRECT.left, clientRECT.top, clientRECT.right, clientRECT.bottom);
+
+			BitBlt(hDC, 0, 0, clientRECT.right, clientRECT.bottom, TotalMemDC, 0, 0, SRCCOPY);
+
+			DeleteObject(TotalMemDC); DeleteObject(PlayerMemDC); //DeleteObject(TileMemDC);
+			DeleteObject(TotalMemBitmap); DeleteObject(PlayerMemBitmap); //DeleteObject(TileMemBitmap);
+			
 		}
 			break;
 		case SCOREBOARD:
@@ -163,7 +223,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 		break;
 
 	case WM_KEYDOWN:
-		InvalidateRect(hWnd, NULL, true);
+		InvalidateRect(hWnd, NULL, false);
 		switch (UI.returnScene())
 		{
 		case TITLE:
@@ -197,7 +257,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 		}
 		break;
 	case WM_CHAR:
-		InvalidateRect(hWnd, NULL, true);
+		InvalidateRect(hWnd, NULL, false);
 		switch (UI.returnScene())
 		{
 		case TITLE:
@@ -222,9 +282,34 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 			break;
 
 		case INGAME:
-			IngameGetChar(wParam);
-			break;
-
+		
+			switch (wParam)
+			{
+			case 'a':
+				player1.x -= 10;
+				break;
+			case 'w':
+				player1.y -= 10;
+				break;
+			case 'd':
+				player1.x += 10;
+				break;
+			case 's':
+				player1.y += 10;
+				break;
+			case 'j':
+				player2.x -= 10;
+				break;
+			case 'i':
+				player2.y -= 10;
+				break;
+			case 'l':
+				player2.x += 10;
+				break;
+			case 'k':
+				player2.y += 10;
+				break;
+			}
 		case SCOREBOARD:
 
 			break;
