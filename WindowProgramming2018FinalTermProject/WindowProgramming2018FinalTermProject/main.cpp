@@ -59,8 +59,12 @@ CImage sample; // 이미지를 관리하는 클래스.
 
 CImage C_TITLE;
 CImage C_MainLobby_BG, C_MainLobby_START[2], C_MainLobby_TIP[2], C_MainLobby_EXIT[2];
-CImage C_Tile[8];
 CImage C_TIP;
+
+//
+CImage C_Tile[4];
+CImage C_Numbers[10];
+//
 
 PlayerData player1, player2;
 
@@ -68,6 +72,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 {
 	PAINTSTRUCT ps;
 	static WCHAR text[100];
+	WCHAR LoadText[100];
 	switch (iMessage)
 	{
 	case WM_CREATE:
@@ -87,6 +92,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 		C_MainLobby_TIP[1].Load(L"Graphic\\UI\\TIP2.png");
 
 		C_Tile[0].Load(L"Graphic\\Tile\\Tile1.jpg");
+
+		for (int i = 0; i < 10; i++)
+		{
+			wsprintf(LoadText, L"Graphic\\Numbers\\%d.png", i);
+			C_Numbers[i].Load(LoadText);
+		}
 
 		C_MainLobby_EXIT[0].Load(L"Graphic\\UI\\EXIT.png");
 		C_MainLobby_EXIT[1].Load(L"Graphic\\UI\\EXIT2.png");
@@ -137,8 +148,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 			TextOut(hDC, clientRECT.right / 2, clientRECT.bottom / 2, text, 1);
 			break;
 		case INGAME:
-		{
-			
+		{	
 			//----------------------------------인게임 초기화
 			RECT p1, p2;
 			static HDC TotalMemDC,TileMemDC,PlayerMemDC;
@@ -161,6 +171,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 
 			if (Tileset == FALSE) // 초기화하는 부분
 			{
+				PlayerImageLoad(&player1, 1); //1 -> 선택한 캐릭터 (캐릭터 선택창 만든 후 변경)
+				PlayerImageLoad(&player2, 2); //2 -> 선택한 캐릭터 (캐릭터 선택창 만든 후 변경)
+				SetTimer(hWnd, 1, 10, NULL);
 				for (int i = 0; i < 100; i++)
 				{
 					for (int j = 0; j < 100; j++)
@@ -189,6 +202,57 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 			BitBlt(PlayerMemDC, player1.x - p1.right / 2, player1.y - p1.bottom / 2, p1.right, p1.bottom,TileMemDC,player1.x-p1.right/2,player1.y-p1.bottom/2,SRCCOPY);
 			BitBlt(PlayerMemDC, player2.x - p1.right / 2, player2.y - p1.bottom / 2, p1.right, p2.bottom, TileMemDC, player2.x - p1.right / 2, player2.y - p2.bottom / 2, SRCCOPY);
 			//------------------------------------캐릭터 출력 PlayerMemDC
+			switch (player1.CharacterStatus) // 0~1 = Idle  // 2~5 = Walk // 6~7 = Attack // 8 = Win // 9 = Lose
+			{
+			case 0:
+				player1.Idle.TransparentBlt(PlayerMemDC, player1.x -player1.Idle.GetWidth()/2, player1.y - 5 - player1.Idle.GetHeight() / 2, player1.Idle.GetWidth(), player1.Idle.GetHeight(),RGB(78,98,61));
+				break;
+			case 1:
+				player1.Idle_B.TransparentBlt(PlayerMemDC, player1.x - player1.Idle_B.GetWidth() / 2, player1.y - 5 - player1.Idle_B.GetHeight() / 2, player1.Idle_B.GetWidth(), player1.Idle_B.GetHeight(), RGB(78, 98, 61));
+				break;
+			case 2:
+			case 5:
+				player1.Walk[player1.WalkingImageTick%6].TransparentBlt(PlayerMemDC, player1.x - player1.Walk[player1.WalkingImageTick%6].GetWidth() / 2, player1.y - 5 - player1.Walk[player1.WalkingImageTick%6].GetHeight() / 2, player1.Walk[player1.WalkingImageTick%6].GetWidth(), player1.Walk[player1.WalkingImageTick%6].GetHeight(), RGB(78, 98, 61));
+				break;
+			case 3:
+			case 4:
+				player1.Walk_B[player1.WalkingImageTick % 6].TransparentBlt(PlayerMemDC, player1.x - player1.Walk[player1.WalkingImageTick % 6].GetWidth() / 2, player1.y - 5 - player1.Walk[player1.WalkingImageTick % 6].GetHeight() / 2, player1.Walk[player1.WalkingImageTick % 6].GetWidth(), player1.Walk[player1.WalkingImageTick % 6].GetHeight(), RGB(78, 98, 61));
+				break;
+			case 6:
+				break;
+			case 7:
+				break;
+			case 8:
+				break;
+			case 9:
+				break;
+			}
+			switch (player2.CharacterStatus) // 0~1 = Idle  // 2~5 = Walk // 6~7 = Attack // 8 = Win // 9 = Lose
+			{
+			case 0:
+				player2.Idle.TransparentBlt(PlayerMemDC, player2.x - player2.Idle.GetWidth() / 2, player2.y - 5 - player2.Idle.GetHeight() / 2, player2.Idle.GetWidth(), player2.Idle.GetHeight(), RGB(78, 98, 61));
+				break;
+			case 1:
+				player2.Idle_B.TransparentBlt(PlayerMemDC, player2.x - player2.Idle_B.GetWidth() / 2, player2.y - 5 - player2.Idle_B.GetHeight() / 2, player2.Idle_B.GetWidth(), player2.Idle_B.GetHeight(), RGB(78, 98, 61));
+				break;
+			case 2:
+			case 5:
+				player2.Walk[player2.WalkingImageTick % 6].TransparentBlt(PlayerMemDC, player2.x - player2.Walk[player2.WalkingImageTick%6].GetWidth() / 2, player2.y - 5 - player2.Walk[player2.WalkingImageTick%6].GetHeight() / 2, player2.Walk[player2.WalkingImageTick%6].GetWidth(), player2.Walk[player2.WalkingImageTick%6].GetHeight(), RGB(78, 98, 61));
+				break;
+			case 3:
+			case 4:
+				player2.Walk_B[player2.WalkingImageTick % 6].TransparentBlt(PlayerMemDC, player2.x - player2.Walk[player2.WalkingImageTick % 6].GetWidth() / 2, player2.y - 5 - player2.Walk[player2.WalkingImageTick % 6].GetHeight() / 2, player2.Walk[player2.WalkingImageTick % 6].GetWidth(), player2.Walk[player2.WalkingImageTick % 6].GetHeight(), RGB(78, 98, 61));
+				break;
+			case 6:
+				break;
+			case 7:
+				break;
+			case 8:
+				break;
+			case 9:
+				break;
+			}
+
 			Ellipse(PlayerMemDC, player1.x - 5, player1.y - 5, player1.x +5, player1.y +5);
 			Ellipse(PlayerMemDC, player2.x - 5, player2.y - 5, player2.x + 5, player2.y + 5);
 			//------------------------------------캐릭터 total로 복사 PlayerMemDC -> TileMemDC
@@ -251,16 +315,32 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 			switch (wParam)
 			{
 			case VK_LEFT:
-				player2.x -= 10;
-				break;
-			case VK_UP:
-				player2.y -= 10;
-				break;
-			case VK_RIGHT:
-				player2.x += 10;
-				break;
-			case VK_DOWN:
-				player2.y += 10;
+				player2.x -= 15;
+				player2.CharacterStatus = 2;
+				player2.isWalk = TRUE;
+				player2.WalkingTimerTick = 0;
+				player2.WalkingImageTick++;
+				break;		  
+			case VK_UP:		  
+				player2.y -= 15;
+				player2.CharacterStatus = 3;
+				player2.isWalk = TRUE;
+				player2.WalkingTimerTick = 0;
+				player2.WalkingImageTick++;
+				break;		  
+			case VK_RIGHT:	  
+				player2.x += 15;
+				player2.CharacterStatus = 4;
+				player2.isWalk = TRUE;
+				player2.WalkingTimerTick = 0;
+				player2.WalkingImageTick++;
+				break;		  
+			case VK_DOWN:	  
+				player2.y += 15;
+				player2.CharacterStatus = 5;
+				player2.isWalk = TRUE;
+				player2.WalkingTimerTick = 0;
+				player2.WalkingImageTick++;
 				break;
 			}
 			break;
@@ -300,22 +380,91 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 			switch (wParam)
 			{
 			case 'f':
-				player1.x -= 10;
+				player1.x -= 15;
+				player1.CharacterStatus = 2;
+				player1.isWalk = TRUE;
+				player1.WalkingTimerTick = 0;
+				player1.WalkingImageTick++;
 				break;
 			case 't':
-				player1.y -= 10;
+				player1.y -= 15;
+				player1.CharacterStatus = 3;
+				player1.isWalk = TRUE;
+				player1.WalkingTimerTick = 0;
+				player1.WalkingImageTick++;
 				break;
 			case 'h':
-				player1.x += 10;
+				player1.x += 15;
+				player1.CharacterStatus = 4;
+				player1.isWalk = TRUE;
+				player1.WalkingTimerTick = 0;
+				player1.WalkingImageTick++;
 				break;
 			case 'g':
-				player1.y += 10;
+				player1.y += 15;
+				player1.CharacterStatus = 5;
+				player1.isWalk = TRUE;
+				player1.WalkingTimerTick = 0;
+				player1.WalkingImageTick++;
 				break;
 			
 			}
 		case SCOREBOARD:
 
 			break;
+		}
+		break;
+	case WM_TIMER:
+		if (wParam == 1) // InGame Movement Manager
+		{
+			if (player1.isWalk)
+			{
+				player1.WalkingTimerTick++;
+				if (player1.WalkingTimerTick >= 7)
+				{
+					player1.WalkingTimerTick = 0;
+					player1.isWalk = FALSE;
+					switch (player1.CharacterStatus)
+					{
+					case 2:
+					case 5:
+					case 6:
+						player1.CharacterStatus = 0;
+						break;
+					case 3:
+					case 4:
+					case 7:
+						player1.CharacterStatus = 1;
+						break;
+					}
+				}
+				InvalidateRect(hWnd, NULL, false);
+			}
+			if (player2.isWalk)
+			{
+				player2.WalkingTimerTick++;
+				if (player2.WalkingTimerTick >= 7)
+				{
+					player2.WalkingTimerTick = 0;
+					player2.isWalk = FALSE;
+					switch (player2.CharacterStatus)
+					{
+					case 2:
+					case 5:
+					case 6:
+						player2.CharacterStatus = 0;
+						break;
+					case 3:
+					case 4:
+					case 7:
+						player2.CharacterStatus = 1;
+						break;
+					}
+				}
+				InvalidateRect(hWnd, NULL, false);
+			}
+
+			
 		}
 		break;
 	case WM_DESTROY: //Destroy 메세지 불렸을 때
@@ -389,6 +538,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 	case WM_RBUTTONDOWN:
 
 		break;
+	
 	}
 	return(DefWindowProc(hWnd, iMessage, wParam, lParam)); //처리되지 않은 메세지는 여기서 처리
 }
