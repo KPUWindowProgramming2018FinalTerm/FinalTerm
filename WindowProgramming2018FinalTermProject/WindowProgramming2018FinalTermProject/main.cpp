@@ -212,7 +212,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 				break;
 			case 2:
 			case 5:
-				player1.Walk[player1.WalkingImageTick%6].TransparentBlt(PlayerMemDC, player1.x - player1.Walk[player1.WalkingImageTick%6].GetWidth() / 2, player1.y - 5 - player1.Walk[player1.WalkingImageTick%6].GetHeight() / 2, player1.Walk[player1.WalkingImageTick%6].GetWidth(), player1.Walk[player1.WalkingImageTick%6].GetHeight(), RGB(78, 98, 61));
+				player1.Walk[player1.WalkingImageTick%6].Draw(PlayerMemDC, player1.x - player1.Walk[player1.WalkingImageTick%6].GetWidth() / 2, player1.y - 5 - player1.Walk[player1.WalkingImageTick%6].GetHeight() / 2, player1.Walk[player1.WalkingImageTick%6].GetWidth(), player1.Walk[player1.WalkingImageTick%6].GetHeight());
 				break;
 			case 3:
 			case 4:

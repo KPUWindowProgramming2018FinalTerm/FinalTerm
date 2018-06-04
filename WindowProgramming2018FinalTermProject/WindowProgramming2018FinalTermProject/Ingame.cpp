@@ -51,7 +51,7 @@ void PlayerImageLoad(PlayerData* player, int characterNum)
 	}
 	for (int i = 1; i <= 6; i++)
 	{
-		wsprintf(LoadText, L"Graphic\\Char%d\\Walk\\%d.jpg", characterNum, i);
+		wsprintf(LoadText, L"Graphic\\Char%d\\Walk\\%d.png", characterNum, i);
 		player->Walk[i-1].Load(LoadText);
 		wsprintf(LoadText, L"Graphic\\Char%d\\Walk_Back\\%d.jpg", characterNum, i);
 		player->Walk_B[i-1].Load(LoadText);
