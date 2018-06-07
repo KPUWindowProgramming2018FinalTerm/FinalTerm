@@ -73,3 +73,76 @@ void PlayerImageLoad(PlayerData* player, int characterNum)
 	wsprintf(LoadText, L"Graphic\\Char%d\\LOSE\\1.png", characterNum);
 	player->Lose.Load(LoadText);
 }
+
+void PlayerDraw(PlayerData* player, HDC PlayerMemDC)
+{
+	switch (player->CharacterStatus) // 0~1 = Idle  // 2~5 = Walk // 6~7 = Attack // 8~9 Attacked // 10 = Win // 11 = Lose
+	{
+	case 0:
+		player->Idle.Draw(PlayerMemDC, player->x - player->Idle.GetWidth() / 2, player->y - 5 - player->Idle.GetHeight() / 2, player->Idle.GetWidth(), player->Idle.GetHeight());
+		break;
+	case 1:
+		player->Idle_B.Draw(PlayerMemDC, player->x - player->Idle_B.GetWidth() / 2, player->y - 5 - player->Idle_B.GetHeight() / 2, player->Idle_B.GetWidth(), player->Idle_B.GetHeight());
+		break;
+	case 2:
+	case 5:
+		player->Walk[player->WalkingImageTick % 6].Draw(PlayerMemDC, player->x - player->Walk[player->WalkingImageTick % 6].GetWidth() / 2, player->y - 5 - player->Walk[player->WalkingImageTick % 6].GetHeight() / 2, player->Walk[player->WalkingImageTick % 6].GetWidth(), player->Walk[player->WalkingImageTick % 6].GetHeight());
+		break;
+	case 3:
+	case 4:
+		player->Walk_B[player->WalkingImageTick % 6].Draw(PlayerMemDC, player->x - player->Walk[player->WalkingImageTick % 6].GetWidth() / 2, player->y - 5 - player->Walk[player->WalkingImageTick % 6].GetHeight() / 2, player->Walk[player->WalkingImageTick % 6].GetWidth(), player->Walk[player->WalkingImageTick % 6].GetHeight());
+		break;
+	case 6:
+
+		break;
+	case 7:
+
+		break;
+	case 8:
+
+		break;
+	case 9:
+
+		break;
+	case 10:
+		player->Win.Draw(PlayerMemDC, player->x - player->Idle_B.GetWidth() / 2, player->y - 5 - player->Idle_B.GetHeight() / 2, player->Idle_B.GetWidth(), player->Idle_B.GetHeight());
+		break;
+	case 11:
+		player->Lose.Draw(PlayerMemDC, player->x - player->Idle_B.GetWidth() / 2, player->y - 5 - player->Idle_B.GetHeight() / 2, player->Idle_B.GetWidth(), player->Idle_B.GetHeight());
+		break;
+	}
+
+	
+}
+
+//switch (player2->.CharacterStatus)  // 0~1 = Idle  // 2~5 = Walk // 6~7 = Attack // 8~9 Attacked // 10 = Win // 11 = Lose
+//{
+//case 0:
+//	player2->.Idle.Draw(PlayerMemDC, player2->.x - player2->.Idle.GetWidth() / 2, player2->.y - 5 - player2->.Idle.GetHeight() / 2, player2->.Idle.GetWidth(), player2->.Idle.GetHeight());
+//	break;
+//case 1:
+//	player2->.Idle_B.Draw(PlayerMemDC, player2->.x - player2->.Idle_B.GetWidth() / 2, player2->.y - 5 - player2->.Idle_B.GetHeight() / 2, player2->.Idle_B.GetWidth(), player2->.Idle_B.GetHeight());
+//	break;
+//case 2:
+//case 5:
+//	player2->.Walk[player2->.WalkingImageTick % 6].Draw(PlayerMemDC, player2->.x - player2->.Walk[player2->.WalkingImageTick % 6].GetWidth() / 2, player2->.y - 5 - player2->.Walk[player2->.WalkingImageTick % 6].GetHeight() / 2, player2->.Walk[player2->.WalkingImageTick % 6].GetWidth(), player2->.Walk[player2->.WalkingImageTick % 6].GetHeight());
+//	break;
+//case 3:
+//case 4:
+//	player2->.Walk_B[player2->.WalkingImageTick % 6].Draw(PlayerMemDC, player2->.x - player2->.Walk[player2->.WalkingImageTick % 6].GetWidth() / 2, player2->.y - 5 - player2->.Walk[player2->.WalkingImageTick % 6].GetHeight() / 2, player2->.Walk[player2->.WalkingImageTick % 6].GetWidth(), player2->.Walk[player2->.WalkingImageTick % 6].GetHeight());
+//	break;
+//case 6:
+//	break;
+//case 7:
+//	break;
+//case 8:
+//	break;
+//case 9:
+//	break;
+//case 10:
+//	player2->.Win.Draw(PlayerMemDC, player2->.x - player2->.Idle_B.GetWidth() / 2, player2->.y - 5 - player2->.Idle_B.GetHeight() / 2, player2->.Idle_B.GetWidth(), player2->.Idle_B.GetHeight());
+//	break;
+//case 11:
+//	player2->.Lose.Draw(PlayerMemDC, player2->.x - player2->.Idle_B.GetWidth() / 2, player2->.y - 5 - player2->.Idle_B.GetHeight() / 2, player2->.Idle_B.GetWidth(), player2->.Idle_B.GetHeight());
+//	break;
+//}

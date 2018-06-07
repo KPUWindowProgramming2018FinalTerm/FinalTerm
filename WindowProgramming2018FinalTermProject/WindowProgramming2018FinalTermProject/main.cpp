@@ -25,21 +25,45 @@ HDC hDC;
 PlayerData player1, player2;
 BOOL keydown;
 
+int Tileindex[100][100];
+
 BOOL IngameKeydownManager()
 {
 	keydown = FALSE;
 	if (GetAsyncKeyState(VK_UP) & 0x8001)
 	{
-		player2.y -= 15;
-		player2.CharacterStatus = 3;
-		player2.isWalk = TRUE;
-		player2.WalkingTimerTick = 0;
-		player2.WalkingImageTick++;
-		keydown = TRUE;
+		if (Tileindex[player2.x / 64][(player2.y + 60) / 64] == 1)
+		{
+			player2.y -= 40;
+		}
+		else if (Tileindex[player2.x / 64][(player2.y + 60 - 40) / 64] == 2)
+		{
+
+		}
+		else
+		{
+			player2.y -= 25;
+		}
+			player2.CharacterStatus = 3;
+			player2.isWalk = TRUE;
+			player2.WalkingTimerTick = 0;
+			player2.WalkingImageTick++;
+			keydown = TRUE;
 	}
 	if (GetAsyncKeyState(VK_LEFT) & 0x8001)
 	{
-		player2.x -= 15;
+		if (Tileindex[player2.x / 64][(player2.y + 60) / 64] == 1)
+		{
+			player2.x -= 40;
+		}
+		else if (Tileindex[(player2.x-30) / 64][(player2.y + 60) / 64] == 2)
+		{
+
+		}
+		else
+		{
+			player2.x -= 25;
+		}
 		player2.CharacterStatus = 2;
 		player2.isWalk = TRUE;
 		player2.WalkingTimerTick = 0;
@@ -48,7 +72,18 @@ BOOL IngameKeydownManager()
 	}
 	if (GetAsyncKeyState(VK_DOWN) & 0x8001)
 	{
-		player2.y += 15;
+		if (Tileindex[player2.x / 64][(player2.y + 60) / 64] == 1)
+		{
+			player2.y += 40;
+		}
+		else if (Tileindex[player2.x / 64][(player2.y + 60 + 30) / 64] == 2)
+		{
+			
+		}
+		else
+		{
+			player2.y += 25;
+		}
 		player2.CharacterStatus = 5;
 		player2.isWalk = TRUE;
 		player2.WalkingTimerTick = 0;
@@ -57,7 +92,18 @@ BOOL IngameKeydownManager()
 	}
 	if (GetAsyncKeyState(VK_RIGHT) & 0x8001)
 	{
-		player2.x += 15;
+		if (Tileindex[player2.x / 64][(player2.y + 60) / 64] == 1)
+		{
+			player2.x += 40;
+		}
+		else if (Tileindex[(player2.x + 30) / 64][(player2.y + 60) / 64] == 2)
+		{
+
+		}
+		else
+		{
+			player2.x += 25;
+		}
 		player2.CharacterStatus = 4;
 		player2.isWalk = TRUE;
 		player2.WalkingTimerTick = 0;
@@ -67,7 +113,18 @@ BOOL IngameKeydownManager()
 
 	if (GetAsyncKeyState(0x46) & 0x8000) // f
 	{
-		player1.x -= 15;
+		if (Tileindex[player1.x / 64][(player1.y + 60) / 64] == 1)
+		{
+			player1.x -= 40;
+		}
+		else if (Tileindex[(player1.x - 30) / 64][(player1.y + 60) / 64] == 2)
+		{
+
+		}
+		else
+		{
+			player1.x -= 25;
+		}
 		player1.CharacterStatus = 2;
 		player1.isWalk = TRUE;
 		player1.WalkingTimerTick = 0;
@@ -76,7 +133,18 @@ BOOL IngameKeydownManager()
 	}
 	if (GetAsyncKeyState(0x54) & 0x8000) // t
 	{
-		player1.y -= 15;
+		if (Tileindex[player1.x / 64][(player1.y + 60) / 64] == 1)
+		{
+			player1.y -= 40;
+		}
+		else if (Tileindex[player1.x / 64][(player1.y + 60 - 30) / 64] == 2)
+		{
+
+		}
+		else
+		{
+			player1.y -= 25;
+		}
 		player1.CharacterStatus = 3;
 		player1.isWalk = TRUE;
 		player1.WalkingTimerTick = 0;
@@ -85,7 +153,18 @@ BOOL IngameKeydownManager()
 	}
 	if (GetAsyncKeyState(0x48) & 0x8000) // h
 	{
-		player1.x += 15;
+		if (Tileindex[player1.x / 64][(player1.y + 60) / 64] == 1)
+		{
+			player1.x += 40;
+		}
+		else if (Tileindex[(player1.x + 30) / 64][(player1.y + 60) / 64] == 2)
+		{
+
+		}
+		else
+		{
+			player1.x += 25;
+		}
 		player1.CharacterStatus = 4;
 		player1.isWalk = TRUE;
 		player1.WalkingTimerTick = 0;
@@ -94,7 +173,18 @@ BOOL IngameKeydownManager()
 	}
 	if (GetAsyncKeyState(0x47) & 0x8000) // g
 	{
-		player1.y += 15;
+		if (Tileindex[player1.x / 64][(player1.y + 60) / 64] == 1)
+		{
+			player1.y += 40;
+		}
+		else if (Tileindex[player1.x / 64][(player1.y + 60 + 30) / 64] == 2)
+		{
+		
+		}
+		else
+		{
+			player1.y += 25;
+		}
 		player1.CharacterStatus = 5;
 		player1.isWalk = TRUE;
 		player1.WalkingTimerTick = 0;
@@ -151,7 +241,7 @@ CImage C_MainLobby_BG, C_MainLobby_START[2], C_MainLobby_TIP[2], C_MainLobby_EXI
 CImage C_TIP;
 
 //
-CImage C_Tile[4];
+CImage C_Tile[3];
 CImage C_Numbers[10];
 //
 
@@ -181,6 +271,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 		C_MainLobby_TIP[1].Load(L"Graphic\\UI\\TIP2.png");
 
 		C_Tile[0].Load(L"Graphic\\Tile\\Tile1.jpg");
+		C_Tile[1].Load(L"Graphic\\Tile\\Tile2.png");
+		C_Tile[2].Load(L"Graphic\\Tile\\Tile3.png");
 
 		for (int i = 0; i < 10; i++)
 		{
@@ -244,7 +336,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 			static HBITMAP TotalMemBitmap, TileMemBitmap, PlayerMemBitmap;
 			static BOOL Tileset = FALSE;
 
-			int Tileindex[100][100];
 			p1.top = 0; p1.left = 0; p1.right = clientRECT.right / 2; p1.bottom = clientRECT.bottom;
 			p2.top = 0; p2.left = clientRECT.right / 2; p2.right = clientRECT.right; p2.bottom = clientRECT.bottom;
 			//--
@@ -268,8 +359,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 					for (int j = 0; j < 100; j++)
 					{
 						Tileindex[j][i] = 0;
+						if (j > 20 && j < 40)
+							Tileindex[j][i] = 1;
+						if (j > 15 && j < 17 && i % 3 == 0)
+							Tileindex[j][i] = 2;
 					}
 				}
+				
 				player1.x = 500; player1.y = 500;
 				player2.x = 700; player2.y = 700;
 
@@ -291,55 +387,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 			BitBlt(PlayerMemDC, player1.x - p1.right / 2, player1.y - p1.bottom / 2, p1.right, p1.bottom, TileMemDC, player1.x - p1.right / 2, player1.y - p1.bottom / 2, SRCCOPY);
 			BitBlt(PlayerMemDC, player2.x - p1.right / 2, player2.y - p1.bottom / 2, p1.right, p2.bottom, TileMemDC, player2.x - p1.right / 2, player2.y - p2.bottom / 2, SRCCOPY);
 			//------------------------------------캐릭터 출력 PlayerMemDC
-			switch (player1.CharacterStatus) // 0~1 = Idle  // 2~5 = Walk // 6~7 = Attack // 8 = Win // 9 = Lose
+			
+			if (player1.y > player2.y)
 			{
-			case 0:
-				player1.Idle.Draw(PlayerMemDC, player1.x - player1.Idle.GetWidth() / 2, player1.y - 5 - player1.Idle.GetHeight() / 2, player1.Idle.GetWidth(), player1.Idle.GetHeight());
-				break;
-			case 1:
-				player1.Idle_B.Draw(PlayerMemDC, player1.x - player1.Idle_B.GetWidth() / 2, player1.y - 5 - player1.Idle_B.GetHeight() / 2, player1.Idle_B.GetWidth(), player1.Idle_B.GetHeight());
-				break;
-			case 2:
-			case 5:
-				player1.Walk[player1.WalkingImageTick % 6].Draw(PlayerMemDC, player1.x - player1.Walk[player1.WalkingImageTick % 6].GetWidth() / 2, player1.y - 5 - player1.Walk[player1.WalkingImageTick % 6].GetHeight() / 2, player1.Walk[player1.WalkingImageTick % 6].GetWidth(), player1.Walk[player1.WalkingImageTick % 6].GetHeight());
-				break;
-			case 3:
-			case 4:
-				player1.Walk_B[player1.WalkingImageTick % 6].Draw(PlayerMemDC, player1.x - player1.Walk[player1.WalkingImageTick % 6].GetWidth() / 2, player1.y - 5 - player1.Walk[player1.WalkingImageTick % 6].GetHeight() / 2, player1.Walk[player1.WalkingImageTick % 6].GetWidth(), player1.Walk[player1.WalkingImageTick % 6].GetHeight());
-				break;
-			case 6:
-				break;
-			case 7:
-				break;
-			case 8:
-				break;
-			case 9:
-				break;
+				PlayerDraw(&player2, PlayerMemDC);
+				PlayerDraw(&player1, PlayerMemDC);
 			}
-			switch (player2.CharacterStatus) // 0~1 = Idle  // 2~5 = Walk // 6~7 = Attack // 8 = Win // 9 = Lose
+			else
 			{
-			case 0:
-				player2.Idle.Draw(PlayerMemDC, player2.x - player2.Idle.GetWidth() / 2, player2.y - 5 - player2.Idle.GetHeight() / 2, player2.Idle.GetWidth(), player2.Idle.GetHeight());
-				break;
-			case 1:
-				player2.Idle_B.Draw(PlayerMemDC, player2.x - player2.Idle_B.GetWidth() / 2, player2.y - 5 - player2.Idle_B.GetHeight() / 2, player2.Idle_B.GetWidth(), player2.Idle_B.GetHeight());
-				break;
-			case 2:
-			case 5:
-				player2.Walk[player2.WalkingImageTick % 6].Draw(PlayerMemDC, player2.x - player2.Walk[player2.WalkingImageTick % 6].GetWidth() / 2, player2.y - 5 - player2.Walk[player2.WalkingImageTick % 6].GetHeight() / 2, player2.Walk[player2.WalkingImageTick % 6].GetWidth(), player2.Walk[player2.WalkingImageTick % 6].GetHeight());
-				break;
-			case 3:
-			case 4:
-				player2.Walk_B[player2.WalkingImageTick % 6].Draw(PlayerMemDC, player2.x - player2.Walk[player2.WalkingImageTick % 6].GetWidth() / 2, player2.y - 5 - player2.Walk[player2.WalkingImageTick % 6].GetHeight() / 2, player2.Walk[player2.WalkingImageTick % 6].GetWidth(), player2.Walk[player2.WalkingImageTick % 6].GetHeight());
-				break;
-			case 6:
-				break;
-			case 7:
-				break;
-			case 8:
-				break;
-			case 9:
-				break;
+				PlayerDraw(&player1, PlayerMemDC);
+				PlayerDraw(&player2, PlayerMemDC);
 			}
 
 			Ellipse(PlayerMemDC, player1.x - 5, player1.y - 5, player1.x + 5, player1.y + 5);
@@ -446,6 +503,21 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 	case WM_TIMER:
 		if (wParam == 1) // InGame Movement Manager
 		{
+			if (Tileindex[player1.y / 64][player1.x / 64] == 2)
+			{
+				switch (player1.CharacterStatus)
+				{
+
+				}
+			}
+			if (Tileindex[player2.y / 64][player2.x / 64] == 2)
+			{
+				switch (player1.CharacterStatus)
+				{
+
+				}
+			}
+
 			if (player1.isWalk)
 			{
 				player1.WalkingTimerTick++;
