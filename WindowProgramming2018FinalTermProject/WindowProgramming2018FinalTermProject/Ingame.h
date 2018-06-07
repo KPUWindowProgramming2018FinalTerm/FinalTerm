@@ -8,6 +8,8 @@ typedef struct _PlayerData
 {
 	CImage Attack[4];
 	CImage Attack_B[4];
+	CImage Attacked[2];
+	CImage Attacked_B[2];
 	CImage Idle;
 	CImage Idle_B;
 	CImage Walk[6];
