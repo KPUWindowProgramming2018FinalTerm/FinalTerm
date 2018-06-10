@@ -23,6 +23,10 @@
 #include <chrono>
 #include <string>
 
+// 타이머를 쓰기 위함
+#pragma comment(lib, "winmm.lib")
+#include <Mmsystem.h>
+
 #define TITLE_MX_LENGTH 64
 
 #define TITLESTRING TEXT("Run away with the Coin")	// 타이틀 이름이 들어갈 문자열이므로 내용을 원하는 대로 바꿔주자.

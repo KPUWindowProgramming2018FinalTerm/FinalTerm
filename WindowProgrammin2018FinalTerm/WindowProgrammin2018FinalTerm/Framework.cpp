@@ -22,12 +22,14 @@ void SetUserDataPtr(HWND hWnd, LPVOID ptr)
 
 CFramework::CFramework()
 {
-
+	m_ticker = new CGameTimer();
+	m_ticker->Start();
 }
 
 CFramework::~CFramework()
 {
 	OnDestroy();
+	m_ticker->Stop();
 }
 
 bool CFramework::OnCreate(HINSTANCE hInstance, HWND hWnd, const RECT & rc) //생성자에서 해야할 일을 하는데 전역 클래스 변수이므로 생성자를 쓰면 안되기 때문
@@ -272,17 +274,20 @@ void CFramework::OnDraw(HDC hDC)
 void CFramework::FrameAdvance()
 {
 	// FPS 제한
-	m_timeElapsed = chrono::system_clock::now() - m_current_time;
-	{
-		if (m_timeElapsed.count() > MAX_FPS) // MAX_FPS가 0 이상이면 프로그램 즉시 종료?
-		{
-			m_current_time = chrono::system_clock::now();
-			if (m_timeElapsed.count() > 0.0)
-				m_fps = 1.0 / m_timeElapsed.count();
-		}
-		else return;
-	}
-	Update(m_timeElapsed.count()); // 그려야 될 것 업데이트(프레임단)
+	
+	//m_timeElapsed = chrono::system_clock::now() - m_current_time;
+	//{
+	//	if (m_timeElapsed.count() > MAX_FPS) // MAX_FPS가 0 이상이면 프로그램 즉시 종료?
+	//	{
+	//		m_current_time = chrono::system_clock::now();
+	//		if (m_timeElapsed.count() > 0.0)
+	//			m_fps = 1.0 / m_timeElapsed.count();
+	//	}
+	//	else return;
+	//}
+	m_ticker->Tick(60.0f);
+	m_fps = 1.0 / m_ticker->GetTimeElapsed();
+	Update(m_ticker->GetTimeElapsed()); // 그려야 될 것 업데이트(프레임단)
 	PreprocessingForDraw(); // 
 	// 백버퍼 연산이므로 OnDraw가 아니다. OnDraw 이전에 백버퍼에 그려주는 연산을 한다.
 
@@ -290,8 +295,8 @@ void CFramework::FrameAdvance()
 
 	// ↓캡션에 글자를 뭘 넣을지 연산하는 캡션 스트링 연산
 	{
-	_itow_s(
-		m_fps + 0.1f
+		_itow_s(
+		m_fps+0.1f
 		, m_CaptionTitle + m_TitleLength
 		, TITLE_MX_LENGTH - m_TitleLength
 		, 10);

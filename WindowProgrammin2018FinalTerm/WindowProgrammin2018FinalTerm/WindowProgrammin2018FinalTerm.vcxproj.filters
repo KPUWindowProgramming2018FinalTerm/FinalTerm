@@ -81,6 +81,9 @@
     <ClInclude Include="OBJECT_Player.h">
       <Filter>헤더 파일\Objects</Filter>
     </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>헤더 파일\Frame</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="o_Ingame.cpp">
@@ -115,6 +118,9 @@
     </ClCompile>
     <ClCompile Include="OBJECT_Player.cpp">
       <Filter>소스 파일\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>소스 파일\Frame</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

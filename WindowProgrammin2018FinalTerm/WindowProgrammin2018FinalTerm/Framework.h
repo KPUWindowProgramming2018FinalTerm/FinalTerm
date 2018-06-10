@@ -3,8 +3,10 @@
 #include <Windows.h>
 #include <iostream>
 #include "Scene.h"
+#include "Timer.h"
 
 class CObject_Player;
+class CGameTimer;
 // 인터페이스이므로 header에 include 한다.
 					// 헤더파일에는 이 프레임워크에서 사용하는 인터페이스나 이 클래스의 부모 외에는 include하지 않도록 한다.
 
@@ -37,6 +39,7 @@ private:
 	COLORREF	m_clrBackBuffer = 0x00000000;	// 백버퍼 색깔. 검정으로 초기화
 	HBRUSH		m_hbrBackground = NULL;			// 그리는 도구. 색칠할 떄 쓴다.
 
+	CGameTimer*		m_ticker = NULL;
 	
 	CObject_Player* player1 = NULL , *player2 = NULL;
 

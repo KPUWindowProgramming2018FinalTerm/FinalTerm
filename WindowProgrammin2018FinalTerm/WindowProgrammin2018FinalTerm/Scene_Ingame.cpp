@@ -61,6 +61,249 @@ void CIngameScene::BuildObjects()
 
 void CIngameScene::Update(float fTimeElapsed)
 {
+	{ //동시 입력 인식
+		keydown = FALSE;
+		for (int i = 0; i < 14; i++)
+		{
+			keydownList[i] = FALSE;
+		}
+		if (GetAsyncKeyState(VK_UP) & 0x8000)
+		{
+			keydownList[1] = TRUE;
+
+			keydown = TRUE;
+		}
+		if (GetAsyncKeyState(VK_LEFT) & 0x8000)
+		{
+			keydownList[0] = TRUE;
+
+			keydown = TRUE;
+		}
+		if (GetAsyncKeyState(VK_DOWN) & 0x8000)
+		{
+			keydownList[3] = TRUE;
+
+			keydown = TRUE;
+		}
+		if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
+		{
+			keydownList[2] = TRUE;
+
+			keydown = TRUE;
+		}
+
+		if (GetAsyncKeyState(0x46) & 0x8000) // f
+		{
+			keydownList[7] = TRUE;
+
+			keydown = TRUE;
+		}
+		if (GetAsyncKeyState(0x54) & 0x8000) // t
+		{
+			keydownList[8] = TRUE;
+
+			keydown = TRUE;
+		}
+		if (GetAsyncKeyState(0x48) & 0x8000) // h
+		{
+			keydownList[9] = TRUE;
+
+			keydown = TRUE;
+		}
+		if (GetAsyncKeyState(0x47) & 0x8000) // g
+		{
+			keydownList[10] = TRUE;
+
+			keydown = TRUE;
+		}
+	}
+	{
+		if (keydown)
+		{
+			p1key = false;
+			p2key = false;
+			// 0 1 2 3 p1 이동 4 5 6 p1 공격 스킬 대시 7 8 9 10 p2 이동 11 12 13 p2 공격 스킬 대시
+			if (keydownList[1])
+			{
+				if (Tileindex[m_pFramework->GetPlayer(2)->x / 64][(m_pFramework->GetPlayer(2)->y + 60) / 64] == 1)
+				{
+					m_pFramework->GetPlayer(2)->y -= 25;
+				}
+				else if (Tileindex[m_pFramework->GetPlayer(2)->x / 64][(m_pFramework->GetPlayer(2)->y + 60 - 20) / 64] == 2)
+				{
+
+				}
+				else
+				{
+					m_pFramework->GetPlayer(2)->y -= 10;
+				}
+				p2key = true;
+				m_pFramework->GetPlayer(2)->CharacterStatus = 3;
+
+			}
+			if (keydownList[0])
+			{
+				if (Tileindex[m_pFramework->GetPlayer(2)->x / 64][(m_pFramework->GetPlayer(2)->y + 60) / 64] == 1)
+				{
+					m_pFramework->GetPlayer(2)->x -= 25;
+				}
+				else if (Tileindex[(m_pFramework->GetPlayer(2)->x - 30) / 64][m_pFramework->GetPlayer(2)->y + 60 / 64] == 2)
+				{
+
+				}
+				else
+				{
+					m_pFramework->GetPlayer(2)->x -= 10;
+				}
+				p2key = true;
+				m_pFramework->GetPlayer(2)->CharacterStatus = 2;
+
+			}
+			if (keydownList[3])
+			{
+				if (Tileindex[m_pFramework->GetPlayer(2)->x / 64][(m_pFramework->GetPlayer(2)->y + 60) / 64] == 1)
+				{
+					m_pFramework->GetPlayer(2)->y += 25;
+				}
+				else if (Tileindex[m_pFramework->GetPlayer(2)->x / 64][(m_pFramework->GetPlayer(2)->y + 60 + 30) / 64] == 2)
+				{
+
+				}
+				else
+				{
+					m_pFramework->GetPlayer(2)->y += 10;
+				}
+				p2key = true;
+				m_pFramework->GetPlayer(2)->CharacterStatus = 5;
+
+			}
+			if (keydownList[2])
+			{
+				if (Tileindex[m_pFramework->GetPlayer(2)->x / 64][(m_pFramework->GetPlayer(2)->y + 60) / 64] == 1)
+				{
+					m_pFramework->GetPlayer(2)->x += 25;
+				}
+				else if (Tileindex[(m_pFramework->GetPlayer(2)->x + 30) / 64][(m_pFramework->GetPlayer(2)->y + 60) / 64] == 2)
+				{
+
+				}
+				else
+				{
+					m_pFramework->GetPlayer(2)->x += 10;
+				}
+				p2key = true;
+				m_pFramework->GetPlayer(2)->CharacterStatus = 4;
+
+			}
+
+			if (keydownList[4])
+			{
+
+			}
+			if (keydownList[5])
+			{
+
+			}
+			if (keydownList[6])
+			{
+
+			}
+			if (keydownList[8])
+			{
+				if (Tileindex[m_pFramework->GetPlayer(1)->x / 64][(m_pFramework->GetPlayer(1)->y + 60) / 64] == 1)
+				{
+					m_pFramework->GetPlayer(1)->y -= 25;
+				}
+				else if (Tileindex[m_pFramework->GetPlayer(1)->x / 64][(m_pFramework->GetPlayer(1)->y + 60 - 30) / 64] == 2)
+				{
+
+				}
+				else
+				{
+					m_pFramework->GetPlayer(1)->y -= 10;
+				}
+				p1key = true;
+				m_pFramework->GetPlayer(1)->CharacterStatus = 3;
+			}
+			if (keydownList[7])
+			{
+				if (Tileindex[m_pFramework->GetPlayer(1)->x / 64][(m_pFramework->GetPlayer(1)->y + 60) / 64] == 1)
+				{
+					m_pFramework->GetPlayer(1)->x -= 25;
+				}
+				else if (Tileindex[(m_pFramework->GetPlayer(1)->x - 30) / 64][(m_pFramework->GetPlayer(1)->y + 60) / 64] == 2)
+				{
+
+				}
+				else
+				{
+					m_pFramework->GetPlayer(1)->x -= 10;
+				}
+				p1key = true;
+				m_pFramework->GetPlayer(1)->CharacterStatus = 2;
+			}
+			if (keydownList[10])
+			{
+				if (Tileindex[m_pFramework->GetPlayer(1)->x / 64][(m_pFramework->GetPlayer(1)->y + 60) / 64] == 1)
+				{
+					m_pFramework->GetPlayer(1)->y += 25;
+				}
+				else if (Tileindex[m_pFramework->GetPlayer(1)->x / 64][(m_pFramework->GetPlayer(1)->y + 60 + 30) / 64] == 2)
+				{
+
+				}
+				else
+				{
+					m_pFramework->GetPlayer(1)->y += 10;
+				}
+				p1key = true;
+				m_pFramework->GetPlayer(1)->CharacterStatus = 5;
+			}
+			if (keydownList[9])
+			{
+				if (Tileindex[m_pFramework->GetPlayer(1)->x / 64][(m_pFramework->GetPlayer(1)->y + 60) / 64] == 1)
+				{
+					m_pFramework->GetPlayer(1)->x += 25;
+				}
+				else if (Tileindex[(m_pFramework->GetPlayer(1)->x + 30) / 64][(m_pFramework->GetPlayer(1)->y + 60) / 64] == 2)
+				{
+
+				}
+				else
+				{
+					m_pFramework->GetPlayer(1)->x += 10;
+				}
+				p1key = true;
+				m_pFramework->GetPlayer(1)->CharacterStatus = 4;
+			}
+
+			if (keydownList[11])
+			{
+
+			}
+			if (keydownList[12])
+			{
+
+			}
+			if (keydownList[13])
+			{
+
+			}
+
+			if (p1key)
+			{	
+				m_pFramework->GetPlayer(1)->isWalk = TRUE;
+				m_pFramework->GetPlayer(1)->WalkingTimerTick = 0;
+				m_pFramework->GetPlayer(1)->WalkingImageTick++;
+			}
+			if (p2key)
+			{
+				m_pFramework->GetPlayer(2)->isWalk = TRUE;
+				m_pFramework->GetPlayer(2)->WalkingTimerTick = 0;
+				m_pFramework->GetPlayer(2)->WalkingImageTick++;
+			}
+		}
+	}
 
 	for (int i = 0; i < nObjects; ++i)
 		ppObjects[i]->Update(fTimeElapsed);

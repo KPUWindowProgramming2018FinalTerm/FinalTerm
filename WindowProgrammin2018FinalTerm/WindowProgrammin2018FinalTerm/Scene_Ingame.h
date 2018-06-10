@@ -21,5 +21,11 @@ private:
 
 	CImage C_Tile[3];
 	CImage C_Numbers[10];
+
+	BOOL keydown;
+	BOOL keydownList[14] = { 0 };
+	bool p1key = false;
+	bool p2key = false;
+
 	int Tileindex[100][100] = { 0 };
 };

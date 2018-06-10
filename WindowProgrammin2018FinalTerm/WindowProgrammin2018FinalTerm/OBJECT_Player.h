@@ -24,6 +24,16 @@ public:
 	int x=0;
 	int y=0;
 
+	BOOL isWalk = FALSE;
+
+	int WalkingTimerTick = 0; //타이머돌려서 10되면 Idle로
+	int WalkingImageTick = 0;
+
+	int AttackTimerTick = 0; //
+	int AttackImageTick = 0;
+
+	int CharacterStatus = 0; // 0~1 = Idle  // 2~5 = Walk // 6~7 = Attack // 8 = Win // 9 = Lose
+
 	CObject_Player();
 	//CObject_Player(int characterNum, HDC PlayerDC);
 	void OnCreate(int characterNum);
@@ -32,15 +42,7 @@ public:
 	void Update(float fTimeElapsed);
 	void Render(HDC* hdc);
 private:
-	BOOL isWalk = FALSE;
 	
-	int WalkingTimerTick = 0; //타이머돌려서 10되면 Idle로
-	int WalkingImageTick = 0;
-
-	int AttackTimerTick = 0; //
-	int AttackImageTick = 0;
-
-	int CharacterStatus = 0; // 0~1 = Idle  // 2~5 = Walk // 6~7 = Attack // 8 = Win // 9 = Lose
 
 
 
