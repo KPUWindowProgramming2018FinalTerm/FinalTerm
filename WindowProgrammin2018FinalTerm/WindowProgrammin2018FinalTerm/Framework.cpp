@@ -188,6 +188,8 @@ bool CFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM 
 	{
 	case WM_KEYDOWN:
 		return true;
+	case WM_CHAR:
+		return true;
 	case WM_KEYUP:
 		switch (wParam)
 		{
@@ -292,7 +294,6 @@ void CFramework::FrameAdvance()
 	// 백버퍼 연산이므로 OnDraw가 아니다. OnDraw 이전에 백버퍼에 그려주는 연산을 한다.
 
 	InvalidateRect(m_hWnd, &m_rcClient, FALSE);	// False는 초기화를 하지 않는다는 뜻이다. 강제로 윈도우 메시지를 호출한다.
-
 	// ↓캡션에 글자를 뭘 넣을지 연산하는 캡션 스트링 연산
 	{
 		_itow_s(
@@ -324,16 +325,24 @@ LRESULT CFramework::WndProc(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lP
 
 	case WM_MOUSEMOVE:
 		self->OnProcessingMouseMessage(hWnd, nMessageID, wParam, lParam);
+		goto Paint;
+		
 		break;
 
 
 	case WM_KEYDOWN:
 	case WM_KEYUP:
+	case WM_CHAR:
 		self->OnProcessingKeyboardMessage(hWnd, nMessageID, wParam, lParam);
+		goto Paint;
+		
 		break;
 
 	case WM_PAINT:
 		{
+		Paint:
+		static int n=0;
+			//printf("%dIn\n",++n);
 			PAINTSTRUCT ps;
 			HDC hdc = ::BeginPaint(hWnd, &ps);	// 이 디바이스 컨텍스트를 사용하겠다.
 			// hdc에서 이 함수를 통해 bitmap을 붙인다.

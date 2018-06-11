@@ -62,72 +62,69 @@ void CIngameScene::BuildObjects()
 void CIngameScene::Update(float fTimeElapsed)
 {
 	{ //동시 입력 인식
-		keydown = FALSE;
-		for (int i = 0; i < 14; i++)
+		if (keydown != TRUE)
 		{
-			keydownList[i] = FALSE;
-		}
-		if (GetAsyncKeyState(VK_UP) & 0x8000)
-		{
-			keydownList[1] = TRUE;
+			if (GetAsyncKeyState(VK_UP) & 0x8000)
+			{	
+				keydownList[1] = TRUE;
 
-			keydown = TRUE;
-		}
-		if (GetAsyncKeyState(VK_LEFT) & 0x8000)
-		{
-			keydownList[0] = TRUE;
+				keydown = TRUE;
+			}
+			if (GetAsyncKeyState(VK_LEFT) & 0x8000)
+			{
+				keydownList[0] = TRUE;
 
-			keydown = TRUE;
-		}
-		if (GetAsyncKeyState(VK_DOWN) & 0x8000)
-		{
-			keydownList[3] = TRUE;
+				keydown = TRUE;
+			}
+			if (GetAsyncKeyState(VK_DOWN) & 0x8000)
+			{
+				keydownList[3] = TRUE;
 
-			keydown = TRUE;
-		}
-		if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
-		{
-			keydownList[2] = TRUE;
+				keydown = TRUE;
+			}
+			if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
+			{
+				keydownList[2] = TRUE;
 
-			keydown = TRUE;
-		}
+				keydown = TRUE;
+			}
 
-		if (GetAsyncKeyState(0x46) & 0x8000) // f
-		{
-			keydownList[7] = TRUE;
+			if (GetAsyncKeyState(0x46) & 0x8000) // f
+			{
+				keydownList[7] = TRUE;
 
-			keydown = TRUE;
-		}
-		if (GetAsyncKeyState(0x54) & 0x8000) // t
-		{
-			keydownList[8] = TRUE;
+				keydown = TRUE;
+			}
+			if (GetAsyncKeyState(0x54) & 0x8000) // t
+			{
+				keydownList[8] = TRUE;
 
-			keydown = TRUE;
-		}
-		if (GetAsyncKeyState(0x48) & 0x8000) // h
-		{
-			keydownList[9] = TRUE;
+				keydown = TRUE;
+			}
+			if (GetAsyncKeyState(0x48) & 0x8000) // h
+			{
+				keydownList[9] = TRUE;
 
-			keydown = TRUE;
-		}
-		if (GetAsyncKeyState(0x47) & 0x8000) // g
-		{
-			keydownList[10] = TRUE;
+				keydown = TRUE;
+			}
+			if (GetAsyncKeyState(0x47) & 0x8000) // g
+			{
+				keydownList[10] = TRUE;
 
-			keydown = TRUE;
+				keydown = TRUE;
+			}
 		}
 	}
 	{
 		if (keydown)
 		{
-			p1key = false;
-			p2key = false;
 			// 0 1 2 3 p1 이동 4 5 6 p1 공격 스킬 대시 7 8 9 10 p2 이동 11 12 13 p2 공격 스킬 대시
 			if (keydownList[1])
 			{
 				if (Tileindex[m_pFramework->GetPlayer(2)->x / 64][(m_pFramework->GetPlayer(2)->y + 60) / 64] == 1)
 				{
-					m_pFramework->GetPlayer(2)->y -= 25;
+					m_pFramework->GetPlayer(2)->y -= 20;
+					m_pFramework->GetPlayer(2)->WalkingTimerTick++;
 				}
 				else if (Tileindex[m_pFramework->GetPlayer(2)->x / 64][(m_pFramework->GetPlayer(2)->y + 60 - 20) / 64] == 2)
 				{
@@ -145,7 +142,8 @@ void CIngameScene::Update(float fTimeElapsed)
 			{
 				if (Tileindex[m_pFramework->GetPlayer(2)->x / 64][(m_pFramework->GetPlayer(2)->y + 60) / 64] == 1)
 				{
-					m_pFramework->GetPlayer(2)->x -= 25;
+					m_pFramework->GetPlayer(2)->x -= 20;
+					m_pFramework->GetPlayer(2)->WalkingTimerTick++;
 				}
 				else if (Tileindex[(m_pFramework->GetPlayer(2)->x - 30) / 64][m_pFramework->GetPlayer(2)->y + 60 / 64] == 2)
 				{
@@ -163,7 +161,8 @@ void CIngameScene::Update(float fTimeElapsed)
 			{
 				if (Tileindex[m_pFramework->GetPlayer(2)->x / 64][(m_pFramework->GetPlayer(2)->y + 60) / 64] == 1)
 				{
-					m_pFramework->GetPlayer(2)->y += 25;
+					m_pFramework->GetPlayer(2)->y += 20;
+					m_pFramework->GetPlayer(2)->WalkingTimerTick++;
 				}
 				else if (Tileindex[m_pFramework->GetPlayer(2)->x / 64][(m_pFramework->GetPlayer(2)->y + 60 + 30) / 64] == 2)
 				{
@@ -181,7 +180,8 @@ void CIngameScene::Update(float fTimeElapsed)
 			{
 				if (Tileindex[m_pFramework->GetPlayer(2)->x / 64][(m_pFramework->GetPlayer(2)->y + 60) / 64] == 1)
 				{
-					m_pFramework->GetPlayer(2)->x += 25;
+					m_pFramework->GetPlayer(2)->x += 20;
+					m_pFramework->GetPlayer(2)->WalkingTimerTick++;
 				}
 				else if (Tileindex[(m_pFramework->GetPlayer(2)->x + 30) / 64][(m_pFramework->GetPlayer(2)->y + 60) / 64] == 2)
 				{
@@ -212,7 +212,8 @@ void CIngameScene::Update(float fTimeElapsed)
 			{
 				if (Tileindex[m_pFramework->GetPlayer(1)->x / 64][(m_pFramework->GetPlayer(1)->y + 60) / 64] == 1)
 				{
-					m_pFramework->GetPlayer(1)->y -= 25;
+					m_pFramework->GetPlayer(1)->y -= 20;
+					m_pFramework->GetPlayer(1)->WalkingTimerTick++;
 				}
 				else if (Tileindex[m_pFramework->GetPlayer(1)->x / 64][(m_pFramework->GetPlayer(1)->y + 60 - 30) / 64] == 2)
 				{
@@ -229,7 +230,8 @@ void CIngameScene::Update(float fTimeElapsed)
 			{
 				if (Tileindex[m_pFramework->GetPlayer(1)->x / 64][(m_pFramework->GetPlayer(1)->y + 60) / 64] == 1)
 				{
-					m_pFramework->GetPlayer(1)->x -= 25;
+					m_pFramework->GetPlayer(1)->x -= 20;
+					m_pFramework->GetPlayer(1)->WalkingTimerTick++;
 				}
 				else if (Tileindex[(m_pFramework->GetPlayer(1)->x - 30) / 64][(m_pFramework->GetPlayer(1)->y + 60) / 64] == 2)
 				{
@@ -246,7 +248,8 @@ void CIngameScene::Update(float fTimeElapsed)
 			{
 				if (Tileindex[m_pFramework->GetPlayer(1)->x / 64][(m_pFramework->GetPlayer(1)->y + 60) / 64] == 1)
 				{
-					m_pFramework->GetPlayer(1)->y += 25;
+					m_pFramework->GetPlayer(1)->y += 20;
+					m_pFramework->GetPlayer(1)->WalkingTimerTick++;
 				}
 				else if (Tileindex[m_pFramework->GetPlayer(1)->x / 64][(m_pFramework->GetPlayer(1)->y + 60 + 30) / 64] == 2)
 				{
@@ -263,7 +266,8 @@ void CIngameScene::Update(float fTimeElapsed)
 			{
 				if (Tileindex[m_pFramework->GetPlayer(1)->x / 64][(m_pFramework->GetPlayer(1)->y + 60) / 64] == 1)
 				{
-					m_pFramework->GetPlayer(1)->x += 25;
+					m_pFramework->GetPlayer(1)->x += 20;
+					m_pFramework->GetPlayer(1)->WalkingTimerTick++;
 				}
 				else if (Tileindex[(m_pFramework->GetPlayer(1)->x + 30) / 64][(m_pFramework->GetPlayer(1)->y + 60) / 64] == 2)
 				{
@@ -293,24 +297,73 @@ void CIngameScene::Update(float fTimeElapsed)
 			if (p1key)
 			{	
 				m_pFramework->GetPlayer(1)->isWalk = TRUE;
-				m_pFramework->GetPlayer(1)->WalkingTimerTick = 0;
-				m_pFramework->GetPlayer(1)->WalkingImageTick++;
+				if (m_pFramework->GetPlayer(1)->WalkingTimerTick++ > 3)
+				{
+					m_pFramework->GetPlayer(1)->WalkingTimerTick = 0;
+					m_pFramework->GetPlayer(1)->WalkingImageTick++;
+				}
+				
+			}
+			else
+			{
+				m_pFramework->GetPlayer(1)->isWalk = FALSE;
+				switch (m_pFramework->GetPlayer(1)->CharacterStatus)
+				{
+				case 2:
+				case 5:
+				case 6:
+					m_pFramework->GetPlayer(1)->CharacterStatus = 0;
+					break;
+				case 3:
+				case 4:
+				case 7:
+					m_pFramework->GetPlayer(1)->CharacterStatus = 1;
+					break;
+				}
 			}
 			if (p2key)
 			{
 				m_pFramework->GetPlayer(2)->isWalk = TRUE;
-				m_pFramework->GetPlayer(2)->WalkingTimerTick = 0;
-				m_pFramework->GetPlayer(2)->WalkingImageTick++;
+				if (m_pFramework->GetPlayer(2)->WalkingTimerTick++ > 3)
+				{
+					m_pFramework->GetPlayer(2)->WalkingTimerTick = 0;
+					m_pFramework->GetPlayer(2)->WalkingImageTick++;
+				}
+			}
+			else
+			{
+				m_pFramework->GetPlayer(2)->isWalk = FALSE;
+				switch (m_pFramework->GetPlayer(2)->CharacterStatus)
+				{
+				case 2:
+				case 5:
+				case 6:
+					m_pFramework->GetPlayer(2)->CharacterStatus = 0;
+					break;
+				case 3:
+				case 4:
+				case 7:
+					m_pFramework->GetPlayer(2)->CharacterStatus = 1;
+					break;
+				}
 			}
 		}
 	}
 
-	for (int i = 0; i < nObjects; ++i)
-		ppObjects[i]->Update(fTimeElapsed);
+	//for (int i = 0; i < nObjects; ++i)
+		//ppObjects[i]->Update(fTimeElapsed);
 }
 
 void CIngameScene::Render(HDC hdc)
 {
+	keydown = FALSE;
+	for (int i = 0; i < 14; i++)
+	{
+		keydownList[i] = FALSE;
+	}
+	p1key = false;
+	p2key = false;
+
 	BitBlt(*m_pFramework->GetPlayerDC(), m_pFramework->GetPlayer(1)->x - m_pFramework->p1.right / 2, m_pFramework->GetPlayer(1)->y - m_pFramework->p1.bottom / 2, m_pFramework->p1.right, m_pFramework->p1.bottom,
 		*m_pFramework->GetTileDC(), m_pFramework->GetPlayer(1)->x - m_pFramework->p1.right / 2, m_pFramework->GetPlayer(1)->y - m_pFramework->p1.bottom / 2, SRCCOPY);
 	BitBlt(*m_pFramework->GetPlayerDC(), m_pFramework->GetPlayer(2)->x - m_pFramework->p1.right / 2, m_pFramework->GetPlayer(2)->y - m_pFramework->p1.bottom / 2, m_pFramework->p1.right, m_pFramework->p2.bottom,
@@ -322,8 +375,8 @@ void CIngameScene::Render(HDC hdc)
 	Ellipse(*m_pFramework->GetPlayerDC(), m_pFramework->GetPlayer(1)->x - 5, m_pFramework->GetPlayer(1)->y - 5, m_pFramework->GetPlayer(1)->x + 5, m_pFramework->GetPlayer(1)->y + 5);
 	Ellipse(*m_pFramework->GetPlayerDC(), m_pFramework->GetPlayer(2)->x - 5, m_pFramework->GetPlayer(2)->y - 5, m_pFramework->GetPlayer(2)->x + 5, m_pFramework->GetPlayer(2)->y + 5);
 
-	BitBlt(m_pFramework->GetTotalDC(), m_pFramework->p1.left, m_pFramework->p1.top, m_pFramework->p1.right, m_pFramework->p1.bottom, *m_pFramework->GetPlayerDC(), m_pFramework->GetPlayer(1)->x - m_pFramework->p1.right / 2, m_pFramework->GetPlayer(1)->y - m_pFramework->p1.bottom / 2, SRCCOPY);
-	BitBlt(m_pFramework->GetTotalDC(), m_pFramework->p2.left, m_pFramework->p2.top, m_pFramework->p1.right, m_pFramework->p2.bottom, *m_pFramework->GetPlayerDC(), m_pFramework->GetPlayer(2)->x - m_pFramework->p1.right / 2, m_pFramework->GetPlayer(2)->y - m_pFramework->p2.bottom / 2, SRCCOPY);
+	BitBlt(hdc, m_pFramework->p1.left, m_pFramework->p1.top, m_pFramework->p1.right, m_pFramework->p1.bottom, *m_pFramework->GetPlayerDC(), m_pFramework->GetPlayer(1)->x - m_pFramework->p1.right / 2, m_pFramework->GetPlayer(1)->y - m_pFramework->p1.bottom / 2, SRCCOPY);
+	BitBlt(hdc, m_pFramework->p2.left, m_pFramework->p2.top, m_pFramework->p1.right, m_pFramework->p2.bottom, *m_pFramework->GetPlayerDC(), m_pFramework->GetPlayer(2)->x - m_pFramework->p1.right / 2, m_pFramework->GetPlayer(2)->y - m_pFramework->p2.bottom / 2, SRCCOPY);
 	
 	
 	for (int i = 0; i < nObjects; ++i)

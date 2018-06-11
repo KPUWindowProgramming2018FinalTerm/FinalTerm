@@ -49,13 +49,14 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 														// PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)
 														// 픽은 루프가 비어있을때도 가져오지만, 겟은 클릭할때마다 가져온다.
 	{
-
 		if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
 		{
 			if (msg.message == WM_QUIT) break; // esc 누르면 윈도우 종료.
-
-			TranslateMessage(&msg);	// 메시지 이동
-			DispatchMessage(&msg);	// 메시지 파견
+			if (msg.message != WM_MOUSEMOVE && msg.message != WM_CHAR)
+			{
+				TranslateMessage(&msg);	// 메시지 이동
+				DispatchMessage(&msg);	// 메시지 파견
+			}
 		}
 		// 여기서 프레임을 통해 프로그램을 돌려야 한다.
 		// FrameAdvance를 통해 프로그램을 돌린다.
