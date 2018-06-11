@@ -19,13 +19,16 @@ private:
 	CObject** ppObjects = NULL;
 	int nObjects;
 
-	CImage C_Tile[3];
+	CImage C_Tile[3];		//타일 이미지
 	CImage C_Numbers[10];
 
-	BOOL keydown;
-	BOOL keydownList[14] = { 0 };
-	bool p1key = false;
-	bool p2key = false;
+	BOOL keydownList[14] = { 0 };	// 0 1 2 3 p2 이동 4 5 6 p2 스킬 공격 대시 7 8 9 10 p1 이동 11 12 13 p1 스킬 공격 대시
+	BOOL keydown;					// 어떤 키라도 눌렸는지 확인
+	BOOL isp1LockDown = FALSE;		// 공격 등 이동할 수 없는 상태
+	BOOL isp2LockDown = FALSE;		// 공격 등 이동할 수 없는 상태
+	
+	bool p1key = false;				// p1 이동키라면
+	bool p2key = false;				// p2 이동키라면
 
 	int Tileindex[100][100] = { 0 };
 };

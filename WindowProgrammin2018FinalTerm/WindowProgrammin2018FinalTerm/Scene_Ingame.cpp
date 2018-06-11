@@ -64,61 +64,168 @@ void CIngameScene::Update(float fTimeElapsed)
 	{ //동시 입력 인식
 		if (keydown != TRUE)
 		{
-			if (GetAsyncKeyState(VK_UP) & 0x8000)
-			{	
-				keydownList[1] = TRUE;
-
-				keydown = TRUE;
-			}
-			if (GetAsyncKeyState(VK_LEFT) & 0x8000)
+			if (isp2LockDown != TRUE)
 			{
-				keydownList[0] = TRUE;
+				if (GetAsyncKeyState(VK_NUMPAD1) & 0x8000)
+				{
+					keydownList[4] = TRUE;
 
-				keydown = TRUE;
+					keydown = TRUE;
+					isp2LockDown = TRUE;
+				}
+				else if (GetAsyncKeyState(VK_NUMPAD2) & 0x8000)
+				{
+					keydownList[5] = TRUE;
+
+					keydown = TRUE;
+					isp2LockDown = TRUE;
+				}
+				else if (GetAsyncKeyState(VK_NUMPAD3) & 0x8000)
+				{
+					keydownList[6] = TRUE;
+
+					keydown = TRUE;
+					isp2LockDown = TRUE;
+				}
+				else
+				{
+					if (GetAsyncKeyState(VK_UP) & 0x8000)
+					{
+						keydownList[1] = TRUE;
+
+						keydown = TRUE;
+					}
+					if (GetAsyncKeyState(VK_LEFT) & 0x8000)
+					{
+						keydownList[0] = TRUE;
+
+						keydown = TRUE;
+					}
+					if (GetAsyncKeyState(VK_DOWN) & 0x8000)
+					{
+						keydownList[3] = TRUE;
+
+						keydown = TRUE;
+					}
+					if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
+					{
+						keydownList[2] = TRUE;
+
+						keydown = TRUE;
+					}
+				}
 			}
-			if (GetAsyncKeyState(VK_DOWN) & 0x8000)
+			else
 			{
-				keydownList[3] = TRUE;
+				if (m_pFramework->GetPlayer(2)->isAttack)
+				{
+					if (m_pFramework->GetPlayer(2)->AttackTimerTick++ > 3)
+					{
+						m_pFramework->GetPlayer(2)->AttackTimerTick = 0;
+						if (m_pFramework->GetPlayer(2)->AttackImageTick++ > 2)
+						{
+							m_pFramework->GetPlayer(2)->isAttack = FALSE;
+							m_pFramework->GetPlayer(2)->AttackTimerTick = 0;
+							m_pFramework->GetPlayer(2)->AttackImageTick = 0;
+							printf("%d", m_pFramework->GetPlayer(2)->CharacterStatus);
+							if (m_pFramework->GetPlayer(2)->CharacterStatus == 6)
+								m_pFramework->GetPlayer(2)->CharacterStatus = 0;
+							else
+								m_pFramework->GetPlayer(2)->CharacterStatus = 1;
+							isp2LockDown = FALSE;
 
-				keydown = TRUE;
+						}
+					}
+				}
+				else if (m_pFramework->GetPlayer(2)->isSkill)
+				{
+
+				}
 			}
-			if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
+			if (isp1LockDown != TRUE)
 			{
-				keydownList[2] = TRUE;
+				if (GetAsyncKeyState(0x41) & 0x8000)
+				{
+					keydownList[11] = TRUE;
 
-				keydown = TRUE;
+					keydown = TRUE;
+					isp1LockDown = TRUE;
+				}
+				else if (GetAsyncKeyState(0x53) & 0x8000)
+				{
+					keydownList[12] = TRUE;
+
+					keydown = TRUE;
+					isp1LockDown = TRUE;
+				}
+				else if (GetAsyncKeyState(0x44) & 0x8000)
+				{
+					keydownList[13] = TRUE;
+
+					keydown = TRUE;
+					isp1LockDown = TRUE;
+				}
+				else
+				{
+					if (GetAsyncKeyState(0x46) & 0x8000) // f
+					{
+						keydownList[7] = TRUE;
+
+						keydown = TRUE;
+					}
+					if (GetAsyncKeyState(0x54) & 0x8000) // t
+					{
+						keydownList[8] = TRUE;
+
+						keydown = TRUE;
+					}
+					if (GetAsyncKeyState(0x48) & 0x8000) // h
+					{
+						keydownList[9] = TRUE;
+
+						keydown = TRUE;
+					}
+					if (GetAsyncKeyState(0x47) & 0x8000) // g
+					{
+						keydownList[10] = TRUE;
+
+						keydown = TRUE;
+					}
+				}
 			}
-
-			if (GetAsyncKeyState(0x46) & 0x8000) // f
+			else
 			{
-				keydownList[7] = TRUE;
+				if (m_pFramework->GetPlayer(1)->isAttack)
+				{
+					if (m_pFramework->GetPlayer(1)->AttackTimerTick++ > 3)
+					{
+						m_pFramework->GetPlayer(1)->AttackTimerTick = 0;
+						if (m_pFramework->GetPlayer(1)->AttackImageTick++ > 2)
+						{
+							m_pFramework->GetPlayer(1)->isAttack = FALSE;
+							m_pFramework->GetPlayer(1)->AttackTimerTick = 0;
+							m_pFramework->GetPlayer(1)->AttackImageTick = 0;
+							printf("%d", m_pFramework->GetPlayer(1)->CharacterStatus);
+							if (m_pFramework->GetPlayer(1)->CharacterStatus == 6)
+								m_pFramework->GetPlayer(1)->CharacterStatus = 0;
+							else
+								m_pFramework->GetPlayer(1)->CharacterStatus = 1;
+							isp1LockDown = FALSE;
 
-				keydown = TRUE;
-			}
-			if (GetAsyncKeyState(0x54) & 0x8000) // t
-			{
-				keydownList[8] = TRUE;
+						}
+					}
+				}
+				else if (m_pFramework->GetPlayer(1)->isSkill)
+				{
 
-				keydown = TRUE;
-			}
-			if (GetAsyncKeyState(0x48) & 0x8000) // h
-			{
-				keydownList[9] = TRUE;
-
-				keydown = TRUE;
-			}
-			if (GetAsyncKeyState(0x47) & 0x8000) // g
-			{
-				keydownList[10] = TRUE;
-
-				keydown = TRUE;
+				}
 			}
 		}
 	}
 	{
 		if (keydown)
 		{
-			// 0 1 2 3 p1 이동 4 5 6 p1 공격 스킬 대시 7 8 9 10 p2 이동 11 12 13 p2 공격 스킬 대시
+			// 0 1 2 3 p2 이동 4 5 6 p2 스킬 공격 대시 7 8 9 10 p1 이동 11 12 13 p1 스킬 공격 대시
 			if (keydownList[1])
 			{
 				if (Tileindex[m_pFramework->GetPlayer(2)->x / 64][(m_pFramework->GetPlayer(2)->y + 60) / 64] == 1)
@@ -145,7 +252,7 @@ void CIngameScene::Update(float fTimeElapsed)
 					m_pFramework->GetPlayer(2)->x -= 20;
 					m_pFramework->GetPlayer(2)->WalkingTimerTick++;
 				}
-				else if (Tileindex[(m_pFramework->GetPlayer(2)->x - 30) / 64][m_pFramework->GetPlayer(2)->y + 60 / 64] == 2)
+				else if (Tileindex[((m_pFramework->GetPlayer(2)->x) -30) / 64][(m_pFramework->GetPlayer(2)->y + 60 - 10) / 64] == 2)
 				{
 
 				}
@@ -164,7 +271,7 @@ void CIngameScene::Update(float fTimeElapsed)
 					m_pFramework->GetPlayer(2)->y += 20;
 					m_pFramework->GetPlayer(2)->WalkingTimerTick++;
 				}
-				else if (Tileindex[m_pFramework->GetPlayer(2)->x / 64][(m_pFramework->GetPlayer(2)->y + 60 + 30) / 64] == 2)
+				else if (Tileindex[m_pFramework->GetPlayer(2)->x / 64][(m_pFramework->GetPlayer(2)->y + 60 + 20) / 64] == 2)
 				{
 
 				}
@@ -196,15 +303,32 @@ void CIngameScene::Update(float fTimeElapsed)
 
 			}
 
-			if (keydownList[4])
+			if (keydownList[4]) // p2 스킬
 			{
 
 			}
-			if (keydownList[5])
+			if (keydownList[5]) // p2 공격
 			{
-
+				switch (m_pFramework->GetPlayer(2)->CharacterStatus)
+				{
+				case 2:
+				case 5:
+				case 6:
+				case 0:
+					m_pFramework->GetPlayer(2)->isAttack = TRUE;
+					m_pFramework->GetPlayer(2)->CharacterStatus = 6;
+						//p1 피격처리 여기서
+					break; // 앞 볼 때
+				case 3:
+				case 4:
+				case 7:
+				case 1:
+					m_pFramework->GetPlayer(2)->isAttack = TRUE;
+					m_pFramework->GetPlayer(2)->CharacterStatus = 7;
+					break; // 뒤 볼 때
+				}
 			}
-			if (keydownList[6])
+			if (keydownList[6]) // p2 대시
 			{
 
 			}
@@ -251,7 +375,7 @@ void CIngameScene::Update(float fTimeElapsed)
 					m_pFramework->GetPlayer(1)->y += 20;
 					m_pFramework->GetPlayer(1)->WalkingTimerTick++;
 				}
-				else if (Tileindex[m_pFramework->GetPlayer(1)->x / 64][(m_pFramework->GetPlayer(1)->y + 60 + 30) / 64] == 2)
+				else if (Tileindex[m_pFramework->GetPlayer(1)->x / 64][(m_pFramework->GetPlayer(1)->y + 60 + 20) / 64] == 2)
 				{
 
 				}
@@ -281,30 +405,49 @@ void CIngameScene::Update(float fTimeElapsed)
 				m_pFramework->GetPlayer(1)->CharacterStatus = 4;
 			}
 
-			if (keydownList[11])
+			if (keydownList[11]) // p1 스킬
 			{
 
 			}
-			if (keydownList[12])
+			if (keydownList[12]) // p1 공격
 			{
-
-			}
-			if (keydownList[13])
-			{
-
-			}
-
-			if (p1key)
-			{	
-				m_pFramework->GetPlayer(1)->isWalk = TRUE;
-				if (m_pFramework->GetPlayer(1)->WalkingTimerTick++ > 3)
+				switch (m_pFramework->GetPlayer(1)->CharacterStatus)
 				{
-					m_pFramework->GetPlayer(1)->WalkingTimerTick = 0;
-					m_pFramework->GetPlayer(1)->WalkingImageTick++;
+				case 2:
+				case 5:
+				case 6:
+				case 0:
+					m_pFramework->GetPlayer(1)->isAttack = TRUE;
+					m_pFramework->GetPlayer(1)->CharacterStatus = 6;
+					//p1 피격처리 여기서
+					break; // 앞 볼 때
+				case 3:
+				case 4:
+				case 7:
+				case 1:
+					m_pFramework->GetPlayer(1)->isAttack = TRUE;
+					m_pFramework->GetPlayer(1)->CharacterStatus = 7;
+					break; // 뒤 볼 때
 				}
-				
 			}
-			else
+			if (keydownList[13]) // p1 대시
+			{
+
+			}
+		}
+		if (p1key)
+		{
+			m_pFramework->GetPlayer(1)->isWalk = TRUE;
+			if (m_pFramework->GetPlayer(1)->WalkingTimerTick++ > 3)
+			{
+				m_pFramework->GetPlayer(1)->WalkingTimerTick = 0;
+				m_pFramework->GetPlayer(1)->WalkingImageTick++;
+			}
+
+		}
+		else
+		{
+			if (m_pFramework->GetPlayer(1)->isAttack != TRUE)
 			{
 				m_pFramework->GetPlayer(1)->isWalk = FALSE;
 				switch (m_pFramework->GetPlayer(1)->CharacterStatus)
@@ -321,16 +464,19 @@ void CIngameScene::Update(float fTimeElapsed)
 					break;
 				}
 			}
-			if (p2key)
+		}
+		if (p2key)
+		{
+			m_pFramework->GetPlayer(2)->isWalk = TRUE;
+			if (m_pFramework->GetPlayer(2)->WalkingTimerTick++ > 3)
 			{
-				m_pFramework->GetPlayer(2)->isWalk = TRUE;
-				if (m_pFramework->GetPlayer(2)->WalkingTimerTick++ > 3)
-				{
-					m_pFramework->GetPlayer(2)->WalkingTimerTick = 0;
-					m_pFramework->GetPlayer(2)->WalkingImageTick++;
-				}
+				m_pFramework->GetPlayer(2)->WalkingTimerTick = 0;
+				m_pFramework->GetPlayer(2)->WalkingImageTick++;
 			}
-			else
+		}
+		else
+		{
+			if (m_pFramework->GetPlayer(2)->isAttack != TRUE)
 			{
 				m_pFramework->GetPlayer(2)->isWalk = FALSE;
 				switch (m_pFramework->GetPlayer(2)->CharacterStatus)
@@ -369,8 +515,16 @@ void CIngameScene::Render(HDC hdc)
 	BitBlt(*m_pFramework->GetPlayerDC(), m_pFramework->GetPlayer(2)->x - m_pFramework->p1.right / 2, m_pFramework->GetPlayer(2)->y - m_pFramework->p1.bottom / 2, m_pFramework->p1.right, m_pFramework->p2.bottom,
 		*m_pFramework->GetTileDC(), m_pFramework->GetPlayer(2)->x - m_pFramework->p1.right / 2, m_pFramework->GetPlayer(2)->y - m_pFramework->p2.bottom / 2, SRCCOPY);
 
-	m_pFramework->GetPlayer(1)->Render(m_pFramework->GetPlayerDC());
-	m_pFramework->GetPlayer(2)->Render(m_pFramework->GetPlayerDC());
+	if (m_pFramework->GetPlayer(1)->y > m_pFramework->GetPlayer(2)->y)
+	{
+		m_pFramework->GetPlayer(2)->Render(m_pFramework->GetPlayerDC());
+		m_pFramework->GetPlayer(1)->Render(m_pFramework->GetPlayerDC());
+	}
+	else
+	{
+		m_pFramework->GetPlayer(1)->Render(m_pFramework->GetPlayerDC());
+		m_pFramework->GetPlayer(2)->Render(m_pFramework->GetPlayerDC());
+	}
 
 	Ellipse(*m_pFramework->GetPlayerDC(), m_pFramework->GetPlayer(1)->x - 5, m_pFramework->GetPlayer(1)->y - 5, m_pFramework->GetPlayer(1)->x + 5, m_pFramework->GetPlayer(1)->y + 5);
 	Ellipse(*m_pFramework->GetPlayerDC(), m_pFramework->GetPlayer(2)->x - 5, m_pFramework->GetPlayer(2)->y - 5, m_pFramework->GetPlayer(2)->x + 5, m_pFramework->GetPlayer(2)->y + 5);

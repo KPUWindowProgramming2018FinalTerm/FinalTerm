@@ -7,6 +7,10 @@ struct PlayerImage
 	CImage Attack_B[4];
 	CImage Attacked[2];
 	CImage Attacked_B[2];
+	CImage Dash;
+	CImage Dash_B;
+	CImage Skill[10];
+	int MaxImageNumOfSkill = 10;
 	CImage Idle;
 	CImage Idle_B;
 	CImage Walk[6];
@@ -25,6 +29,9 @@ public:
 	int y=0;
 
 	BOOL isWalk = FALSE;
+	BOOL isAttack = FALSE;
+	BOOL isAttacked = FALSE;
+	BOOL isSkill = FALSE;
 
 	int WalkingTimerTick = 0; //타이머돌려서 10되면 Idle로
 	int WalkingImageTick = 0;
