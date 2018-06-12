@@ -32,14 +32,19 @@ public:
 	BOOL isAttack = FALSE;
 	BOOL isAttacked = FALSE;
 	BOOL isSkill = FALSE;
+	BOOL isDash = FALSE;
+	BOOL iHaveCoin = FALSE;
 
-	int WalkingTimerTick = 0; //타이머돌려서 10되면 Idle로
+	int WalkingTimerTick = 0;
 	int WalkingImageTick = 0;
 
 	int AttackTimerTick = 0; //
 	int AttackImageTick = 0;
 
+	int DashTimerTick = 0;
+
 	int CharacterStatus = 0; // 0~1 = Idle  // 2~5 = Walk // 6~7 = Attack // 8 = Win // 9 = Lose
+	int Old_CharStat = 0; // 대시에서 쓰는 것
 
 	CObject_Player();
 	//CObject_Player(int characterNum, HDC PlayerDC);

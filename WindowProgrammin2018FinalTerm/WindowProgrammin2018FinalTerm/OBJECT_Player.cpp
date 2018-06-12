@@ -96,7 +96,6 @@ void CObject_Player::Render(HDC* hdc)
 			this->Image.Walk[this->WalkingImageTick % 6].GetHeight());
 		break;
 	case 6:
-		printf("%d",this->AttackImageTick);
 		this->Image.Attack[this->AttackImageTick].Draw(*hdc, this->x - this->Image.Attack[this->AttackImageTick].GetWidth() / 2,
 			this->y - 5 - this->Image.Attack[this->AttackImageTick].GetHeight() / 2, this->Image.Attack[this->AttackImageTick].GetWidth(),
 			this->Image.Attack[this->AttackImageTick].GetHeight());
@@ -107,14 +106,25 @@ void CObject_Player::Render(HDC* hdc)
 			this->Image.Attack_B[this->AttackImageTick].GetHeight());
 		break;
 	case 8:
-
+		this->Image.Attacked[WalkingImageTick % 2].Draw(*hdc, this->x - this->Image.Attacked[WalkingImageTick % 2].GetWidth() / 2,
+			this->y - 5 - Image.Attacked[WalkingImageTick % 2].GetHeight() / 2, Image.Attacked[WalkingImageTick % 2].GetWidth(), Image.Attacked[WalkingImageTick % 2].GetHeight());
 		break;
 	case 9:
-
+		this->Image.Attacked_B[WalkingImageTick % 2].Draw(*hdc, this->x - this->Image.Attacked_B[WalkingImageTick % 2].GetWidth() / 2,
+			this->y - 5 - Image.Attacked_B[WalkingImageTick % 2].GetHeight() / 2, Image.Attacked_B[WalkingImageTick % 2].GetWidth(), Image.Attacked_B[WalkingImageTick % 2].GetHeight());
+		break;
 		break;
 	case 10:
+		if (DashTimerTick < 7)
+		{ }
+		else
+		this->Image.Dash.Draw(*hdc, this->x - this->Image.Dash.GetWidth() / 2, this->y - 5 - Image.Dash.GetHeight() / 2, Image.Dash.GetWidth(), Image.Dash.GetHeight());
 		break;
 	case 11:
+		if (DashTimerTick < 7)
+		{}
+		else
+		this->Image.Dash_B.Draw(*hdc, this->x - this->Image.Dash_B.GetWidth() / 2, this->y - 5 - Image.Dash_B.GetHeight() / 2, Image.Dash_B.GetWidth(), Image.Dash_B.GetHeight());
 		break;
 	case 12:
 		break;

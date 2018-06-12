@@ -15,6 +15,9 @@ public:
 	void Render(HDC hdc) override;				// FrameAdvanced
 	void Update(float fTimeElapsed) override;	// m_pCurrScene->Update();
 												// m_pCurrScene->Render(m_hdc);
+
+	void KeyState();
+	void CharacterState();
 private:
 	CObject** ppObjects = NULL;
 	int nObjects;

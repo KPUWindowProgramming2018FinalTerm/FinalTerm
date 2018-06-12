@@ -289,6 +289,7 @@ void CFramework::FrameAdvance()
 	//}
 	m_ticker->Tick(60.0f);
 	m_fps = 1.0 / m_ticker->GetTimeElapsed();
+	
 	Update(m_ticker->GetTimeElapsed()); // 그려야 될 것 업데이트(프레임단)
 	PreprocessingForDraw(); // 
 	// 백버퍼 연산이므로 OnDraw가 아니다. OnDraw 이전에 백버퍼에 그려주는 연산을 한다.
@@ -341,7 +342,6 @@ LRESULT CFramework::WndProc(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lP
 	case WM_PAINT:
 		{
 		Paint:
-		static int n=0;
 			//printf("%dIn\n",++n);
 			PAINTSTRUCT ps;
 			HDC hdc = ::BeginPaint(hWnd, &ps);	// 이 디바이스 컨텍스트를 사용하겠다.
