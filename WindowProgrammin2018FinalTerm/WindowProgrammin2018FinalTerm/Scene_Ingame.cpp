@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Scene_Ingame.h"
 #include "OBJECT_Player.h"
+#include "OBJECT_Coin.h"
 #include "Framework.h"
 
 
@@ -10,7 +11,10 @@ CIngameScene::CIngameScene()
 }
 CIngameScene::~CIngameScene()
 {
-
+	if (CoinObject != NULL)
+	{
+		free(CoinObject);
+	}
 }
 CIngameScene::CIngameScene(SceneTag tag, CFramework * pFramework) : CScene(tag, pFramework)
 {
@@ -51,6 +55,7 @@ bool CIngameScene::OnCreate()
 void CIngameScene::BuildObjects()
 {
 	nObjects = 0;
+	CoinObject = new OBJECT_Coin(100,100);
 	/*CObject** ppObjects;
 	int nObjects; 여기다 값넣기*/
 
@@ -156,19 +161,23 @@ void CIngameScene::KeyState()
 				case 0:
 					if (m_pFramework->GetPlayer(2)->x > 50)
 						m_pFramework->GetPlayer(2)->x -= 25;
+					
 					break;
 				case 5:
 					if (m_pFramework->GetPlayer(2)->y < 6350)
 						m_pFramework->GetPlayer(2)->y += 25;
+					
 					break; // 앞 볼 때
 				case 3:
 					if (m_pFramework->GetPlayer(2)->y > 50)
 						m_pFramework->GetPlayer(2)->y -= 25;
+					
 					break;
 				case 4:
 				case 1:
 					if (m_pFramework->GetPlayer(2)->x < 6350)
 						m_pFramework->GetPlayer(2)->x += 25;
+					
 					break; // 뒤 볼 때
 				}
 			}
@@ -189,22 +198,34 @@ void CIngameScene::KeyState()
 					case 2:
 					case 0:
 						if (m_pFramework->GetPlayer(2)->x > 50)
-							m_pFramework->GetPlayer(2)->x -= 10;
+							m_pFramework->GetPlayer(2)->x -= 15;
+						if (coinLockDown)
+						CoinObject->Setx(CoinObject->x() - 5);
 						break;
 					case 5:
 						if (m_pFramework->GetPlayer(2)->y < 6350)
-							m_pFramework->GetPlayer(2)->y += 10;
+							m_pFramework->GetPlayer(2)->y += 15;
+						if (coinLockDown)
+						CoinObject->Setx(CoinObject->y() + 5);
 						break; // 앞 볼 때
 					case 3:
 						if (m_pFramework->GetPlayer(2)->y > 50)
-							m_pFramework->GetPlayer(2)->y -= 10;
+							m_pFramework->GetPlayer(2)->y -= 15;
+						if (coinLockDown)
+						CoinObject->Setx(CoinObject->y() - 5);
 						break;
 					case 4:
 					case 1:
 						if (m_pFramework->GetPlayer(2)->x < 6350)
-							m_pFramework->GetPlayer(2)->x += 10;
+							m_pFramework->GetPlayer(2)->x += 15;
+						if (coinLockDown)
+						CoinObject->Setx(CoinObject->x() + 5);
 						break; // 뒤 볼 때
 					}
+				}
+				else
+				{
+					coinLockDown = FALSE;
 				}
 			}
 		}
@@ -334,23 +355,36 @@ void CIngameScene::KeyState()
 					case 2:
 					case 0:
 						if (m_pFramework->GetPlayer(1)->x > 50)
-							m_pFramework->GetPlayer(1)->x -= 10;
+							m_pFramework->GetPlayer(1)->x -= 15;
+						if (coinLockDown)
+						CoinObject->Setx(CoinObject->x() - 5);
 						break;
 					case 5:
 						if (m_pFramework->GetPlayer(1)->y < 6350)
-							m_pFramework->GetPlayer(1)->y += 10;
+							m_pFramework->GetPlayer(1)->y += 15;
+						if (coinLockDown)
+						CoinObject->Setx(CoinObject->y() + 5);
 						break; // 앞 볼 때
 					case 3:
 						if (m_pFramework->GetPlayer(1)->y > 50)
-							m_pFramework->GetPlayer(1)->y -= 10;
+							m_pFramework->GetPlayer(1)->y -= 15;
+						if (coinLockDown)
+						CoinObject->Setx(CoinObject->y() - 5);
 						break;
 					case 4:
 					case 1:
 						if (m_pFramework->GetPlayer(1)->x < 6350)
-							m_pFramework->GetPlayer(1)->x += 10;
+							m_pFramework->GetPlayer(1)->x += 15;
+						if (coinLockDown)
+						CoinObject->Setx(CoinObject->x() + 5);
 						break; // 뒤 볼 때
 					}
 				}
+				else
+				{
+					coinLockDown = FALSE;
+				}
+
 			}
 		}
 	}
@@ -469,6 +503,12 @@ void CIngameScene::CharacterState()
 					m_pFramework->GetPlayer(1)->isAttacked = TRUE;
 					m_pFramework->GetPlayer(1)->CharacterStatus = 9;
 					isp1LockDown = TRUE;
+					if (m_pFramework->GetPlayer(1)->iHaveCoin)
+					{
+						m_pFramework->GetPlayer(1)->iHaveCoin = FALSE;
+						CoinObject->OnCreate(m_pFramework->GetPlayer(1)->x, m_pFramework->GetPlayer(1)->y);
+						coinLockDown = TRUE;
+					}
 				}
 				break; // 앞 볼 때
 			case 3:
@@ -486,6 +526,12 @@ void CIngameScene::CharacterState()
 					m_pFramework->GetPlayer(1)->isAttacked = TRUE;
 					m_pFramework->GetPlayer(1)->CharacterStatus = 8;
 					isp1LockDown = TRUE;
+					if (m_pFramework->GetPlayer(1)->iHaveCoin)
+					{
+						m_pFramework->GetPlayer(1)->iHaveCoin = FALSE;
+						CoinObject->OnCreate(m_pFramework->GetPlayer(1)->x, m_pFramework->GetPlayer(1)->y);
+						coinLockDown = TRUE;
+					}
 				}
 				break; // 뒤 볼 때
 			}
@@ -513,6 +559,7 @@ void CIngameScene::CharacterState()
 		{
 			if (Tileindex[m_pFramework->GetPlayer(1)->x / 64][(m_pFramework->GetPlayer(1)->y + 60) / 64] == 1)
 			{
+				if (m_pFramework->GetPlayer(1)->y > 50)
 				m_pFramework->GetPlayer(1)->y -= 20;
 				m_pFramework->GetPlayer(1)->WalkingTimerTick++;
 			}
@@ -522,6 +569,7 @@ void CIngameScene::CharacterState()
 			}
 			else
 			{
+				if (m_pFramework->GetPlayer(1)->y > 50)
 				m_pFramework->GetPlayer(1)->y -= 10;
 			}
 			p1key = true;
@@ -531,6 +579,7 @@ void CIngameScene::CharacterState()
 		{
 			if (Tileindex[m_pFramework->GetPlayer(1)->x / 64][(m_pFramework->GetPlayer(1)->y + 60) / 64] == 1)
 			{
+				if (m_pFramework->GetPlayer(1)->x > 50)
 				m_pFramework->GetPlayer(1)->x -= 20;
 				m_pFramework->GetPlayer(1)->WalkingTimerTick++;
 			}
@@ -540,6 +589,7 @@ void CIngameScene::CharacterState()
 			}
 			else
 			{
+				if (m_pFramework->GetPlayer(1)->x > 50)
 				m_pFramework->GetPlayer(1)->x -= 10;
 			}
 			p1key = true;
@@ -549,6 +599,7 @@ void CIngameScene::CharacterState()
 		{
 			if (Tileindex[m_pFramework->GetPlayer(1)->x / 64][(m_pFramework->GetPlayer(1)->y + 60) / 64] == 1)
 			{
+				if (m_pFramework->GetPlayer(1)->y < 6350)
 				m_pFramework->GetPlayer(1)->y += 20;
 				m_pFramework->GetPlayer(1)->WalkingTimerTick++;
 			}
@@ -558,6 +609,7 @@ void CIngameScene::CharacterState()
 			}
 			else
 			{
+				if (m_pFramework->GetPlayer(1)->y < 6350)
 				m_pFramework->GetPlayer(1)->y += 10;
 			}
 			p1key = true;
@@ -567,6 +619,7 @@ void CIngameScene::CharacterState()
 		{
 			if (Tileindex[m_pFramework->GetPlayer(1)->x / 64][(m_pFramework->GetPlayer(1)->y + 60) / 64] == 1)
 			{
+				if (m_pFramework->GetPlayer(1)->x < 6350)
 				m_pFramework->GetPlayer(1)->x += 20;
 				m_pFramework->GetPlayer(1)->WalkingTimerTick++;
 			}
@@ -576,6 +629,7 @@ void CIngameScene::CharacterState()
 			}
 			else
 			{
+				if (m_pFramework->GetPlayer(1)->x < 6350)
 				m_pFramework->GetPlayer(1)->x += 10;
 			}
 			p1key = true;
@@ -606,6 +660,12 @@ void CIngameScene::CharacterState()
 					m_pFramework->GetPlayer(2)->isAttacked = TRUE;
 					m_pFramework->GetPlayer(2)->CharacterStatus = 9;
 					isp2LockDown = TRUE;
+					if (m_pFramework->GetPlayer(2)->iHaveCoin)
+					{
+						m_pFramework->GetPlayer(2)->iHaveCoin = FALSE;
+						CoinObject->OnCreate(m_pFramework->GetPlayer(2)->x, m_pFramework->GetPlayer(2)->y);
+						coinLockDown = TRUE;
+					}
 				}
 				break; // 앞 볼 때
 			case 3:
@@ -623,6 +683,12 @@ void CIngameScene::CharacterState()
 					m_pFramework->GetPlayer(2)->isAttacked = TRUE;
 					m_pFramework->GetPlayer(2)->CharacterStatus = 8;
 					isp2LockDown = TRUE;
+					if (m_pFramework->GetPlayer(2)->iHaveCoin)
+					{
+						m_pFramework->GetPlayer(2)->iHaveCoin = FALSE;
+						CoinObject->OnCreate(m_pFramework->GetPlayer(2)->x, m_pFramework->GetPlayer(2)->y);
+						coinLockDown = TRUE;
+					}
 				}
 				break; // 뒤 볼 때
 			}
@@ -712,7 +778,21 @@ void CIngameScene::Update(float fTimeElapsed)
 {
 	KeyState();
 	CharacterState();
-
+	CoinObject->Update(fTimeElapsed);
+	
+	if (CoinObject->GetbDraw() && coinLockDown == FALSE)
+	{
+		if (abs(CoinObject->x() - m_pFramework->GetPlayer(1)->x) < 30 && abs(CoinObject->y() - m_pFramework->GetPlayer(1)->y) < 30)
+		{
+			m_pFramework->GetPlayer(1)->iHaveCoin = TRUE;
+			CoinObject->SetDrawFalse();
+		}
+		if (abs(CoinObject->x() - m_pFramework->GetPlayer(2)->x) < 30 && abs(CoinObject->y() - m_pFramework->GetPlayer(2)->y) < 30)
+		{
+			m_pFramework->GetPlayer(2)->iHaveCoin = TRUE;
+			CoinObject->SetDrawFalse();
+		}
+	}
 	//for (int i = 0; i < nObjects; ++i)
 		//ppObjects[i]->Update(fTimeElapsed);
 }
@@ -742,7 +822,7 @@ void CIngameScene::Render(HDC hdc)
 		m_pFramework->GetPlayer(1)->Render(m_pFramework->GetPlayerDC());
 		m_pFramework->GetPlayer(2)->Render(m_pFramework->GetPlayerDC());
 	}
-
+	CoinObject->Render(&*m_pFramework->GetPlayerDC());
 	Ellipse(*m_pFramework->GetPlayerDC(), m_pFramework->GetPlayer(1)->x - 5, m_pFramework->GetPlayer(1)->y - 5, m_pFramework->GetPlayer(1)->x + 5, m_pFramework->GetPlayer(1)->y + 5);
 	Ellipse(*m_pFramework->GetPlayerDC(), m_pFramework->GetPlayer(2)->x - 5, m_pFramework->GetPlayer(2)->y - 5, m_pFramework->GetPlayer(2)->x + 5, m_pFramework->GetPlayer(2)->y + 5);
 

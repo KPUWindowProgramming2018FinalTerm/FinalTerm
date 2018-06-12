@@ -84,6 +84,9 @@
     <ClInclude Include="Timer.h">
       <Filter>헤더 파일\Frame</Filter>
     </ClInclude>
+    <ClInclude Include="OBJECT_Coin.h">
+      <Filter>헤더 파일\Objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="o_Ingame.cpp">
@@ -121,6 +124,9 @@
     </ClCompile>
     <ClCompile Include="Timer.cpp">
       <Filter>소스 파일\Frame</Filter>
+    </ClCompile>
+    <ClCompile Include="OBJECT_Coin.cpp">
+      <Filter>소스 파일\Objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

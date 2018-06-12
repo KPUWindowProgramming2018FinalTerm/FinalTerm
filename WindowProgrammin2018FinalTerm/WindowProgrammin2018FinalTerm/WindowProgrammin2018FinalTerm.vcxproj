@@ -140,6 +140,7 @@
   <ItemGroup>
     <ClInclude Include="Framework.h" />
     <ClInclude Include="Object.h" />
+    <ClInclude Include="OBJECT_Coin.h" />
     <ClInclude Include="OBJECT_Player.h" />
     <ClInclude Include="o_Ingame.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
@@ -161,6 +162,7 @@
   <ItemGroup>
     <ClCompile Include="Framework.cpp" />
     <ClCompile Include="Object.cpp" />
+    <ClCompile Include="OBJECT_Coin.cpp" />
     <ClCompile Include="OBJECT_Player.cpp" />
     <ClCompile Include="o_Ingame.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
