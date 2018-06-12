@@ -15,8 +15,9 @@ CIngameScene::~CIngameScene()
 	{
 		free(CoinObject);
 	}
+
 }
-CIngameScene::CIngameScene(SceneTag tag, CFramework * pFramework) : CScene(tag, pFramework)
+CIngameScene::CIngameScene(SceneTag tag, CFramework * pFramework) : CScene(tag, pFramework) //프레임워크 포인터 활성화
 {
 
 }
@@ -26,6 +27,17 @@ bool CIngameScene::OnCreate()
 	C_Tile[1].Load(L"Graphic\\Tile\\Tile2.png");
 	C_Tile[2].Load(L"Graphic\\Tile\\Tile3.png");
 
+	C_IngameLine.Load(L"Graphic\\UI\\INGAME UI.png");
+
+	WinC.Load(L"Graphic\\UI\\WIN.png");
+	LoseC.Load(L"Graphic\\UI\\LOSE.png");
+
+	WCHAR LoadText[100];
+	for (int i = 0; i <= 9; i++)
+	{
+		wsprintf(LoadText, L"Graphic\\Numbers\\%d.png", i);
+		this->C_Numbers[i].Load(LoadText);
+	}
 
 	for (int i = 0; i < 100; i++)
 	{
@@ -46,6 +58,10 @@ bool CIngameScene::OnCreate()
 			C_Tile[Tileindex[j][i]].BitBlt(*m_pFramework->GetTileDC(), 64 * j, 64 * i, 64, 64, 0, 0, SRCCOPY); //타일의 가로세로크기가 64바이트
 		}
 	}
+	RemainTime = 5;
+	TimeTick = 0;
+	TimerImage[0] = 9;
+	TimerImage[1] = 9;
 	BuildObjects();
 
 	return true;
@@ -776,21 +792,51 @@ void CIngameScene::CharacterState()
 
 void CIngameScene::Update(float fTimeElapsed)
 {
-	KeyState();
-	CharacterState();
-	CoinObject->Update(fTimeElapsed);
-	
-	if (CoinObject->GetbDraw() && coinLockDown == FALSE)
+	if (RemainTime <= 0)
 	{
-		if (abs(CoinObject->x() - m_pFramework->GetPlayer(1)->x) < 30 && abs(CoinObject->y() - m_pFramework->GetPlayer(1)->y) < 30)
+		if (m_pFramework->GetPlayer(1)->iHaveCoin == TRUE)
 		{
-			m_pFramework->GetPlayer(1)->iHaveCoin = TRUE;
-			CoinObject->SetDrawFalse();
+			isGameEnd = TRUE;
+			m_pFramework->GetPlayer(1)->CharacterStatus = 14;
+			m_pFramework->GetPlayer(2)->CharacterStatus = 15;
 		}
-		if (abs(CoinObject->x() - m_pFramework->GetPlayer(2)->x) < 30 && abs(CoinObject->y() - m_pFramework->GetPlayer(2)->y) < 30)
+		else if (m_pFramework->GetPlayer(2)->iHaveCoin == TRUE)
 		{
-			m_pFramework->GetPlayer(2)->iHaveCoin = TRUE;
-			CoinObject->SetDrawFalse();
+			isGameEnd = TRUE;
+			m_pFramework->GetPlayer(1)->CharacterStatus = 15;
+			m_pFramework->GetPlayer(2)->CharacterStatus = 14;
+		}
+	}
+	if (isGameEnd == FALSE)
+	{
+		KeyState();
+		CharacterState();
+		CoinObject->Update(fTimeElapsed);
+
+		TimeTick++;
+
+		if (TimeTick >= 60)
+		{
+			TimeTick = 0;
+			if (RemainTime > 0)
+			{
+				RemainTime--;
+				TimerImage[0] = RemainTime / 10;
+				TimerImage[1] = RemainTime % 10;
+			}
+		}
+		if (CoinObject->GetbDraw() && coinLockDown == FALSE)
+		{
+			if (abs(CoinObject->x() - m_pFramework->GetPlayer(1)->x) < 30 && abs(CoinObject->y() - m_pFramework->GetPlayer(1)->y) < 30)
+			{
+				m_pFramework->GetPlayer(1)->iHaveCoin = TRUE;
+				CoinObject->SetDrawFalse();
+			}
+			if (abs(CoinObject->x() - m_pFramework->GetPlayer(2)->x) < 30 && abs(CoinObject->y() - m_pFramework->GetPlayer(2)->y) < 30)
+			{
+				m_pFramework->GetPlayer(2)->iHaveCoin = TRUE;
+				CoinObject->SetDrawFalse();
+			}
 		}
 	}
 	//for (int i = 0; i < nObjects; ++i)
@@ -829,6 +875,24 @@ void CIngameScene::Render(HDC hdc)
 	BitBlt(hdc, m_pFramework->p1.left, m_pFramework->p1.top, m_pFramework->p1.right, m_pFramework->p1.bottom, *m_pFramework->GetPlayerDC(), m_pFramework->GetPlayer(1)->x - m_pFramework->p1.right / 2, m_pFramework->GetPlayer(1)->y - m_pFramework->p1.bottom / 2, SRCCOPY);
 	BitBlt(hdc, m_pFramework->p2.left, m_pFramework->p2.top, m_pFramework->p1.right, m_pFramework->p2.bottom, *m_pFramework->GetPlayerDC(), m_pFramework->GetPlayer(2)->x - m_pFramework->p1.right / 2, m_pFramework->GetPlayer(2)->y - m_pFramework->p2.bottom / 2, SRCCOPY);
 	
+	if (isGameEnd)
+	{
+		if (m_pFramework->GetPlayer(1)->iHaveCoin == TRUE)
+		{
+			WinC.Draw(hdc, m_pFramework->p1.right / 2 - 100, m_pFramework->p1.bottom / 2 - 300, 200, 200);
+			LoseC.Draw(hdc, m_pFramework->p2.right / 4 * 3 - 100, m_pFramework->p2.bottom / 2 - 300, 200, 200);
+		}
+		else
+		{
+			LoseC.Draw(hdc, m_pFramework->p1.right / 2 - 100, m_pFramework->p1.bottom / 2 - 300, 200, 200);
+			WinC.Draw(hdc, m_pFramework->p2.right / 4 * 3 - 100, m_pFramework->p2.bottom / 2 - 300, 200, 200);
+		}
+	}
+
+	C_IngameLine.Draw(hdc, 0, 0, windowX, windowY);
+	C_Numbers[TimerImage[0]].Draw(hdc, windowX / 2 - 100, windowY / 15, 80, 80);
+	C_Numbers[TimerImage[1]].Draw(hdc, windowX / 2 + 30, windowY / 15, 80, 80);
+
 	
 	for (int i = 0; i < nObjects; ++i)
 		ppObjects[i]->Render(*m_pFramework->GetPlayerDC());

@@ -26,15 +26,26 @@ private:
 
 	CImage C_Tile[3];		//타일 이미지
 	CImage C_Numbers[10];
+	CImage C_IngameLine;
+	CImage WinC;
+	CImage LoseC;
+
+	int windowX = ::GetSystemMetrics(SM_CXSCREEN);  //모니터 x길이
+	int windowY = ::GetSystemMetrics(SM_CYSCREEN);  //모니터 y길이
 
 	BOOL keydownList[14] = { 0 };	// 0 1 2 3 p2 이동 4 5 6 p2 스킬 공격 대시 7 8 9 10 p1 이동 11 12 13 p1 스킬 공격 대시
 	BOOL keydown;					// 어떤 키라도 눌렸는지 확인
 	BOOL isp1LockDown = FALSE;		// 공격 등 이동할 수 없는 상태
 	BOOL isp2LockDown = FALSE;		// 공격 등 이동할 수 없는 상태
 	BOOL coinLockDown = FALSE;		// 애니메이션용
-	
+	BOOL isGameEnd    = FALSE;
+
 	bool p1key = false;				// p1 이동키라면
 	bool p2key = false;				// p2 이동키라면
+	
 
 	int Tileindex[100][100] = { 0 };
+	int RemainTime;
+	int TimeTick;
+	int TimerImage[2];
 };

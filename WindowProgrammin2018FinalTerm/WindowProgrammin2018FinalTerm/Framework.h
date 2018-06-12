@@ -27,6 +27,7 @@ private:
 
 	HWND		m_hWnd{ NULL };
 	RECT		m_rcClient{ 0, 0, 0, 0 };	// 클라이언트 크기
+	HDC			hhdc;
 	//---------------------
 	HBITMAP		m_totalBackBitmap = NULL;	// 비트맵 핸들. 최종 출력물이 여기 먼저 출력된다.
 	HDC			m_totalBackDC = NULL;		// 백윈도우 핸들

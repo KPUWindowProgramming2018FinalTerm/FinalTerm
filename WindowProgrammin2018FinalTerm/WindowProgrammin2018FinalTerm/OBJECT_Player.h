@@ -17,6 +17,7 @@ struct PlayerImage
 	CImage Walk_B[6];
 	CImage Win;
 	CImage Lose;
+	
 };
 
 class CObject_Player : public CObject

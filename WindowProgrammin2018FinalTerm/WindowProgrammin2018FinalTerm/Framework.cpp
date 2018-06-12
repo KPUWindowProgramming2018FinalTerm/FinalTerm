@@ -287,14 +287,15 @@ void CFramework::FrameAdvance()
 	//	}
 	//	else return;
 	//}
+	HDC hdc = ::GetDC(m_hWnd);	// 이 디바이스 컨텍스트를 사용하겠다.
+
 	m_ticker->Tick(60.0f);
 	m_fps = 1.0 / m_ticker->GetTimeElapsed();
 	
 	Update(m_ticker->GetTimeElapsed()); // 그려야 될 것 업데이트(프레임단)
 	PreprocessingForDraw(); // 
 	// 백버퍼 연산이므로 OnDraw가 아니다. OnDraw 이전에 백버퍼에 그려주는 연산을 한다.
-
-	InvalidateRect(m_hWnd, &m_rcClient, FALSE);	// False는 초기화를 하지 않는다는 뜻이다. 강제로 윈도우 메시지를 호출한다.
+	this->OnDraw(hdc); //Paint로 안 보내고 그냥 그리기
 	// ↓캡션에 글자를 뭘 넣을지 연산하는 캡션 스트링 연산
 	{
 		_itow_s(
@@ -308,6 +309,9 @@ void CFramework::FrameAdvance()
 		, TEXT("FPS )"));
 	SetWindowText(m_hWnd, m_CaptionTitle);
 	}
+	
+
+	::ReleaseDC(m_hWnd,hdc); // 그리고 지운다.
 }
 
 LRESULT CFramework::WndProc(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam)
@@ -326,7 +330,6 @@ LRESULT CFramework::WndProc(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lP
 
 	case WM_MOUSEMOVE:
 		self->OnProcessingMouseMessage(hWnd, nMessageID, wParam, lParam);
-		goto Paint;
 		
 		break;
 
@@ -335,24 +338,12 @@ LRESULT CFramework::WndProc(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lP
 	case WM_KEYUP:
 	case WM_CHAR:
 		self->OnProcessingKeyboardMessage(hWnd, nMessageID, wParam, lParam);
-		goto Paint;
 		
 		break;
 
 	case WM_PAINT:
 		{
-		Paint:
-			//printf("%dIn\n",++n);
-			PAINTSTRUCT ps;
-			HDC hdc = ::BeginPaint(hWnd, &ps);	// 이 디바이스 컨텍스트를 사용하겠다.
-			// hdc에서 이 함수를 통해 bitmap을 붙인다.
-
-			// CPU 단계에서 호출하는 거라 메시지 검사 부분 등이 굉장히 느리다.
-			// 따라서 윈도우 메시지는 더 빠른 게임을 위해서는 쓰지 않게 된다. 하지만 알아놓기는 해야한다.
-			// 픽메시지를 검사하고 트랜스메시지, 디스패치메시지에서 윈도우프로시저로 메시지를 넘겨준다.
-			self->OnDraw(hdc);
-	
-			::EndPaint(hWnd, &ps); // 그리고 지운다.
+		//WM_CHAR보다 우선순위가 낮아서 사용하지 않음.
 		}
 		break;
 	case WM_DESTROY:
@@ -377,57 +368,3 @@ void CFramework::ChangeScene(CScene::SceneTag tag)
 	m_pCurrScene = arrScene[tag];
 	//m_pCurrScene->OnCreate();
 }
-
-/*
-20171206 스터디 최후
-winmain()
-{
-	윈도우 등록
-	윈도우 생성
-
-	메시지 루프
-	{
-		메시지 처리
-		게임 루프 처리
-		{
-			FrameWork
-				FrameAdvanced();
-				{
-					ProcessInput()	// 키 입력
-					{
-						WndProc
-							WM_KEY:
-							WM_MOUSE:
-					}
-					m_pscene->	Update();	// 로직 처리
-					m_pscene->	Render()	// 그리기	// InvalidateRect()를 통해 아래 블럭 안으로 이동
-					{	
-						WndProc
-							WM_PAINT:
-							hdc = BeginDraw();
-							Render(hdc);
-							EndDraw(hdc);
-					}
-				}
-		}
-	}
-}
-
-
-private:
-	CScene * m_pscene;
-	Oncreate() 함수 안에서 new를 통해 위 변수를 생성
-	씬 이름을 enum tag를 통해 정해주면 된다.
-
-	** arrscene;
-	2D프로그래밍때와 달리, 프레임워크가 자체적으로 씬 배열을 가지고 있다.
-	[0]에서는 로비, [1]에서는 게임오버 등...
-	그러면 2D때 푸쉬 팝과는 달리 ChangeScene으로 해결한다.
-
-	이러면 장점이 씬 이동이 자유롭다.
-
-
-	update와 render는 상위 클래스에서 =0; 을 만들고
-
-	각자 scene들이 상속받아서 이걸 가지고 있어야 한다.
-*/
