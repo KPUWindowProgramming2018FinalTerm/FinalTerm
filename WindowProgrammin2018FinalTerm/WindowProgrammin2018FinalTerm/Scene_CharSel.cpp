@@ -11,6 +11,7 @@ Scene_Charsel::~Scene_Charsel()
 {
 }
 
+//생성될때 뭔가 하려나 부다
 bool Scene_Charsel::OnCreate()
 {
 	this->x = 0;
