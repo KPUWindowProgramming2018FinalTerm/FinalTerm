@@ -2,7 +2,9 @@
 // 
 // 타이틀 씬 등을 include할 공간
 #include "Scene_Main.h"
+#include "Scene_CharSel.h"
 #include "Scene_Ingame.h"
+
 // 
 #include "OBJECT_Player.h"
 #include "Framework.h"
@@ -76,7 +78,7 @@ bool CFramework::OnCreate(HINSTANCE hInstance, HWND hWnd, const RECT & rc) //생�
 
 
 	// 최초의 씬은 무엇인가?
-	ChangeScene(CScene::SceneTag::Ingame);
+	ChangeScene(CScene::SceneTag::Select_Char);
 
 	return (m_hWnd != NULL);
 }
@@ -150,6 +152,7 @@ void CFramework::BuildScene()
 {
 	// arrScene[SceneTag::Title] = new TitleScene();	// 이런 방식으로 씬을 만들어라.
 	arrScene[CScene::SceneTag::Main_Lobby] = new CMainScene();
+	arrScene[CScene::SceneTag::Select_Char] = new Scene_Charsel();
 	arrScene[CScene::SceneTag::Ingame] = new CIngameScene(CScene::SceneTag::Ingame,this);
 	arrScene[CScene::SceneTag::Ingame]->OnCreate();
 }

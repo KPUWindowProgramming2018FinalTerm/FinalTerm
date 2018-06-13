@@ -12,7 +12,6 @@ public:
 		Title
 		, Main_Lobby
 		, Control_Tip
-		, Select_Mode
 		, Select_Char
 		, Ingame
 		, Scoreboard

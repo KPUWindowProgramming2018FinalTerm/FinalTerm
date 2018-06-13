@@ -569,7 +569,7 @@ void CIngameScene::CharacterState()
 				SkillCoolTime[1] = 5;
 				break;
 			case 3:
-				SkillCoolTime[1] = 15;
+				SkillCoolTime[1] = 12;
 				break;
 			}
 			switch (m_pFramework->GetPlayer(2)->CharacterStatus)
@@ -651,13 +651,13 @@ void CIngameScene::CharacterState()
 				switch (m_pFramework->GetPlayer(2)->charNum)
 				{
 				case 1:
-					m_pFramework->GetPlayer(1)->DashCoolTimer = 410;
+					m_pFramework->GetPlayer(2)->DashCoolTimer = 410;
 					break;
 				case 2:
-					m_pFramework->GetPlayer(1)->DashCoolTimer = 300;
+					m_pFramework->GetPlayer(2)->DashCoolTimer = 300;
 					break;
 				case 3:
-					m_pFramework->GetPlayer(1)->DashCoolTimer = 600;
+					m_pFramework->GetPlayer(2)->DashCoolTimer = 600;
 					break;
 				}
 				m_pFramework->GetPlayer(2)->Old_CharStat = m_pFramework->GetPlayer(2)->CharacterStatus;
@@ -770,7 +770,7 @@ void CIngameScene::CharacterState()
 				SkillCoolTime[0] = 5;
 				break;
 			case 3:
-				SkillCoolTime[0] = 15;
+				SkillCoolTime[0] = 12;
 				break;
 			}
 			switch (m_pFramework->GetPlayer(1)->CharacterStatus) 

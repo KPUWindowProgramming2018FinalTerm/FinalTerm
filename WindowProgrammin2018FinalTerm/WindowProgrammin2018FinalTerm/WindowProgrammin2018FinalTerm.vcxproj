@@ -153,6 +153,7 @@
     </ClInclude>
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="Scene_CharSel.h" />
     <ClInclude Include="Scene_Ingame.h" />
     <ClInclude Include="Scene_Main.h" />
     <ClInclude Include="stdafx.h" />
@@ -179,6 +180,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="Scene_CharSel.cpp" />
     <ClCompile Include="Scene_Ingame.cpp" />
     <ClCompile Include="Scene_Main.cpp" />
     <ClCompile Include="stdafx.cpp">
