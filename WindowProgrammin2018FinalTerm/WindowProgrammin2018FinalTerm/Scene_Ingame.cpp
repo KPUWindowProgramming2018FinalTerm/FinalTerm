@@ -337,7 +337,7 @@ void CIngameScene::KeyState()
 						m_pFramework->GetPlayer(1)->isAttack = FALSE;
 						m_pFramework->GetPlayer(1)->AttackTimerTick = 0;
 						m_pFramework->GetPlayer(1)->AttackImageTick = 0;
-						printf("%d", m_pFramework->GetPlayer(1)->CharacterStatus);
+						//printf("%d", m_pFramework->GetPlayer(1)->CharacterStatus);
 						if (m_pFramework->GetPlayer(1)->CharacterStatus == 6)
 							m_pFramework->GetPlayer(1)->CharacterStatus = 0;
 						else

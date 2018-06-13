@@ -7,8 +7,7 @@
 #include "OBJECT_Player.h"
 #include "Framework.h"
 
-using namespace std;// 왠만하면 하지 말자. 컴파일 시간이 엄청 느려진다. 성능상의 문제는 없다.
-					// 컴파일 할 때 std 네임스페이스가 포함된 모든 헤더파일을 돌기 때문에 생기는 문제이다.
+using namespace std;
 
 template<typename T>
 T GetUserDataPtr(HWND hWnd)
@@ -161,9 +160,9 @@ void CFramework::BuildPlayer()
 		player1 = new CObject_Player();
 	while (player2 == NULL)
 		player2 = new CObject_Player();
-	printf("%d\n", player1->x);
+	//printf("%d\n", player1->x);
 	player1->OnCreate(1);
-	printf("%d\n", player1->x);
+	//printf("%d\n", player1->x);
 	player2->OnCreate(2);
 }
 
