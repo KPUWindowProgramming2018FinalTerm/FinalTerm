@@ -161,7 +161,7 @@ void CFramework::BuildPlayer()
 	while (player2 == NULL)
 		player2 = new CObject_Player();
 	//printf("%d\n", player1->x);
-	player1->OnCreate(1);
+	player1->OnCreate(3);
 	//printf("%d\n", player1->x);
 	player2->OnCreate(2);
 }

@@ -48,7 +48,8 @@ public:
 	int AttackImageTick = 0;
 
 	int SkillAttackedTimer = 0;
-
+	
+	int DashCoolTimer = 0;
 	int DashTimerTick = 0;
 
 	int CharacterStatus = 0; // 0~1 = Idle  // 2~5 = Walk // 6~7 = Attack // 8 = Win // 9 = Lose

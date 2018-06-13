@@ -9,11 +9,12 @@ private:
 	int tick = 0;
 
 	bool draw = true;
-	CImage Image;
+	
 public:
 	OBJECT_Coin();
 	OBJECT_Coin(int Cx, int Cy);
 	~OBJECT_Coin();
+	CImage Image;
 
 	void OnCreate(int Cx, int Cy);
 	void Update(float fTimeElapsed);
