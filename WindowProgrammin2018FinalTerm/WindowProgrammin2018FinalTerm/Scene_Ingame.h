@@ -40,10 +40,12 @@ private:
 	BOOL coinLockDown = FALSE;		// 애니메이션용
 	BOOL isGameEnd    = FALSE;
 
+	RECT tmp;
+
 	bool p1key = false;				// p1 이동키라면
 	bool p2key = false;				// p2 이동키라면
 	
-
+	int SkillCoolTime[2];
 	int Tileindex[100][100] = { 0 };
 	int RemainTime;
 	int TimeTick;

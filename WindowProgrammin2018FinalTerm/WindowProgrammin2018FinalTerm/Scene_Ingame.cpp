@@ -2,6 +2,7 @@
 #include "Scene_Ingame.h"
 #include "OBJECT_Player.h"
 #include "OBJECT_Coin.h"
+#include "OBJECT_Skill.h"
 #include "Framework.h"
 
 
@@ -58,10 +59,12 @@ bool CIngameScene::OnCreate()
 			C_Tile[Tileindex[j][i]].BitBlt(*m_pFramework->GetTileDC(), 64 * j, 64 * i, 64, 64, 0, 0, SRCCOPY); //타일의 가로세로크기가 64바이트
 		}
 	}
-	RemainTime = 5;
+	RemainTime = 60;
 	TimeTick = 0;
 	TimerImage[0] = 9;
 	TimerImage[1] = 9;
+	SkillCoolTime[0] = 0;
+	SkillCoolTime[1] = 0;
 	BuildObjects();
 
 	return true;
@@ -86,7 +89,7 @@ void CIngameScene::KeyState()
 	{
 		if (isp2LockDown != TRUE)
 		{
-			if (GetAsyncKeyState(VK_NUMPAD1) & 0x8000) // 스킬
+			if (GetAsyncKeyState(VK_NUMPAD1) & 0x8000 && SkillCoolTime[1] <= 0) // 스킬
 			{
 				keydownList[4] = TRUE;
 
@@ -153,13 +156,33 @@ void CIngameScene::KeyState()
 						else
 							m_pFramework->GetPlayer(2)->CharacterStatus = 1;
 						isp2LockDown = FALSE;
-
+						p2key = TRUE;
 					}
 				}
 			}
 			else if (m_pFramework->GetPlayer(2)->isSkill)
 			{
-
+				if (m_pFramework->GetPlayer(2)->AttackTimerTick++ > 3)
+				{
+					m_pFramework->GetPlayer(2)->AttackTimerTick = 0;
+					if (m_pFramework->GetPlayer(2)->AttackImageTick++ > 2)
+					{
+						m_pFramework->GetPlayer(2)->AttackTimerTick = 0;
+						m_pFramework->GetPlayer(2)->AttackImageTick = 0;
+						//printf("%d", m_pFramework->GetPlayer(2)->CharacterStatus);
+					}
+				}
+			}
+			else if (m_pFramework->GetPlayer(2)->isSkillEnd)
+			{
+				if (m_pFramework->GetPlayer(2)->CharacterStatus == 12)
+					m_pFramework->GetPlayer(2)->CharacterStatus = 0;
+				else
+					m_pFramework->GetPlayer(2)->CharacterStatus = 1;
+				m_pFramework->GetPlayer(2)->AttackTimerTick = 0;
+				m_pFramework->GetPlayer(2)->AttackImageTick = 0;
+				m_pFramework->GetPlayer(2)->isSkillEnd = FALSE;
+				isp2LockDown = FALSE;
 			}
 			else if (m_pFramework->GetPlayer(2)->isDash)
 			{
@@ -199,6 +222,11 @@ void CIngameScene::KeyState()
 			}
 			else if (m_pFramework->GetPlayer(2)->isAttacked)
 			{
+				if (m_pFramework->GetPlayer(2)->SkillAttackedTimer-- > 0 && m_pFramework->GetPlayer(2)->AttackTimerTick > 10)
+				{
+					m_pFramework->GetPlayer(2)->AttackTimerTick--;
+				}
+
 				if (m_pFramework->GetPlayer(2)->AttackTimerTick++ > 20)
 				{
 					m_pFramework->GetPlayer(2)->AttackTimerTick = 0;
@@ -206,6 +234,7 @@ void CIngameScene::KeyState()
 					m_pFramework->GetPlayer(2)->CharacterStatus = m_pFramework->GetPlayer(2)->Old_CharStat;
 					isp2LockDown = FALSE;
 					p2key = TRUE;
+					m_pFramework->GetPlayer(2)->SkillAttackedTimer = 0;
 				}
 				if (m_pFramework->GetPlayer(2)->AttackTimerTick < 10)
 				{
@@ -247,21 +276,21 @@ void CIngameScene::KeyState()
 		}
 		if (isp1LockDown != TRUE)
 		{
-			if (GetAsyncKeyState(0x41) & 0x8000)
+			if (GetAsyncKeyState(0x41) & 0x8000 && SkillCoolTime[0] <= 0) // p1 스킬
 			{
 				keydownList[11] = TRUE;
 
 				keydown = TRUE;
 				isp1LockDown = TRUE;
 			}
-			else if (GetAsyncKeyState(0x53) & 0x8000)
+			else if (GetAsyncKeyState(0x53) & 0x8000) // p1 공격
 			{
 				keydownList[12] = TRUE;
 
 				keydown = TRUE;
 				isp1LockDown = TRUE;
 			}
-			else if (GetAsyncKeyState(0x44) & 0x8000)
+			else if (GetAsyncKeyState(0x44) & 0x8000) // p1 대시
 			{
 				keydownList[13] = TRUE;
 
@@ -314,13 +343,33 @@ void CIngameScene::KeyState()
 						else
 							m_pFramework->GetPlayer(1)->CharacterStatus = 1;
 						isp1LockDown = FALSE;
-
+						p1key = TRUE;
 					}
 				}
 			}
 			else if (m_pFramework->GetPlayer(1)->isSkill)
 			{
-
+				if (m_pFramework->GetPlayer(1)->AttackTimerTick++ > 3)
+				{
+					m_pFramework->GetPlayer(1)->AttackTimerTick = 0;
+					if (m_pFramework->GetPlayer(1)->AttackImageTick++ > 2)
+					{
+						m_pFramework->GetPlayer(1)->AttackTimerTick = 0;
+						m_pFramework->GetPlayer(1)->AttackImageTick = 0;
+						//printf("%d", m_pFramework->GetPlayer(2)->CharacterStatus);
+					}
+				}
+			}
+			else if (m_pFramework->GetPlayer(1)->isSkillEnd)
+			{
+				if (m_pFramework->GetPlayer(1)->CharacterStatus == 12)
+					m_pFramework->GetPlayer(1)->CharacterStatus = 0;
+				else
+					m_pFramework->GetPlayer(1)->CharacterStatus = 1;
+				m_pFramework->GetPlayer(1)->AttackTimerTick = 0;
+				m_pFramework->GetPlayer(1)->AttackImageTick = 0;
+				m_pFramework->GetPlayer(1)->isSkillEnd = FALSE;
+				isp1LockDown = FALSE;
 			}
 			else if (m_pFramework->GetPlayer(1)->isDash)
 			{
@@ -331,6 +380,7 @@ void CIngameScene::KeyState()
 					m_pFramework->GetPlayer(1)->CharacterStatus = m_pFramework->GetPlayer(1)->Old_CharStat;
 					p1key = true;
 					isp1LockDown = FALSE;
+					p1key = TRUE;
 				}
 				switch (m_pFramework->GetPlayer(1)->Old_CharStat)
 				{
@@ -356,6 +406,11 @@ void CIngameScene::KeyState()
 			}
 			else if (m_pFramework->GetPlayer(1)->isAttacked)
 			{
+				if (m_pFramework->GetPlayer(1)->SkillAttackedTimer-- > 0 && m_pFramework->GetPlayer(1)->AttackTimerTick > 10)
+				{
+					m_pFramework->GetPlayer(1)->AttackTimerTick--;
+				}
+
 				if (m_pFramework->GetPlayer(1)->AttackTimerTick++ > 20)
 				{
 					m_pFramework->GetPlayer(1)->AttackTimerTick = 0;
@@ -363,6 +418,7 @@ void CIngameScene::KeyState()
 					m_pFramework->GetPlayer(1)->CharacterStatus = m_pFramework->GetPlayer(1)->Old_CharStat;
 					isp1LockDown = FALSE;
 					p1key = TRUE;
+					m_pFramework->GetPlayer(1)->SkillAttackedTimer = 0;
 				}
 				if (m_pFramework->GetPlayer(1)->AttackTimerTick < 10)
 				{
@@ -498,7 +554,39 @@ void CIngameScene::CharacterState()
 
 		if (keydownList[4]) // p2 스킬
 		{
-
+			switch (m_pFramework->GetPlayer(2)->charNum)
+			{
+			case 1:
+				SkillCoolTime[1] = 8;
+				break;
+			case 2:
+				SkillCoolTime[1] = 5;
+				break;
+			case 3:
+				SkillCoolTime[1] = 15;
+				break;
+			}
+			switch (m_pFramework->GetPlayer(2)->CharacterStatus)
+			{
+			case 2:
+			case 5:
+			case 6:
+			case 0:
+				m_pFramework->GetPlayer(2)->Old_CharStat = m_pFramework->GetPlayer(2)->CharacterStatus;
+				m_pFramework->GetPlayer(2)->isSkill = TRUE;
+				m_pFramework->GetPlayer(2)->CharacterStatus = 12;
+				m_pFramework->GetPlayer(2)->SkillCast(m_pFramework->GetPlayer(2)->x, m_pFramework->GetPlayer(2)->y, m_pFramework->GetPlayer(2)->Old_CharStat);
+				break; // 앞 볼 때
+			case 3:
+			case 4:
+			case 7:
+			case 1:
+				m_pFramework->GetPlayer(2)->Old_CharStat = m_pFramework->GetPlayer(2)->CharacterStatus;
+				m_pFramework->GetPlayer(2)->isSkill = TRUE;
+				m_pFramework->GetPlayer(2)->CharacterStatus = 13;
+				m_pFramework->GetPlayer(2)->SkillCast(m_pFramework->GetPlayer(2)->x, m_pFramework->GetPlayer(2)->y, m_pFramework->GetPlayer(2)->Old_CharStat);
+				break; // 뒤 볼 때
+			}
 		}
 		if (keydownList[5]) // p2 공격
 		{
@@ -511,9 +599,8 @@ void CIngameScene::CharacterState()
 				m_pFramework->GetPlayer(2)->Old_CharStat = m_pFramework->GetPlayer(2)->CharacterStatus;
 				m_pFramework->GetPlayer(2)->isAttack = TRUE;
 				m_pFramework->GetPlayer(2)->CharacterStatus = 6;
-				if ((m_pFramework->GetPlayer(2)->x - m_pFramework->GetPlayer(1)->x < 70) &&
-					(m_pFramework->GetPlayer(1)->y - m_pFramework->GetPlayer(2)->y < 50) &&
-					(m_pFramework->GetPlayer(1)->y - m_pFramework->GetPlayer(2)->y > -50))
+				if ((abs(m_pFramework->GetPlayer(2)->x - m_pFramework->GetPlayer(1)->x) < 70) &&
+					(abs(m_pFramework->GetPlayer(2)->y - m_pFramework->GetPlayer(1)->y) < 50))
 				{
 					m_pFramework->GetPlayer(1)->Old_CharStat = m_pFramework->GetPlayer(1)->CharacterStatus;
 					m_pFramework->GetPlayer(1)->isAttacked = TRUE;
@@ -534,9 +621,8 @@ void CIngameScene::CharacterState()
 				m_pFramework->GetPlayer(2)->Old_CharStat = m_pFramework->GetPlayer(2)->CharacterStatus;
 				m_pFramework->GetPlayer(2)->isAttack = TRUE;
 				m_pFramework->GetPlayer(2)->CharacterStatus = 7;
-				if ((m_pFramework->GetPlayer(1)->x - m_pFramework->GetPlayer(2)->x < 70) &&
-					(m_pFramework->GetPlayer(2)->y - m_pFramework->GetPlayer(1)->y < 50) &&
-					(m_pFramework->GetPlayer(2)->y - m_pFramework->GetPlayer(1)->y > -50))
+				if ((abs(m_pFramework->GetPlayer(2)->x - m_pFramework->GetPlayer(1)->x) < 70) &&
+					(abs(m_pFramework->GetPlayer(2)->y - m_pFramework->GetPlayer(1)->y) < 50))
 				{
 					m_pFramework->GetPlayer(1)->Old_CharStat = m_pFramework->GetPlayer(1)->CharacterStatus;
 					m_pFramework->GetPlayer(1)->isAttacked = TRUE;
@@ -654,7 +740,39 @@ void CIngameScene::CharacterState()
 
 		if (keydownList[11]) // p1 스킬
 		{
-
+			switch (m_pFramework->GetPlayer(1)->charNum)
+			{
+			case 1:
+				SkillCoolTime[0] = 8;
+				break;
+			case 2:
+				SkillCoolTime[0] = 5;
+				break;
+			case 3:
+				SkillCoolTime[0] = 15;
+				break;
+			}
+			switch (m_pFramework->GetPlayer(1)->CharacterStatus) 
+			{
+			case 2:
+			case 5:
+			case 6:
+			case 0:
+				m_pFramework->GetPlayer(1)->Old_CharStat = m_pFramework->GetPlayer(1)->CharacterStatus;
+				m_pFramework->GetPlayer(1)->isSkill = TRUE;
+				m_pFramework->GetPlayer(1)->CharacterStatus = 12;
+				m_pFramework->GetPlayer(1)->SkillCast(m_pFramework->GetPlayer(1)->x, m_pFramework->GetPlayer(1)->y, m_pFramework->GetPlayer(1)->Old_CharStat);
+				break; // 앞 볼 때
+			case 3:
+			case 4:
+			case 7:
+			case 1:
+				m_pFramework->GetPlayer(1)->Old_CharStat = m_pFramework->GetPlayer(1)->CharacterStatus;
+				m_pFramework->GetPlayer(1)->isSkill = TRUE;
+				m_pFramework->GetPlayer(1)->CharacterStatus = 13;
+				m_pFramework->GetPlayer(1)->SkillCast(m_pFramework->GetPlayer(1)->x, m_pFramework->GetPlayer(1)->y, m_pFramework->GetPlayer(1)->Old_CharStat);
+				break; // 뒤 볼 때
+			}
 		}
 		if (keydownList[12]) // p1 공격
 		{
@@ -668,9 +786,8 @@ void CIngameScene::CharacterState()
 				m_pFramework->GetPlayer(1)->isAttack = TRUE;
 				m_pFramework->GetPlayer(1)->CharacterStatus = 6;
 				//p2  피격처리 여기서
-				if ((m_pFramework->GetPlayer(1)->x - m_pFramework->GetPlayer(2)->x < 70) &&
-					(m_pFramework->GetPlayer(1)->y - m_pFramework->GetPlayer(2)->y < 50) &&
-					(m_pFramework->GetPlayer(1)->y - m_pFramework->GetPlayer(2)->y > -50))
+				if ((abs(m_pFramework->GetPlayer(1)->x - m_pFramework->GetPlayer(2)->x) < 70) &&
+					(abs(m_pFramework->GetPlayer(1)->y - m_pFramework->GetPlayer(2)->y) < 50))
 				{
 					m_pFramework->GetPlayer(2)->Old_CharStat = m_pFramework->GetPlayer(2)->CharacterStatus;
 					m_pFramework->GetPlayer(2)->isAttacked = TRUE;
@@ -691,9 +808,8 @@ void CIngameScene::CharacterState()
 				m_pFramework->GetPlayer(1)->Old_CharStat = m_pFramework->GetPlayer(1)->CharacterStatus;
 				m_pFramework->GetPlayer(1)->isAttack = TRUE;
 				m_pFramework->GetPlayer(1)->CharacterStatus = 7;
-				if ((m_pFramework->GetPlayer(2)->x - m_pFramework->GetPlayer(1)->x < 70) &&
-					(m_pFramework->GetPlayer(2)->y - m_pFramework->GetPlayer(1)->y < 50) &&
-					(m_pFramework->GetPlayer(2)->y - m_pFramework->GetPlayer(1)->y > -50))
+				if ((abs(m_pFramework->GetPlayer(1)->x - m_pFramework->GetPlayer(2)->x) < 70) &&
+					(abs(m_pFramework->GetPlayer(1)->y - m_pFramework->GetPlayer(2)->y) < 50))
 				{
 					m_pFramework->GetPlayer(2)->Old_CharStat = m_pFramework->GetPlayer(2)->CharacterStatus;
 					m_pFramework->GetPlayer(2)->isAttacked = TRUE;
@@ -812,8 +928,67 @@ void CIngameScene::Update(float fTimeElapsed)
 		KeyState();
 		CharacterState();
 		CoinObject->Update(fTimeElapsed);
-
+		m_pFramework->GetPlayer(1)->Update(fTimeElapsed);
+		m_pFramework->GetPlayer(2)->Update(fTimeElapsed);
 		TimeTick++;
+
+		//if (m_pFramework->GetPlayer(1)->isSkill)
+		{
+			if (IntersectRect(&tmp, m_pFramework->GetPlayer(2)->getRECT(), m_pFramework->GetPlayer(1)->CSkill->GetRECT())) // p2스킬피격
+			{
+				switch (m_pFramework->GetPlayer(1)->charNum)
+				{
+				case 1:
+					m_pFramework->GetPlayer(2)->SkillAttackedTimer = 120;
+					break;
+				case 2:
+					m_pFramework->GetPlayer(2)->SkillAttackedTimer = 60;
+					break;
+				case 3:
+					m_pFramework->GetPlayer(2)->SkillAttackedTimer = 180;
+					break;
+				}
+				//m_pFramework->GetPlayer(2)->Old_CharStat = m_pFramework->GetPlayer(2)->CharacterStatus;
+				m_pFramework->GetPlayer(2)->isAttacked = TRUE;
+				m_pFramework->GetPlayer(2)->CharacterStatus = 9;
+				isp2LockDown = TRUE;
+				if (m_pFramework->GetPlayer(2)->iHaveCoin)
+				{
+					m_pFramework->GetPlayer(2)->iHaveCoin = FALSE;
+					CoinObject->OnCreate(m_pFramework->GetPlayer(2)->x, m_pFramework->GetPlayer(2)->y);
+					coinLockDown = TRUE;
+				}
+			}
+		}
+		//if (m_pFramework->GetPlayer(2)->isSkill)
+		{
+			if (IntersectRect(&tmp, m_pFramework->GetPlayer(1)->getRECT(), m_pFramework->GetPlayer(2)->CSkill->GetRECT()))
+			{
+				switch (m_pFramework->GetPlayer(2)->charNum)
+				{
+				case 1:
+					m_pFramework->GetPlayer(1)->SkillAttackedTimer = 120;
+					break;
+				case 2:
+					m_pFramework->GetPlayer(1)->SkillAttackedTimer = 60;
+					break;
+				case 3:
+					m_pFramework->GetPlayer(1)->SkillAttackedTimer = 180;
+					break;
+				}
+				//m_pFramework->GetPlayer(1)->Old_CharStat = m_pFramework->GetPlayer(1)->CharacterStatus;
+				m_pFramework->GetPlayer(1)->isAttacked = TRUE;
+				m_pFramework->GetPlayer(1)->CharacterStatus = 9;
+				isp1LockDown = TRUE;
+
+				if (m_pFramework->GetPlayer(1)->iHaveCoin)
+				{
+					m_pFramework->GetPlayer(1)->iHaveCoin = FALSE;
+					CoinObject->OnCreate(m_pFramework->GetPlayer(1)->x, m_pFramework->GetPlayer(1)->y);
+					coinLockDown = TRUE;
+				}
+			}
+		}
 
 		if (TimeTick >= 60)
 		{
@@ -823,6 +998,14 @@ void CIngameScene::Update(float fTimeElapsed)
 				RemainTime--;
 				TimerImage[0] = RemainTime / 10;
 				TimerImage[1] = RemainTime % 10;
+			}
+			if (SkillCoolTime[0] > 0)
+			{
+				SkillCoolTime[0]--;
+			}
+			if (SkillCoolTime[1] > 0)
+			{
+				SkillCoolTime[1]--;
 			}
 		}
 		if (CoinObject->GetbDraw() && coinLockDown == FALSE)
@@ -853,11 +1036,13 @@ void CIngameScene::Render(HDC hdc)
 	p1key = false;
 	p2key = false;
 
+	//타일
 	BitBlt(*m_pFramework->GetPlayerDC(), m_pFramework->GetPlayer(1)->x - m_pFramework->p1.right / 2, m_pFramework->GetPlayer(1)->y - m_pFramework->p1.bottom / 2, m_pFramework->p1.right, m_pFramework->p1.bottom,
 		*m_pFramework->GetTileDC(), m_pFramework->GetPlayer(1)->x - m_pFramework->p1.right / 2, m_pFramework->GetPlayer(1)->y - m_pFramework->p1.bottom / 2, SRCCOPY);
 	BitBlt(*m_pFramework->GetPlayerDC(), m_pFramework->GetPlayer(2)->x - m_pFramework->p1.right / 2, m_pFramework->GetPlayer(2)->y - m_pFramework->p1.bottom / 2, m_pFramework->p1.right, m_pFramework->p2.bottom,
 		*m_pFramework->GetTileDC(), m_pFramework->GetPlayer(2)->x - m_pFramework->p1.right / 2, m_pFramework->GetPlayer(2)->y - m_pFramework->p2.bottom / 2, SRCCOPY);
 
+	//플레이어
 	if (m_pFramework->GetPlayer(1)->y > m_pFramework->GetPlayer(2)->y)
 	{
 		m_pFramework->GetPlayer(2)->Render(m_pFramework->GetPlayerDC());
@@ -868,10 +1053,12 @@ void CIngameScene::Render(HDC hdc)
 		m_pFramework->GetPlayer(1)->Render(m_pFramework->GetPlayerDC());
 		m_pFramework->GetPlayer(2)->Render(m_pFramework->GetPlayerDC());
 	}
+	//코인
 	CoinObject->Render(&*m_pFramework->GetPlayerDC());
 	Ellipse(*m_pFramework->GetPlayerDC(), m_pFramework->GetPlayer(1)->x - 5, m_pFramework->GetPlayer(1)->y - 5, m_pFramework->GetPlayer(1)->x + 5, m_pFramework->GetPlayer(1)->y + 5);
 	Ellipse(*m_pFramework->GetPlayerDC(), m_pFramework->GetPlayer(2)->x - 5, m_pFramework->GetPlayer(2)->y - 5, m_pFramework->GetPlayer(2)->x + 5, m_pFramework->GetPlayer(2)->y + 5);
 
+	//토탈로 옮기기
 	BitBlt(hdc, m_pFramework->p1.left, m_pFramework->p1.top, m_pFramework->p1.right, m_pFramework->p1.bottom, *m_pFramework->GetPlayerDC(), m_pFramework->GetPlayer(1)->x - m_pFramework->p1.right / 2, m_pFramework->GetPlayer(1)->y - m_pFramework->p1.bottom / 2, SRCCOPY);
 	BitBlt(hdc, m_pFramework->p2.left, m_pFramework->p2.top, m_pFramework->p1.right, m_pFramework->p2.bottom, *m_pFramework->GetPlayerDC(), m_pFramework->GetPlayer(2)->x - m_pFramework->p1.right / 2, m_pFramework->GetPlayer(2)->y - m_pFramework->p2.bottom / 2, SRCCOPY);
 	
@@ -896,6 +1083,7 @@ void CIngameScene::Render(HDC hdc)
 	
 	for (int i = 0; i < nObjects; ++i)
 		ppObjects[i]->Render(*m_pFramework->GetPlayerDC());
+
 }
 
 
