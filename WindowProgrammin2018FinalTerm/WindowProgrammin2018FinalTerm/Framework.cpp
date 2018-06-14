@@ -154,7 +154,7 @@ void CFramework::BuildScene()
 	arrScene[CScene::SceneTag::Main_Lobby] = new CMainScene();
 	arrScene[CScene::SceneTag::Select_Char] = new Scene_Charsel();
 	arrScene[CScene::SceneTag::Ingame] = new CIngameScene(CScene::SceneTag::Ingame,this);
-	arrScene[CScene::SceneTag::Ingame]->OnCreate();
+	arrScene[CScene::SceneTag::Select_Char]->OnCreate();
 }
 
 void CFramework::BuildPlayer()
