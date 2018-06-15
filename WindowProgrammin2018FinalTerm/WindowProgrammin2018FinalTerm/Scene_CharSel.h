@@ -13,6 +13,8 @@ public:
 	void Render(HDC hdc) override;				// FrameAdvanced
 	
 												// m_pCurrScene->Render(m_hdc);
+	void KeyState();
+
 
 private:
 	int windowX = ::GetSystemMetrics(SM_CXSCREEN);  //모니터 x길이
@@ -31,10 +33,19 @@ private:
 
 	CImage I_list;
 
+	CImage num[10];
+
 	//선택된 캐릭터입니다.
 	int choice1=1,choice2=1;
 	//레디가 되었는지 체크합니다.
 	bool ready1 = false, ready2 = false;
 
+	int timer;
+	int count;
+
+	bool Finish = false;
+
+	bool P2_L, P2_R;
+	WCHAR LoadText[100];
 
 };
