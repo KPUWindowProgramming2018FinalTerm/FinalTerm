@@ -34,6 +34,9 @@ void Scene_Charsel::OnDestroy()
 
 	I_list.Destroy();
 
+	I_Select_L.Destroy();
+	I_Select_R.Destroy();
+
 	for (int i = 0; i < 10; i++) {
 		num[i].Destroy();
 	}
@@ -57,12 +60,15 @@ bool Scene_Charsel::OnCreate()
 	I_Ready.Load(L"Graphic\\UI\\CharSel\\READY.png");
 
 	I_list.Load(L"Graphic\\UI\\CharSel\\List.png");
-	
+
+	I_Select_L.Load(L"Graphic\\UI\\CharSel\\L.png");
+	I_Select_R.Load(L"Graphic\\UI\\CharSel\\R.png");
+
 	for (int i = 0; i < 10; i++) {
 		wsprintf(LoadText, L"Graphic\\UI\\CharSel\\NUM\\%d.png", i);
 		num[i].Load(LoadText);
 	}
-	
+
 
 	//타이머 초기화
 	timer = 60;
@@ -94,9 +100,9 @@ bool Scene_Charsel::OnCreate()
 		R_NUM2.right = 200;
 
 		R_LIST.top = 500;
-		R_LIST.left = 649;
-		R_LIST.right = 621;
-		R_LIST.bottom = 567;
+		R_LIST.left = 670;
+		R_LIST.right = 579;
+		R_LIST.bottom = 544;
 
 		//캐릭터 L
 		{
@@ -153,6 +159,28 @@ bool Scene_Charsel::OnCreate()
 			R_READY_R.bottom = 205;
 			R_READY_R.right = 633;
 		}
+
+		{
+			R_SELECT[0].top = 471;
+			R_SELECT[0].left = 670;
+			R_SELECT[0].right = 139;
+			R_SELECT[0].bottom = 596;
+
+			R_SELECT[1].top = 471;
+			R_SELECT[1].left = 820;
+			R_SELECT[1].right = 139;
+			R_SELECT[1].bottom = 596;
+
+			R_SELECT[2].top = 471;
+			R_SELECT[2].left = 970;
+			R_SELECT[2].right = 139;
+			R_SELECT[2].bottom = 596;
+
+			R_SELECT[3].top = 471;
+			R_SELECT[3].left = 1120;
+			R_SELECT[3].right = 139;
+			R_SELECT[3].bottom = 596;
+		}
 	}
 
 
@@ -164,14 +192,14 @@ bool Scene_Charsel::OnCreate()
 
 void Scene_Charsel::BuildObjects()
 {
-	
+
 }
 
 
 
 //키 상태를 입력받음.
 void Scene_Charsel::KeyState() {
-	
+
 	//P1 레디
 	if (GetAsyncKeyState(0x41) & 0x8000) {
 		ready1 = true;
@@ -224,7 +252,7 @@ void Scene_Charsel::KeyState() {
 			P1_R = false;
 		}
 	}
-	
+
 
 	//P2 레디
 	if (GetAsyncKeyState(VK_NUMPAD1) & 0x8000) {
@@ -249,7 +277,7 @@ void Scene_Charsel::KeyState() {
 				}
 			}
 			P2_L = true;
-			
+
 		}
 		else {
 			P2_L = false;
@@ -280,7 +308,7 @@ void Scene_Charsel::KeyState() {
 			P2_R = false;
 		}
 	}
-	
+
 }
 
 // 1/60으로 업데이트됨
@@ -317,9 +345,9 @@ void Scene_Charsel::Update(float fTimeElapsed)
 				choice2 = rand() % 4;
 			m_pFramework->ChangeScene(CScene::SceneTag::Ingame);
 			m_pFramework->curSceneCreate();
-			m_pFramework->BuildPlayer(choice1,choice2);
+			m_pFramework->BuildPlayer(choice1, choice2);
 			Scene_Charsel::OnDestroy();
-			
+
 		}
 
 
@@ -337,11 +365,12 @@ void Scene_Charsel::Render(HDC hdc)
 	//유저 선택
 	//준비
 
-
 	I_BG.Draw(hdc, 0, 0, windowX, windowY);
 
 	//이미지 크기가 다 다르니깐 그냥 스위치 케이스 하자...
 	//왼쪽 이미지
+
+
 	switch (choice1) {
 	case 1:
 		I_charL[0].Draw(hdc, CalcImage(R_CHAR_L[0]));
@@ -357,7 +386,9 @@ void Scene_Charsel::Render(HDC hdc)
 		break;
 	}
 
+
 	//오른쪽 이미지
+
 	switch (choice2)
 	{
 	case 1:
@@ -373,21 +404,25 @@ void Scene_Charsel::Render(HDC hdc)
 		I_charR[3].Draw(hdc, CalcImage(R_CHAR_R[3]));
 		break;
 	}
-	
 
 
-	
+
 	I_list.Draw(hdc, CalcImage(R_LIST));
+
+	I_Select_L.Draw(hdc, CalcImage(R_SELECT[choice1 - 1]));
+	I_Select_R.Draw(hdc, CalcImage(R_SELECT[choice2 - 1]));
 
 	//만약 레디 했다면
 	if (ready1) {
-		I_Ready.Draw(hdc,CalcImage(R_READY_L));
+		I_Ready.Draw(hdc, CalcImage(R_READY_L));
 	}
 	if (ready2) {
 		I_Ready.Draw(hdc, CalcImage(R_READY_R));
 	}
-	
-	num[timer / 10].Draw(hdc, CalcImage(R_NUM1)); 
+
+
+
+	num[timer / 10].Draw(hdc, CalcImage(R_NUM1));
 	num[timer % 10].Draw(hdc, CalcImage(R_NUM2));
 
 
@@ -403,17 +438,17 @@ RECT Scene_Charsel::CalcImage(RECT input) {
 	//===========================================
 
 	RECT calc;
-	
+
 	float X = 1920.0, Y = 1080.0;
 
 	//1080일때 기준으로 개발하고, 윈도우의 크기로 나눠서 위치를 맞춘다.
-	calc.top = input.top*(windowY/Y);
+	calc.top = input.top*(windowY / Y);
 	//1920일때 기준으로 개발하고, 윈도우의 크기로 나눠서 위치를 정합시다.
-	calc.left = input.left*(windowX/X);	
+	calc.left = input.left*(windowX / X);
 
 	//가로와 세로중 어떤 비율이 더 작은지 정하고 더 작은 비율로 정하여 비율 유지하여 그림 크기를 정한다.
 	//세로가 더 크므로 가로 기준으로 맞춘다.
-	if ((windowY/Y) >= (windowX/X)) {
+	if ((windowY / Y) >= (windowX / X)) {
 		calc.bottom = calc.top + input.bottom * (windowX / X);
 		calc.right = calc.left + input.right * (windowX / X);
 	}
@@ -422,8 +457,8 @@ RECT Scene_Charsel::CalcImage(RECT input) {
 		calc.bottom = calc.top + input.bottom*(windowY / Y);
 		calc.right = calc.left + input.right*(windowY / Y);
 	}
-	
-	printf("top : %d, bottom : %d, left : %d, right : %d\n",calc.top, calc.bottom, calc.left, calc.right);
+
+	printf("top : %d, bottom : %d, left : %d, right : %d\n", calc.top, calc.bottom, calc.left, calc.right);
 	//계산된 결과를 리턴한다.
 	return calc;
 }
