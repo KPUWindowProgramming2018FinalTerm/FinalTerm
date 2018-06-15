@@ -92,6 +92,12 @@ bool Scene_Charsel::OnCreate()
 		R_NUM2.left = 960;
 		R_NUM2.bottom = 200;
 		R_NUM2.right = 200;
+
+		R_LIST.top = 500;
+		R_LIST.left = 649;
+		R_LIST.right = 621;
+		R_LIST.bottom = 567;
+
 		//캐릭터 L
 		{
 			R_CHAR_L[0].top = 0;
@@ -113,6 +119,11 @@ bool Scene_Charsel::OnCreate()
 			R_CHAR_L[3].left = 0;
 			R_CHAR_L[3].bottom = 1075;
 			R_CHAR_L[3].right = 603;
+
+			R_READY_L.top = 800;
+			R_READY_L.left = 50;
+			R_READY_L.bottom = 205;
+			R_READY_L.right = 633;
 		}
 
 		//캐릭터 R
@@ -136,6 +147,11 @@ bool Scene_Charsel::OnCreate()
 			R_CHAR_R[3].left = 1329;
 			R_CHAR_R[3].bottom = 1080;
 			R_CHAR_R[3].right = 591;
+
+			R_READY_R.top = 800;
+			R_READY_R.left = 1250;
+			R_READY_R.bottom = 205;
+			R_READY_R.right = 633;
 		}
 	}
 
@@ -339,16 +355,16 @@ void Scene_Charsel::Render(HDC hdc)
 	
 
 
-	//
-	//I_list.Draw(hdc, 0,0, windowX, windowY);
+	
+	I_list.Draw(hdc, CalcImage(R_LIST));
 
-	////만약 레디 했다면
-	//if (ready1) {
-	//	I_Ready.Draw(hdc, 50, 800, 633, 205);
-	//}
-	//if (ready2) {
-	//	I_Ready.Draw(hdc, 1250, 800, 633, 205);
-	//}
+	//만약 레디 했다면
+	if (ready1) {
+		I_Ready.Draw(hdc,CalcImage(R_READY_L));
+	}
+	if (ready2) {
+		I_Ready.Draw(hdc, CalcImage(R_READY_R));
+	}
 	
 	num[timer / 10].Draw(hdc, CalcImage(R_NUM1)); 
 	num[timer % 10].Draw(hdc, CalcImage(R_NUM2));

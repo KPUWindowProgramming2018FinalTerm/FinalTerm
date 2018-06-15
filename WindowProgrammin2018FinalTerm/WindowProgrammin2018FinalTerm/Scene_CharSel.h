@@ -55,7 +55,8 @@ private:
 	RECT R_NUM1, R_NUM2;
 	RECT R_CHAR_L[4], R_CHAR_R[4];
 	RECT R_SELECT_L[4], R_SELECT_R[4];
-
+	RECT R_LIST;
+	RECT R_READY_L, R_READY_R;
 
 
 };
