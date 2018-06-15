@@ -78,6 +78,8 @@ bool Scene_Charsel::OnCreate()
 
 	//이미지 크기와 관련하여 작성합니다.
 	//이미지 크기가 변경될 시 재작성이 필요합니다.
+	//모든 이미지 크기는 CalcImage()를 통해 재정의됨
+	//bottom과 Right 는 크기를 넣으면 됩니다.
 	{
 		//10단위 이미지
 		R_NUM1.top = 50;
@@ -90,9 +92,51 @@ bool Scene_Charsel::OnCreate()
 		R_NUM2.left = 960;
 		R_NUM2.bottom = 200;
 		R_NUM2.right = 200;
+		//캐릭터 L
+		{
+			R_CHAR_L[0].top = 0;
+			R_CHAR_L[0].left = 0;
+			R_CHAR_L[0].bottom = 1075;
+			R_CHAR_L[0].right = 928;
 
+			R_CHAR_L[1].top = 25;
+			R_CHAR_L[1].left = 100;
+			R_CHAR_L[1].bottom = 1049;
+			R_CHAR_L[1].right = 596;
 
+			R_CHAR_L[2].top = 2;
+			R_CHAR_L[2].left = 0;
+			R_CHAR_L[2].bottom = 1078;
+			R_CHAR_L[2].right = 669;
 
+			R_CHAR_L[3].top = 5;
+			R_CHAR_L[3].left = 0;
+			R_CHAR_L[3].bottom = 1075;
+			R_CHAR_L[3].right = 603;
+		}
+
+		//캐릭터 R
+		{
+			R_CHAR_R[0].top = 5;
+			R_CHAR_R[0].left = 1118;
+			R_CHAR_R[0].bottom = 1075;
+			R_CHAR_R[0].right = 802;
+
+			R_CHAR_R[1].top = 10;
+			R_CHAR_R[1].left = 1224;
+			R_CHAR_R[1].bottom = 1070;
+			R_CHAR_R[1].right = 596;
+
+			R_CHAR_R[2].top = 0;
+			R_CHAR_R[2].left = 1251;
+			R_CHAR_R[2].bottom = 1080;
+			R_CHAR_R[2].right = 669;
+
+			R_CHAR_R[3].top = 0;
+			R_CHAR_R[3].left = 1329;
+			R_CHAR_R[3].bottom = 1080;
+			R_CHAR_R[3].right = 591;
+		}
 	}
 
 
@@ -259,40 +303,40 @@ void Scene_Charsel::Render(HDC hdc)
 
 	I_BG.Draw(hdc, 0, 0, windowX, windowY);
 
-	////이미지 크기가 다 다르니깐 그냥 스위치 케이스 하자...
-	////왼쪽 이미지
-	//switch (choice1) {
-	//case 1:
-	//	I_charL[0].Draw(hdc, 0, 0, windowX, windowY);
-	//	break;
-	//case 2:
-	//	I_charL[1].Draw(hdc, 0, 15, windowX, windowY);
-	//	break;
-	//case 3:
-	//	I_charL[2].Draw(hdc, 0, 0, windowX, windowY);
-	//	break;
-	//case 4: //랜덤일때야
-	//	I_charL[3].Draw(hdc, 0, 0, windowX, windowY);
-	//	break;
-	//}
+	//이미지 크기가 다 다르니깐 그냥 스위치 케이스 하자...
+	//왼쪽 이미지
+	switch (choice1) {
+	case 1:
+		I_charL[0].Draw(hdc, CalcImage(R_CHAR_L[0]));
+		break;
+	case 2:
+		I_charL[1].Draw(hdc, CalcImage(R_CHAR_L[1]));
+		break;
+	case 3:
+		I_charL[2].Draw(hdc, CalcImage(R_CHAR_L[2]));
+		break;
+	case 4: //랜덤일때야
+		I_charL[3].Draw(hdc, CalcImage(R_CHAR_L[3]));
+		break;
+	}
 
-	////오른쪽 이미지
-	//switch (choice2)
-	//{
-	//case 1:
-	//	I_charR[0].Draw(hdc, 0, 0, windowX, windowY);
-	//	break;
-	//case 2:
-	//	I_charR[1].Draw(hdc, 0, 0, windowX, windowY);
-	//	break;
-	//case 3:
-	//	I_charR[2].Draw(hdc, 0, 0, windowX, windowY);
-	//	break;
-	//case 4:
-	//	I_charR[3].Draw(hdc, 0, 0, windowX, windowY);
-	//	break;
-	//}
-	//
+	//오른쪽 이미지
+	switch (choice2)
+	{
+	case 1:
+		I_charR[0].Draw(hdc, CalcImage(R_CHAR_R[0]));
+		break;
+	case 2:
+		I_charR[1].Draw(hdc, CalcImage(R_CHAR_R[1]));
+		break;
+	case 3:
+		I_charR[2].Draw(hdc, CalcImage(R_CHAR_R[2]));
+		break;
+	case 4:
+		I_charR[3].Draw(hdc, CalcImage(R_CHAR_R[3]));
+		break;
+	}
+	
 
 
 	//
@@ -322,24 +366,27 @@ RECT Scene_Charsel::CalcImage(RECT input) {
 	//===========================================
 
 	RECT calc;
+	
+	float X = 1920.0, Y = 1080.0;
 
 	//1080일때 기준으로 개발하고, 윈도우의 크기로 나눠서 위치를 맞춘다.
-	calc.top = input.top*(1080/windowY);
-
+	calc.top = input.top*(windowY/Y);
 	//1920일때 기준으로 개발하고, 윈도우의 크기로 나눠서 위치를 정합시다.
-	calc.left = input.left*(1920 / windowX);
+	calc.left = input.left*(windowX/X);	
 
 	//가로와 세로중 어떤 비율이 더 작은지 정하고 더 작은 비율로 정하여 비율 유지하여 그림 크기를 정한다.
 	//세로가 더 크므로 가로 기준으로 맞춘다.
-	if ((1080 / windowY) >= (1920 / windowX)) {
-		calc.bottom = input.bottom*(1920 / windowX);
-		calc.right=input.right*(1920 / windowX);
+	if ((windowY/Y) >= (windowX/X)) {
+		calc.bottom = calc.top + input.bottom * (windowX / X);
+		calc.right = calc.left + input.right * (windowX / X);
 	}
 	//가로가 더 크므로 세로 기준으로 맞춘다.
 	else {
-		calc.bottom = input.bottom*(1080 / windowY);
-		calc.right = input.right*(1080 / windowY);
+		calc.bottom = calc.top + input.bottom*(windowY / Y);
+		calc.right = calc.left + input.right*(windowY / Y);
 	}
+	
+	printf("top : %d, bottom : %d, left : %d, right : %d\n",calc.top, calc.bottom, calc.left, calc.right);
 	//계산된 결과를 리턴한다.
 	return calc;
 }
