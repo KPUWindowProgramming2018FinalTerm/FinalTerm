@@ -13,6 +13,10 @@ public:
 	void Update(float fTimeElapsed) override;	// m_pCurrScene->Update();
 												// m_pCurrScene->Render(m_hdc);
 private:
-	CObject** ppObjects;
-	int nObjects;
+	CImage MainTitle;
+	CImage Manual[3];
+
+	bool CheckKey;
+
+
 };

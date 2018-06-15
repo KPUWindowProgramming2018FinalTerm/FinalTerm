@@ -48,7 +48,9 @@ private:
 
 	bool Finish = false;
 
+	//자동으로 넘어가는 것을 방지하기 위한 변수
 	bool P2_L, P2_R;
+	bool P1_L, P1_R;
 	WCHAR LoadText[100];
 
 	//내부 UI 위치값입니다. 1920 1080 기준으로 작성하였습니다.

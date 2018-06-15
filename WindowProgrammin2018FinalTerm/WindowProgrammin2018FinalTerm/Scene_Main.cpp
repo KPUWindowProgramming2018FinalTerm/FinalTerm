@@ -14,26 +14,29 @@ CMainScene::~CMainScene()
 
 bool CMainScene::OnCreate()
 {
+	CheckKey = false;
+
+	MainTitle.Load(L"Graphic\\UI\\MAINTITLE.png");
+
+
 	return false;
 }
 
 void CMainScene::BuildObjects()
 {
-	/*CObject** ppObjects;
-	int nObjects; 여기다 값넣기*/
+
 
 }
 
 void CMainScene::Render(HDC hdc)
 {
 
-	for (int i = 0; i < nObjects; ++i)
-		ppObjects[i]->Render(hdc);
+	
 }
 
 void CMainScene::Update(float fTimeElapsed)
 {
 
-	for (int i = 0; i < nObjects; ++i)
-	ppObjects[i]->Update(fTimeElapsed);
+
+
 }

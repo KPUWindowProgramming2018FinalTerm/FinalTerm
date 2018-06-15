@@ -179,37 +179,49 @@ void Scene_Charsel::KeyState() {
 	if (!ready1) {
 		// f
 		if (GetAsyncKeyState(0x46) & 0x8000) {
-			switch (choice1) {
-			case 1:
-				choice1 = 4;
-				break;
-			case 2:
-				choice1 = 1;
-				break;
-			case 3:
-				choice1 = 2;
-				break;
-			case 4:
-				choice1 = 3;
-				break;
+			if (!P1_L) {
+				switch (choice1) {
+				case 1:
+					choice1 = 4;
+					break;
+				case 2:
+					choice1 = 1;
+					break;
+				case 3:
+					choice1 = 2;
+					break;
+				case 4:
+					choice1 = 3;
+					break;
+				}
 			}
+			P1_L = true;
+		}
+		else {
+			P1_L = false;
 		}
 		// h
 		if (GetAsyncKeyState(0x48) & 0x8000) {
-			switch (choice1) {
-			case 1:
-				choice1 = 2;
-				break;
-			case 2:
-				choice1 = 3;
-				break;
-			case 3:
-				choice1 = 4;
-				break;
-			case 4:
-				choice1 = 1;
-				break;
+			if (!P1_R) {
+				switch (choice1) {
+				case 1:
+					choice1 = 2;
+					break;
+				case 2:
+					choice1 = 3;
+					break;
+				case 3:
+					choice1 = 4;
+					break;
+				case 4:
+					choice1 = 1;
+					break;
+				}
 			}
+			P1_R = true;
+		}
+		else {
+			P1_R = false;
 		}
 	}
 	
@@ -219,22 +231,25 @@ void Scene_Charsel::KeyState() {
 		ready2 = true;
 	}
 	if (!ready2) {
-		if (GetAsyncKeyState(VK_LEFT) & 0x8000 && !P2_L) {
-			P2_L = true;
-			switch (choice2) {
-			case 1:
-				choice2 = 4;
-				break;
-			case 2:
-				choice2 = 1;
-				break;
-			case 3:
-				choice2 = 2;
-				break;
-			case 4:
-				choice2 = 3;
-				break;
+		if (GetAsyncKeyState(VK_LEFT) & 0x8000) {
+			if (!P2_L) {
+				switch (choice2) {
+				case 1:
+					choice2 = 4;
+					break;
+				case 2:
+					choice2 = 1;
+					break;
+				case 3:
+					choice2 = 2;
+					break;
+				case 4:
+					choice2 = 3;
+					break;
+				}
 			}
+			P2_L = true;
+			
 		}
 		else {
 			P2_L = false;
@@ -243,20 +258,26 @@ void Scene_Charsel::KeyState() {
 
 
 		if (GetAsyncKeyState(VK_RIGHT) & 0x8000) {
-			switch (choice2) {
-			case 1:
-				choice2 = 2;
-				break;
-			case 2:
-				choice2 = 3;
-				break;
-			case 3:
-				choice2 = 4;
-				break;
-			case 4:
-				choice2 = 1;
-				break;
+			if (!P2_R) {
+				switch (choice2) {
+				case 1:
+					choice2 = 2;
+					break;
+				case 2:
+					choice2 = 3;
+					break;
+				case 3:
+					choice2 = 4;
+					break;
+				case 4:
+					choice2 = 1;
+					break;
+				}
 			}
+			P2_R = true;
+		}
+		else {
+			P2_R = false;
 		}
 	}
 	
