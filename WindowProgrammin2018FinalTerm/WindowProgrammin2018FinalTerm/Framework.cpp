@@ -51,7 +51,7 @@ bool CFramework::OnCreate(HINSTANCE hInstance, HWND hWnd, const RECT & rc) //생�
 	CreatebackBuffer();
 	
 	//플레이어 생성
-	BuildPlayer();
+	//BuildPlayer();
 	p1.top = 0; p1.left = 0; p1.right = m_rcClient.right / 2; p1.bottom = m_rcClient.bottom;
 	p2.top = 0; p2.left = m_rcClient.right / 2; p2.right = m_rcClient.right; p2.bottom = m_rcClient.bottom;
 	// 클래스와 윈도우 프로시저 연결
@@ -152,21 +152,21 @@ void CFramework::BuildScene()
 {
 	// arrScene[SceneTag::Title] = new TitleScene();	// 이런 방식으로 씬을 만들어라.
 	arrScene[CScene::SceneTag::Main_Lobby] = new CMainScene();
-	arrScene[CScene::SceneTag::Select_Char] = new Scene_Charsel();
+	arrScene[CScene::SceneTag::Select_Char] = new Scene_Charsel(CScene::SceneTag::Select_Char, this);
 	arrScene[CScene::SceneTag::Ingame] = new CIngameScene(CScene::SceneTag::Ingame,this);
 	arrScene[CScene::SceneTag::Select_Char]->OnCreate();
 }
 
-void CFramework::BuildPlayer()
+void CFramework::BuildPlayer(int p1,int p2)
 {
 	while (player1 == NULL)
 		player1 = new CObject_Player();
 	while (player2 == NULL)
 		player2 = new CObject_Player();
 	//printf("%d\n", player1->x);
-	player1->OnCreate(3);
+	player1->OnCreate(p1);
 	//printf("%d\n", player1->x);
-	player2->OnCreate(2);
+	player2->OnCreate(p2);
 }
 
 void CFramework::ReleaseScene() // 씬 완전삭제
@@ -368,5 +368,5 @@ void CFramework::curSceneCreate()
 void CFramework::ChangeScene(CScene::SceneTag tag)
 {
 	m_pCurrScene = arrScene[tag];
-	//m_pCurrScene->OnCreate();
+	m_pCurrScene->OnCreate();
 }

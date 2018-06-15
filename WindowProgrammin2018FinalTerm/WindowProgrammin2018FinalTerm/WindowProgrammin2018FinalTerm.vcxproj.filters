@@ -45,12 +45,6 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="o_Ingame.h">
-      <Filter>헤더 파일\Other\Obsolete</Filter>
-    </ClInclude>
-    <ClInclude Include="o_USERINTERFACE.h">
-      <Filter>헤더 파일\Other\Obsolete</Filter>
-    </ClInclude>
     <ClInclude Include="WindowProgrammin2018FinalTerm.h">
       <Filter>헤더 파일\Frame</Filter>
     </ClInclude>
@@ -95,15 +89,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="o_Ingame.cpp">
-      <Filter>소스 파일\Obsolete</Filter>
-    </ClCompile>
-    <ClCompile Include="o_main.cpp">
-      <Filter>소스 파일\Obsolete</Filter>
-    </ClCompile>
-    <ClCompile Include="o_USERINTERFACE.cpp">
-      <Filter>소스 파일\Obsolete</Filter>
-    </ClCompile>
     <ClCompile Include="stdafx.cpp">
       <Filter>소스 파일\Frame</Filter>
     </ClCompile>

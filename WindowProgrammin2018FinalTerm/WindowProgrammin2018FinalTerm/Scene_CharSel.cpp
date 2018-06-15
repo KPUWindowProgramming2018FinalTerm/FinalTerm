@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Scene_CharSel.h"
+#include "Framework.h"
 
 Scene_Charsel::Scene_Charsel()
 {
@@ -9,6 +10,33 @@ Scene_Charsel::Scene_Charsel()
 
 Scene_Charsel::~Scene_Charsel()
 {
+}
+
+Scene_Charsel::Scene_Charsel(SceneTag tag, CFramework * pFramework) : CScene(tag, pFramework) //프레임워크 포인터 활성화
+{
+
+}
+
+void Scene_Charsel::OnDestroy()
+{
+	I_BG.Destroy();
+	I_charL[0].Destroy();
+	I_charL[1].Destroy();
+	I_charL[2].Destroy();
+	I_charL[3].Destroy();
+
+	I_charR[0].Destroy();
+	I_charR[1].Destroy();
+	I_charR[2].Destroy();
+	I_charR[3].Destroy();
+
+	I_Ready.Destroy();
+
+	I_list.Destroy();
+
+	for (int i = 0; i < 10; i++) {
+		num[i].Destroy();
+	}
 }
 
 //생성될때 뭔가 하려나 부다
@@ -43,6 +71,8 @@ bool Scene_Charsel::OnCreate()
 	P2_L = false;
 	P2_R = false;
 
+	choice1 = 1;
+	choice2 = 1;
 
 	Finish = false;
 
@@ -52,9 +82,6 @@ bool Scene_Charsel::OnCreate()
 void Scene_Charsel::BuildObjects()
 {
 	
-
-
-
 }
 
 
@@ -176,8 +203,18 @@ void Scene_Charsel::Update(float fTimeElapsed)
 		//둘다 참이면 피니쉬
 		if (ready1&&ready2) {
 			Finish = true;
-		}
 
+		}
+		if (Finish)
+		{
+			if (choice1 == 4)
+				choice1 = rand() % 4;
+			if (choice2 == 4)
+				choice2 = rand() % 4;
+			m_pFramework->ChangeScene(CScene::SceneTag::Ingame);
+			m_pFramework->BuildPlayer(choice1,choice2);
+			
+		}
 
 
 	}
@@ -193,6 +230,7 @@ void Scene_Charsel::Render(HDC hdc)
 	//타이머
 	//유저 선택
 	//준비
+
 
 	I_BG.Draw(hdc, 0, 0, windowX, windowY);
 

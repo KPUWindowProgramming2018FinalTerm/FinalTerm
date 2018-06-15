@@ -6,7 +6,9 @@ class Scene_Charsel : public CScene
 public:
 	Scene_Charsel();
 	~Scene_Charsel();
+	Scene_Charsel(SceneTag tag, CFramework * pFramework);
 
+	void OnDestroy();
 	bool OnCreate() override;
 	void BuildObjects() override;
 	void Update(float fTimeElapsed) override;	// m_pCurrScene->Update();
@@ -36,7 +38,7 @@ private:
 	CImage num[10];
 
 	//선택된 캐릭터입니다.
-	int choice1=1,choice2=1;
+	int choice1,choice2;
 	//레디가 되었는지 체크합니다.
 	bool ready1 = false, ready2 = false;
 
