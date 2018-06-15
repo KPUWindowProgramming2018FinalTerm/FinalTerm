@@ -16,6 +16,7 @@ public:
 	
 												// m_pCurrScene->Render(m_hdc);
 	void KeyState();
+	RECT CalcImage(RECT input);
 
 
 private:
@@ -49,5 +50,12 @@ private:
 
 	bool P2_L, P2_R;
 	WCHAR LoadText[100];
+
+	//내부 UI 위치값입니다. 1920 1080 기준으로 작성하였습니다.
+	RECT R_NUM1, R_NUM2;
+	//RECT R_CHAR_L[4], R_CHAR_R[4];
+	//RECT R_SELECT_L[4], R_SELECT_R[4];
+
+
 
 };

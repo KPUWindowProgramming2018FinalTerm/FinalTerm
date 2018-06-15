@@ -368,5 +368,5 @@ void CFramework::curSceneCreate()
 void CFramework::ChangeScene(CScene::SceneTag tag)
 {
 	m_pCurrScene = arrScene[tag];
-	m_pCurrScene->OnCreate();
+	//m_pCurrScene->OnCreate();
 }

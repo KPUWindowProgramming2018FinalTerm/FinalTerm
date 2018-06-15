@@ -76,6 +76,29 @@ bool Scene_Charsel::OnCreate()
 
 	Finish = false;
 
+	//이미지 크기와 관련하여 작성합니다.
+	//이미지 크기가 변경될 시 재작성이 필요합니다.
+	{
+		//10단위 이미지
+		R_NUM1.top = 50;
+		R_NUM1.left = 760;
+		R_NUM1.bottom = 200;
+		R_NUM1.right = 200;
+
+		//1단위 이미지
+		R_NUM2.top = 50;
+		R_NUM2.left = 960;
+		R_NUM2.bottom = 200;
+		R_NUM2.right = 200;
+
+
+
+	}
+
+
+
+
+
 	return false;
 }
 
@@ -212,7 +235,9 @@ void Scene_Charsel::Update(float fTimeElapsed)
 			if (choice2 == 4)
 				choice2 = rand() % 4;
 			m_pFramework->ChangeScene(CScene::SceneTag::Ingame);
+			m_pFramework->curSceneCreate();
 			m_pFramework->BuildPlayer(choice1,choice2);
+			Scene_Charsel::OnDestroy();
 			
 		}
 
@@ -234,57 +259,88 @@ void Scene_Charsel::Render(HDC hdc)
 
 	I_BG.Draw(hdc, 0, 0, windowX, windowY);
 
-	//이미지 크기가 다 다르니깐 그냥 스위치 케이스 하자...
-	//왼쪽 이미지
-	switch (choice1) {
-	case 1:
-		I_charL[0].Draw(hdc, 0, 0, windowX, windowY);
-		break;
-	case 2:
-		I_charL[1].Draw(hdc, 0, 15, windowX, windowY);
-		break;
-	case 3:
-		I_charL[2].Draw(hdc, 0, 0, windowX, windowY);
-		break;
-	case 4: //랜덤일때야
-		I_charL[3].Draw(hdc, 0, 0, windowX, windowY);
-		break;
-	}
+	////이미지 크기가 다 다르니깐 그냥 스위치 케이스 하자...
+	////왼쪽 이미지
+	//switch (choice1) {
+	//case 1:
+	//	I_charL[0].Draw(hdc, 0, 0, windowX, windowY);
+	//	break;
+	//case 2:
+	//	I_charL[1].Draw(hdc, 0, 15, windowX, windowY);
+	//	break;
+	//case 3:
+	//	I_charL[2].Draw(hdc, 0, 0, windowX, windowY);
+	//	break;
+	//case 4: //랜덤일때야
+	//	I_charL[3].Draw(hdc, 0, 0, windowX, windowY);
+	//	break;
+	//}
 
-	//오른쪽 이미지
-	switch (choice2)
-	{
-	case 1:
-		I_charR[0].Draw(hdc, 0, 0, windowX, windowY);
-		break;
-	case 2:
-		I_charR[1].Draw(hdc, 0, 0, windowX, windowY);
-		break;
-	case 3:
-		I_charR[2].Draw(hdc, 0, 0, windowX, windowY);
-		break;
-	case 4:
-		I_charR[3].Draw(hdc, 0, 0, windowX, windowY);
-		break;
-	}
+	////오른쪽 이미지
+	//switch (choice2)
+	//{
+	//case 1:
+	//	I_charR[0].Draw(hdc, 0, 0, windowX, windowY);
+	//	break;
+	//case 2:
+	//	I_charR[1].Draw(hdc, 0, 0, windowX, windowY);
+	//	break;
+	//case 3:
+	//	I_charR[2].Draw(hdc, 0, 0, windowX, windowY);
+	//	break;
+	//case 4:
+	//	I_charR[3].Draw(hdc, 0, 0, windowX, windowY);
+	//	break;
+	//}
+	//
+
+
+	//
+	//I_list.Draw(hdc, 0,0, windowX, windowY);
+
+	////만약 레디 했다면
+	//if (ready1) {
+	//	I_Ready.Draw(hdc, 50, 800, 633, 205);
+	//}
+	//if (ready2) {
+	//	I_Ready.Draw(hdc, 1250, 800, 633, 205);
+	//}
 	
-
-
-	
-	I_list.Draw(hdc, 0,0, windowX, windowY);
-
-	//만약 레디 했다면
-	if (ready1) {
-		I_Ready.Draw(hdc, 50, 800, 633, 205);
-	}
-	if (ready2) {
-		I_Ready.Draw(hdc, 1250, 800, 633, 205);
-	}
-	
-	num[timer / 10].Draw(hdc, windowX / 2 - 200, 10, 200, 200); 
-	num[timer % 10].Draw(hdc, windowX / 2 , 10, 200, 200);
+	num[timer / 10].Draw(hdc, CalcImage(R_NUM1)); 
+	num[timer % 10].Draw(hdc, CalcImage(R_NUM2));
 
 
 }
 
+
+//이미지의 크기를 계산합니다.
+RECT Scene_Charsel::CalcImage(RECT input) {
+	//=======================================
+	//        기능 안내
+	// top과 left는 화면 비율에 맞게 계산하여 정하고
+	// bottom과 right는 화면 크기에 맞게 계산하여 정한다.
+	//===========================================
+
+	RECT calc;
+
+	//1080일때 기준으로 개발하고, 윈도우의 크기로 나눠서 위치를 맞춘다.
+	calc.top = input.top*(1080/windowY);
+
+	//1920일때 기준으로 개발하고, 윈도우의 크기로 나눠서 위치를 정합시다.
+	calc.left = input.left*(1920 / windowX);
+
+	//가로와 세로중 어떤 비율이 더 작은지 정하고 더 작은 비율로 정하여 비율 유지하여 그림 크기를 정한다.
+	//세로가 더 크므로 가로 기준으로 맞춘다.
+	if ((1080 / windowY) >= (1920 / windowX)) {
+		calc.bottom = input.bottom*(1920 / windowX);
+		calc.right=input.right*(1920 / windowX);
+	}
+	//가로가 더 크므로 세로 기준으로 맞춘다.
+	else {
+		calc.bottom = input.bottom*(1080 / windowY);
+		calc.right = input.right*(1080 / windowY);
+	}
+	//계산된 결과를 리턴한다.
+	return calc;
+}
 
