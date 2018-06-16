@@ -1207,6 +1207,28 @@ void CIngameScene::Render(HDC hdc)
 		AngleRender(hdc);
 	}
 
+	for (int i = 0; i < 3; i++)
+	{
+		m_pFramework->GetPlayer(1)->Image.Skill_I[i].Draw(hdc, 30 + 80 * i, windowY-120,64,64);
+		m_pFramework->GetPlayer(2)->Image.Skill_I[i].Draw(hdc,windowX - 280 +( 30 + 80 * i), windowY - 120, 64, 64);
+	}
+	if (SkillCoolTime[0] > 0)
+	{
+		Rectangle(hdc, 30, windowY - 120, 30+SkillCoolTime[0]*4, windowY - 120 + 64);
+	}
+	if (m_pFramework->GetPlayer(1)->DashCoolTimer > 0)
+	{
+		Rectangle(hdc, 30 + 160, windowY - 120, 30 + 160 + (m_pFramework->GetPlayer(1)->DashCoolTimer / 10), windowY - 120 + 64);
+	}
+	if (SkillCoolTime[1] > 0)
+	{
+		Rectangle(hdc, windowX - 280 + 30 + 64 - SkillCoolTime[1]*4, windowY - 120, windowX - 280 + 30 + 64, windowY - 120 + 64);
+	}
+	if (m_pFramework->GetPlayer(2)->DashCoolTimer > 0)
+	{
+		Rectangle(hdc, windowX - 280 + 30 + 160 + 64 - (m_pFramework->GetPlayer(2)->DashCoolTimer / 10), windowY - 120, windowX - 280 + 30 + 160 + 64, windowY - 120 + 64);
+	}
+
 	C_IngameLine.Draw(hdc, 0, 0, windowX, windowY);
 	C_Numbers[TimerImage[0]].Draw(hdc, windowX / 2 - 100, windowY / 15, 80, 80);
 	C_Numbers[TimerImage[1]].Draw(hdc, windowX / 2 + 30, windowY / 15, 80, 80);

@@ -32,6 +32,11 @@ void CObject_Player::OnCreate(int characterNum)
 		wsprintf(LoadText, L"Graphic\\Char%d\\ATTACK_B\\%d.png", characterNum, i);
 		this->Image.Attack_B[i - 1].Load(LoadText);
 	}
+	for (int i = 1; i <= 3; i++)
+	{
+		wsprintf(LoadText, L"Graphic\\Char%d\\SKILL_I\\%d.png", characterNum, i);
+		this->Image.Skill_I[i - 1].Load(LoadText);
+	}
 	for (int i = 1; i <= 6; i++)
 	{
 		wsprintf(LoadText, L"Graphic\\Char%d\\WALK\\%d.png", characterNum, i);
