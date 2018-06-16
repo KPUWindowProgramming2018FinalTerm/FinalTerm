@@ -164,6 +164,10 @@ void CFramework::BuildPlayer(int p1,int p2)
 		player2 = new CObject_Player();
 	//printf("%d\n", player1->x);
 	player1->OnCreate(p1);
+	player1->x = 35 * 64;
+	player1->y = 15 * 64;
+	player2->x = 58 * 64;
+	player2->y = 15 * 64;
 	//printf("%d\n", player1->x);
 	player2->OnCreate(p2);
 }

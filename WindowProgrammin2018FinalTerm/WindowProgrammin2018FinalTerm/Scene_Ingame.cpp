@@ -44,18 +44,36 @@ bool CIngameScene::OnCreate()
 		this->C_Numbers[i].Load(LoadText);
 	}
 
+	char Inbuff[20000] = { 0 };
+	DWORD read_size = 20000;
+	DWORD c = 20000;
+
+	hFile = CreateFile(L"map.txt", GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, 0, 0);
+	memset(Inbuff, 0, 99 * sizeof(WCHAR));
+	ReadFile(hFile, Inbuff, c, &read_size, NULL); // hFile에서 size 만큼 읽어 InBuff에 저장
+	//Inbuff[c - 1] = '\0';
 	for (int i = 0; i < 100; i++)
 	{
 		for (int j = 0; j < 100; j++)
 		{
-			Tileindex[j][i] = 0;
-			if (j > 20 && j < 40)
-				Tileindex[j][i] = 1;
-			if (j > 15 && j < 17 && i % 3 == 0)
+			if (Inbuff[j + i * 100] >= 48 && Inbuff[j + i * 100] <= 50)
+				Tileindex[j][i] = Inbuff[j + i * 100] - 48;
+			switch (Tileindex[j][i])
+			{
+			case 0:
 				Tileindex[j][i] = 2;
+				break;
+			case 1:
+				Tileindex[j][i] = 0;
+				break;
+			case 2:
+				Tileindex[j][i] = 1;
+				break;
+			}
 		}
 	}
 
+	CloseHandle(hFile);
 	for (int i = 0; i < 100; i++)
 	{
 		for (int j = 0; j < 100; j++)
@@ -63,10 +81,12 @@ bool CIngameScene::OnCreate()
 			C_Tile[Tileindex[j][i]].BitBlt(*m_pFramework->GetTileDC(), 64 * j, 64 * i, 64, 64, 0, 0, SRCCOPY); //타일의 가로세로크기가 64바이트
 		}
 	}
-	RemainTime = 60;
+
+
+	RemainTime = 99;
 	TimeTick = 0;
-	TimerImage[0] = 6;
-	TimerImage[1] = 0;
+	TimerImage[0] = 9;
+	TimerImage[1] = 9;
 	SkillCoolTime[0] = 0;
 	SkillCoolTime[1] = 0;
 	BuildObjects();
@@ -78,7 +98,7 @@ bool CIngameScene::OnCreate()
 void CIngameScene::BuildObjects()
 {
 	nObjects = 0;
-	CoinObject = new OBJECT_Coin(100,100);
+	CoinObject = new OBJECT_Coin(rand()%6000 + 250, rand() % 6000 + 250);
 	/*CObject** ppObjects;
 	int nObjects; 여기다 값넣기*/
 
@@ -482,7 +502,7 @@ void CIngameScene::CharacterState()
 			if (Tileindex[m_pFramework->GetPlayer(2)->x / 64][(m_pFramework->GetPlayer(2)->y + 60) / 64] == 1)
 			{
 				if (m_pFramework->GetPlayer(2)->y > 50)
-					m_pFramework->GetPlayer(2)->y -= (20 - m_pFramework->GetPlayer(2)->iHaveCoin * 4);
+					m_pFramework->GetPlayer(2)->y -= (15 - m_pFramework->GetPlayer(2)->iHaveCoin * 4);
 				m_pFramework->GetPlayer(2)->WalkingTimerTick++;
 			}
 			else if (Tileindex[m_pFramework->GetPlayer(2)->x / 64][(m_pFramework->GetPlayer(2)->y + 60 - 20) / 64] == 2)
@@ -503,7 +523,7 @@ void CIngameScene::CharacterState()
 			if (Tileindex[m_pFramework->GetPlayer(2)->x / 64][(m_pFramework->GetPlayer(2)->y + 60) / 64] == 1)
 			{
 				if (m_pFramework->GetPlayer(2)->x > 50)
-					m_pFramework->GetPlayer(2)->x -= (20 - m_pFramework->GetPlayer(2)->iHaveCoin * 4);
+					m_pFramework->GetPlayer(2)->x -= (15 - m_pFramework->GetPlayer(2)->iHaveCoin * 4);
 				m_pFramework->GetPlayer(2)->WalkingTimerTick++;
 			}
 			else if (Tileindex[((m_pFramework->GetPlayer(2)->x) - 30) / 64][(m_pFramework->GetPlayer(2)->y + 60 - 10) / 64] == 2)
@@ -524,7 +544,7 @@ void CIngameScene::CharacterState()
 			if (Tileindex[m_pFramework->GetPlayer(2)->x / 64][(m_pFramework->GetPlayer(2)->y + 60) / 64] == 1)
 			{
 				if (m_pFramework->GetPlayer(2)->y < 6350)
-				m_pFramework->GetPlayer(2)->y += (20 - m_pFramework->GetPlayer(2)->iHaveCoin * 4);
+				m_pFramework->GetPlayer(2)->y += (15 - m_pFramework->GetPlayer(2)->iHaveCoin * 4);
 				m_pFramework->GetPlayer(2)->WalkingTimerTick++;
 			}
 			else if (Tileindex[m_pFramework->GetPlayer(2)->x / 64][(m_pFramework->GetPlayer(2)->y + 60 + 20) / 64] == 2)
@@ -545,7 +565,7 @@ void CIngameScene::CharacterState()
 			if (Tileindex[m_pFramework->GetPlayer(2)->x / 64][(m_pFramework->GetPlayer(2)->y + 60) / 64] == 1)
 			{
 				if (m_pFramework->GetPlayer(2)->x < 6350)
-				m_pFramework->GetPlayer(2)->x += (20 - m_pFramework->GetPlayer(2)->iHaveCoin * 4);
+				m_pFramework->GetPlayer(2)->x += (15 - m_pFramework->GetPlayer(2)->iHaveCoin * 4);
 				m_pFramework->GetPlayer(2)->WalkingTimerTick++;
 			}
 			else if (Tileindex[(m_pFramework->GetPlayer(2)->x + 30) / 64][(m_pFramework->GetPlayer(2)->y + 60) / 64] == 2)
@@ -687,7 +707,7 @@ void CIngameScene::CharacterState()
 			if (Tileindex[m_pFramework->GetPlayer(1)->x / 64][(m_pFramework->GetPlayer(1)->y + 60) / 64] == 1)
 			{
 				if (m_pFramework->GetPlayer(1)->y > 50)
-				m_pFramework->GetPlayer(1)->y -= (20 - m_pFramework->GetPlayer(1)->iHaveCoin * 4);
+				m_pFramework->GetPlayer(1)->y -= (15 - m_pFramework->GetPlayer(1)->iHaveCoin * 4);
 				m_pFramework->GetPlayer(1)->WalkingTimerTick++;
 			}
 			else if (Tileindex[m_pFramework->GetPlayer(1)->x / 64][(m_pFramework->GetPlayer(1)->y + 60 - 30) / 64] == 2)
@@ -707,7 +727,7 @@ void CIngameScene::CharacterState()
 			if (Tileindex[m_pFramework->GetPlayer(1)->x / 64][(m_pFramework->GetPlayer(1)->y + 60) / 64] == 1)
 			{
 				if (m_pFramework->GetPlayer(1)->x > 50)
-				m_pFramework->GetPlayer(1)->x -= (20 - m_pFramework->GetPlayer(1)->iHaveCoin * 4);
+				m_pFramework->GetPlayer(1)->x -= (15 - m_pFramework->GetPlayer(1)->iHaveCoin * 4);
 				m_pFramework->GetPlayer(1)->WalkingTimerTick++;
 			}
 			else if (Tileindex[(m_pFramework->GetPlayer(1)->x - 30) / 64][(m_pFramework->GetPlayer(1)->y + 60) / 64] == 2)
@@ -727,7 +747,7 @@ void CIngameScene::CharacterState()
 			if (Tileindex[m_pFramework->GetPlayer(1)->x / 64][(m_pFramework->GetPlayer(1)->y + 60) / 64] == 1)
 			{
 				if (m_pFramework->GetPlayer(1)->y < 6350)
-				m_pFramework->GetPlayer(1)->y += (20 - m_pFramework->GetPlayer(1)->iHaveCoin * 4);
+				m_pFramework->GetPlayer(1)->y += (15 - m_pFramework->GetPlayer(1)->iHaveCoin * 4);
 				m_pFramework->GetPlayer(1)->WalkingTimerTick++;
 			}
 			else if (Tileindex[m_pFramework->GetPlayer(1)->x / 64][(m_pFramework->GetPlayer(1)->y + 60 + 20) / 64] == 2)
@@ -747,7 +767,7 @@ void CIngameScene::CharacterState()
 			if (Tileindex[m_pFramework->GetPlayer(1)->x / 64][(m_pFramework->GetPlayer(1)->y + 60) / 64] == 1)
 			{
 				if (m_pFramework->GetPlayer(1)->x < 6350)
-				m_pFramework->GetPlayer(1)->x += (20 - m_pFramework->GetPlayer(1)->iHaveCoin * 4);
+				m_pFramework->GetPlayer(1)->x += (15 - m_pFramework->GetPlayer(1)->iHaveCoin * 4);
 				m_pFramework->GetPlayer(1)->WalkingTimerTick++;
 			}
 			else if (Tileindex[(m_pFramework->GetPlayer(1)->x + 30) / 64][(m_pFramework->GetPlayer(1)->y + 60) / 64] == 2)

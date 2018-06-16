@@ -22,8 +22,7 @@ void CObject_Player::OnCreate(int characterNum)
 	WCHAR LoadText[100];
 
 	this->charNum = characterNum;
-	x = characterNum * 400;
-	y = characterNum * 400;
+
 
 	for (int i = 1; i <= 4; i++)
 	{

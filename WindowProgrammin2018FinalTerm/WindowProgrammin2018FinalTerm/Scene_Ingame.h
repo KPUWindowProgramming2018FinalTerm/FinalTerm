@@ -33,6 +33,9 @@ private:
 	CImage WinC;
 	CImage LoseC;
 
+	HANDLE hFile;
+
+
 	int windowX = ::GetSystemMetrics(SM_CXSCREEN);  //모니터 x길이
 	int windowY = ::GetSystemMetrics(SM_CYSCREEN);  //모니터 y길이
 
