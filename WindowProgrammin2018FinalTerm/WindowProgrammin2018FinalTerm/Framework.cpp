@@ -78,7 +78,7 @@ bool CFramework::OnCreate(HINSTANCE hInstance, HWND hWnd, const RECT & rc) //생�
 
 
 	// 최초의 씬은 무엇인가?
-	ChangeScene(CScene::SceneTag::Select_Char);
+	ChangeScene(CScene::SceneTag::Main_Lobby);
 
 	return (m_hWnd != NULL);
 }
@@ -151,10 +151,10 @@ void CFramework::CreatebackBuffer() //backBuffer 초기화
 void CFramework::BuildScene()
 {
 	// arrScene[SceneTag::Title] = new TitleScene();	// 이런 방식으로 씬을 만들어라.
-	arrScene[CScene::SceneTag::Main_Lobby] = new CMainScene();
+	arrScene[CScene::SceneTag::Main_Lobby] = new CMainScene(CScene::SceneTag::Main_Lobby, this);
 	arrScene[CScene::SceneTag::Select_Char] = new Scene_Charsel(CScene::SceneTag::Select_Char, this);
 	arrScene[CScene::SceneTag::Ingame] = new CIngameScene(CScene::SceneTag::Ingame,this);
-	arrScene[CScene::SceneTag::Select_Char]->OnCreate();
+	arrScene[CScene::SceneTag::Main_Lobby]->OnCreate();
 }
 
 void CFramework::BuildPlayer(int p1,int p2)

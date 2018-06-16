@@ -6,7 +6,7 @@ class CMainScene : public CScene
 public:
 	CMainScene();
 	~CMainScene();
-
+	CMainScene(SceneTag tag, CFramework * pFramework);
 	void OnDestroy();
 	bool OnCreate() override;
 	void BuildObjects() override;

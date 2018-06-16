@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "Scene_Main.h"
-#include "Object.h"
+#include "Framework.h"
 
 CMainScene::CMainScene()
 {
@@ -11,6 +11,11 @@ CMainScene::CMainScene()
 CMainScene::~CMainScene()
 {
 }
+CMainScene::CMainScene(SceneTag tag, CFramework * pFramework) : CScene(tag, pFramework)
+{
+
+}
+
 
 void CMainScene::OnDestroy() {
 	MainTitle.Destroy();
@@ -25,7 +30,7 @@ bool CMainScene::OnCreate()
 	SceneNum = 0;
 	finish = false;
 
-	MainTitle.Load(L"Graphic\\UI\\MAINTITLE.png");
+	MainTitle.Load(L"Graphic\\UI\\MAINTITLE.jpg");
 	Manual[0].Load(L"Graphic\\UI\\manual1.png");
 	Manual[1].Load(L"Graphic\\UI\\manual2.png");
 
@@ -60,6 +65,13 @@ void CMainScene::Render(HDC hdc)
 void CMainScene::Update(float fTimeElapsed)
 {
 	KeyState();
+
+	if (finish)
+	{
+		m_pFramework->ChangeScene(CScene::SceneTag::Select_Char);
+		m_pFramework->curSceneCreate();
+		CMainScene::OnDestroy();
+	}
 }
 
 void CMainScene::KeyState() {
