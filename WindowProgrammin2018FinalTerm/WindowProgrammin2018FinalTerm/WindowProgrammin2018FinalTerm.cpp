@@ -195,6 +195,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	ShowWindow(hWnd, nCmdShow); // 윈도우 창을 보여준다. 이게 없으면 윈도우 창이 안 보이기 떄문에 활성화가 안되므로 아무것도 못한다. 종료 조차도!
 								// 확인 : WnbdProc의 default msg handler가 DefWindowProc
 								// 함수를 반환하는가?
+	ShowCursor(FALSE);
 	UpdateWindow(hWnd);
 
 	// 성공 반환

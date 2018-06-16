@@ -1122,51 +1122,51 @@ void CIngameScene::AngleRender(HDC hdc) // 아 안돼...
 	{
 		if (Angle > 135 && Angle <= 225) // p1가 왼쪽
 		{
-			if ((sin(rad) + 0.5) * m_pFramework->GetRect().right / 2 > m_pFramework->GetRect().bottom * 0.95)
-				anY = m_pFramework->GetRect().bottom * 0.95;
+			if ((sin(rad) + 0.5) * m_pFramework->GetRect().right / 2 > m_pFramework->GetRect().bottom * 0.93)
+				anY = m_pFramework->GetRect().bottom * 0.93;
 			else if ((sin(rad) + 0.5) * m_pFramework->GetRect().right / 2 < 0)
 				anY = 0;
 			else
 				anY= (sin(rad) + 0.5) * m_pFramework->GetRect().right / 2;
-			C_Angle[m_pFramework->GetPlayer(2)->charNum - 1].Draw(hdc,m_pFramework->GetRect().right / 2 - 30,anY,30,30);
+			C_Angle[m_pFramework->GetPlayer(2)->charNum - 1].Draw(hdc,m_pFramework->GetRect().right / 2 - 50,anY,50,50);
 			//
-			C_Angle[m_pFramework->GetPlayer(1)->charNum - 1].Draw(hdc, 10 + m_pFramework->GetRect().right / 2, m_pFramework->GetRect().bottom-30 -anY, 30, 30);
+			C_Angle[m_pFramework->GetPlayer(1)->charNum - 1].Draw(hdc, 10 + m_pFramework->GetRect().right / 2, m_pFramework->GetRect().bottom-50 -anY, 50, 50);
 		}
 		else if (Angle > 225 && Angle <= 315) // p1가 위쪽
 		{
-			if ((cos(rad) + 0.5) * m_pFramework->GetRect().right / 2 > m_pFramework->GetRect().right/2 * 0.95)
-				anX = m_pFramework->GetRect().right/2 * 0.95;
+			if ((cos(rad) + 0.5) * m_pFramework->GetRect().right / 2 > m_pFramework->GetRect().right/2 * 0.93)
+				anX = m_pFramework->GetRect().right/2 * 0.93;
 			else if ((cos(rad) + 0.5) * m_pFramework->GetRect().right / 2 < 0)
 				anX = 0;
 			else
 				anX = (cos(rad) + 0.5) * m_pFramework->GetRect().right / 2;
-			C_Angle[m_pFramework->GetPlayer(2)->charNum - 1].Draw(hdc,anX, m_pFramework->GetRect().bottom - 30, 30, 30);
+			C_Angle[m_pFramework->GetPlayer(2)->charNum - 1].Draw(hdc,anX, m_pFramework->GetRect().bottom - 55, 50, 50);
 			//Ellipse(hdc, m_pFramework->GetRect().right / 4 + distanceX / 2 - 10, m_pFramework->GetRect().bottom - 65, m_pFramework->GetRect().right / 4 + distanceX/2 + 10, m_pFramework->GetRect().bottom - 45);
-			C_Angle[m_pFramework->GetPlayer(1)->charNum - 1].Draw(hdc, -anX + m_pFramework->GetRect().right - 30, 20, 30, 30);
+			C_Angle[m_pFramework->GetPlayer(1)->charNum - 1].Draw(hdc, -anX + m_pFramework->GetRect().right - 50, 20, 50, 50);
 		}
 		else if (Angle > 45 && Angle <= 135) // p1가 아래쪽
 		{
-			if ((cos(rad) + 0.5) * m_pFramework->GetRect().right / 2 > m_pFramework->GetRect().right / 2 * 0.95)
-				anX = m_pFramework->GetRect().right / 2 * 0.95;
+			if ((cos(rad) + 0.5) * m_pFramework->GetRect().right / 2 > m_pFramework->GetRect().right / 2 * 0.93)
+				anX = m_pFramework->GetRect().right / 2 * 0.93;
 			else if ((cos(rad) + 0.5) * m_pFramework->GetRect().right / 2 < 0)
 				anX = 0;
 			else
 				anX = (cos(rad) + 0.5) * m_pFramework->GetRect().right / 2;
-			C_Angle[m_pFramework->GetPlayer(2)->charNum - 1].Draw(hdc,anX, 20,30, 30);
+			C_Angle[m_pFramework->GetPlayer(2)->charNum - 1].Draw(hdc,anX, 20,50, 50);
 			//Ellipse(hdc, m_pFramework->GetRect().right / 4 + distanceX / 2 - 10, 45, m_pFramework->GetRect().right / 4 + distanceX / 2 + 10, 65);
-			C_Angle[m_pFramework->GetPlayer(1)->charNum - 1].Draw(hdc, -anX + m_pFramework->GetRect().right - 30, m_pFramework->GetRect().bottom - 30, 30, 30);
+			C_Angle[m_pFramework->GetPlayer(1)->charNum - 1].Draw(hdc, -anX + m_pFramework->GetRect().right - 20, m_pFramework->GetRect().bottom - 50, 50, 50);
 		}
 		else								// p1가 오른쪽
 		{
-			if ((sin(rad) + 0.5) * m_pFramework->GetRect().right / 2 > m_pFramework->GetRect().bottom * 0.95)
-				anY = m_pFramework->GetRect().bottom * 0.95;
+			if ((sin(rad) + 0.5) * m_pFramework->GetRect().right / 2 > m_pFramework->GetRect().bottom * 0.93)
+				anY = m_pFramework->GetRect().bottom * 0.93;
 			else if ((sin(rad) + 0.5) * m_pFramework->GetRect().right / 2 < 0)
 				anY = 0;
 			else
 				anY = (sin(rad) + 0.5) * m_pFramework->GetRect().right / 2;
-			C_Angle[m_pFramework->GetPlayer(2)->charNum - 1].Draw(hdc, 10,anY, 30, 30);
+			C_Angle[m_pFramework->GetPlayer(2)->charNum - 1].Draw(hdc, 10,anY, 50, 50);
 			//Ellipse(hdc, 10, m_pFramework->GetRect().bottom / 2 + distanceY / 2 - 10, 30, m_pFramework->GetRect().bottom / 2 + distanceY / 2 + 10);
-			C_Angle[m_pFramework->GetPlayer(1)->charNum - 1].Draw(hdc, m_pFramework->GetRect().right / 2 + 30, m_pFramework->GetRect().bottom - 30 -anY, 30, 30);
+			C_Angle[m_pFramework->GetPlayer(1)->charNum - 1].Draw(hdc, m_pFramework->GetRect().right - 30, m_pFramework->GetRect().bottom - 50 -anY, 50, 50);
 		}
 	}
 }
@@ -1249,17 +1249,17 @@ void CIngameScene::Render(HDC hdc)
 		Rectangle(hdc, windowX - 280 + 30 + 160 + 64 - (m_pFramework->GetPlayer(2)->DashCoolTimer / 10), windowY - 120, windowX - 280 + 30 + 160 + 64, windowY - 120 + 64);
 	}
 
-	C_IngameLine.Draw(hdc, 0, 0, windowX, windowY);
-	C_Numbers[TimerImage[0]].Draw(hdc, windowX / 2 - 100, windowY / 15, 80, 80);
-	C_Numbers[TimerImage[1]].Draw(hdc, windowX / 2 + 30, windowY / 15, 80, 80);
+	C_IngameLine.Draw(hdc, 0, 0, m_pFramework->GetRect().right, m_pFramework->GetRect().bottom);
+	C_Numbers[TimerImage[0]].Draw(hdc, m_pFramework->GetRect().right / 2 - 90, m_pFramework->GetRect().bottom / 15, 80, 80);
+	C_Numbers[TimerImage[1]].Draw(hdc, m_pFramework->GetRect().right / 2 + 20, m_pFramework->GetRect().bottom / 15, 80, 80);
 
 	if (m_pFramework->GetPlayer(1)->iHaveCoin)
 	{
-		CoinObject->Image.Draw(hdc, windowX / 2 - 200, windowY / 15, 80, 80);
+		CoinObject->Image.Draw(hdc, m_pFramework->GetRect().right / 2 - 90 - 60, windowY / 15, 50, 50);
 	}
 	else if (m_pFramework->GetPlayer(2)->iHaveCoin)
 	{
-		CoinObject->Image.Draw(hdc, windowX / 2 + 140, windowY / 15, 80, 80);
+		CoinObject->Image.Draw(hdc, m_pFramework->GetRect().right / 2 + 110, windowY / 15, 50, 50);
 	}
 
 	for (int i = 0; i < nObjects; ++i)

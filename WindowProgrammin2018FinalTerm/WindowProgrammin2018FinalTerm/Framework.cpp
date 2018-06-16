@@ -48,7 +48,7 @@ bool CFramework::OnCreate(HINSTANCE hInstance, HWND hWnd, const RECT & rc) //생�
 	//
 	// 버퍼 생성
 	CreatebackBuffer();
-	
+
 	//플레이어 생성
 	//BuildPlayer();
 	p1.top = 0; p1.left = 0; p1.right = m_rcClient.right / 2; p1.bottom = m_rcClient.bottom;
@@ -152,11 +152,11 @@ void CFramework::BuildScene()
 	// arrScene[SceneTag::Title] = new TitleScene();	// 이런 방식으로 씬을 만들어라.
 	arrScene[CScene::SceneTag::Main_Lobby] = new CMainScene(CScene::SceneTag::Main_Lobby, this);
 	arrScene[CScene::SceneTag::Select_Char] = new Scene_Charsel(CScene::SceneTag::Select_Char, this);
-	arrScene[CScene::SceneTag::Ingame] = new CIngameScene(CScene::SceneTag::Ingame,this);
+	arrScene[CScene::SceneTag::Ingame] = new CIngameScene(CScene::SceneTag::Ingame, this);
 	arrScene[CScene::SceneTag::Main_Lobby]->OnCreate();
 }
 
-void CFramework::BuildPlayer(int p1,int p2)
+void CFramework::BuildPlayer(int p1, int p2)
 {
 	while (player1 == NULL)
 		player1 = new CObject_Player();
@@ -233,16 +233,18 @@ HRESULT CFramework::OnProcessingWindowMessage(HWND hWnd, UINT nMessageID, WPARAM
 		if (LOWORD(wParam) == WA_INACTIVE)
 		{
 			//비활성화 처리
+			inactive = true;
 		}
 		else
 		{
 			//활성화 처리
+			inactive = false;
 		}
 		break;
 	default:
 		return ::DefWindowProc(hWnd, nMessageID, wParam, lParam);
 	}
-//	return E_NOTIMPL;
+	//	return E_NOTIMPL;
 	return 0;
 }
 
@@ -281,7 +283,7 @@ void CFramework::OnDraw(HDC hDC)
 void CFramework::FrameAdvance()
 {
 	// FPS 제한
-	
+
 	//m_timeElapsed = chrono::system_clock::now() - m_current_time;
 	//{
 	//	if (m_timeElapsed.count() > MAX_FPS) // MAX_FPS가 0 이상이면 프로그램 즉시 종료?
@@ -296,27 +298,30 @@ void CFramework::FrameAdvance()
 
 	m_ticker->Tick(60.0f);
 	m_fps = 1.0 / m_ticker->GetTimeElapsed();
-	
-	Update(m_ticker->GetTimeElapsed()); // 그려야 될 것 업데이트(프레임단)
-	PreprocessingForDraw(); // 
-	// 백버퍼 연산이므로 OnDraw가 아니다. OnDraw 이전에 백버퍼에 그려주는 연산을 한다.
-	this->OnDraw(hdc); //Paint로 안 보내고 그냥 그리기
+
+	if (inactive == false)
+	{
+		Update(m_ticker->GetTimeElapsed()); // 그려야 될 것 업데이트(프레임단)
+		PreprocessingForDraw(); // 
+		// 백버퍼 연산이므로 OnDraw가 아니다. OnDraw 이전에 백버퍼에 그려주는 연산을 한다.
+		this->OnDraw(hdc); //Paint로 안 보내고 그냥 그리기
+	}
 	// ↓캡션에 글자를 뭘 넣을지 연산하는 캡션 스트링 연산
 	{
 		_itow_s(
-		m_fps+0.1f
-		, m_CaptionTitle + m_TitleLength
-		, TITLE_MX_LENGTH - m_TitleLength
-		, 10);
-	wcscat_s(
-		m_CaptionTitle + m_TitleLength
-		, TITLE_MX_LENGTH - m_TitleLength
-		, TEXT("FPS )"));
-	SetWindowText(m_hWnd, m_CaptionTitle);
+			m_fps + 0.1f
+			, m_CaptionTitle + m_TitleLength
+			, TITLE_MX_LENGTH - m_TitleLength
+			, 10);
+		wcscat_s(
+			m_CaptionTitle + m_TitleLength
+			, TITLE_MX_LENGTH - m_TitleLength
+			, TEXT("FPS )"));
+		SetWindowText(m_hWnd, m_CaptionTitle);
 	}
-	
 
-	::ReleaseDC(m_hWnd,hdc); // 그리고 지운다.
+
+	::ReleaseDC(m_hWnd, hdc); // 그리고 지운다.
 }
 
 LRESULT CFramework::WndProc(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam)
@@ -335,7 +340,7 @@ LRESULT CFramework::WndProc(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lP
 
 	case WM_MOUSEMOVE:
 		self->OnProcessingMouseMessage(hWnd, nMessageID, wParam, lParam);
-		
+
 		break;
 
 
@@ -343,14 +348,14 @@ LRESULT CFramework::WndProc(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lP
 	case WM_KEYUP:
 	case WM_CHAR:
 		self->OnProcessingKeyboardMessage(hWnd, nMessageID, wParam, lParam);
-		
+
 		break;
 
 	case WM_PAINT:
-		{
+	{
 		//WM_CHAR보다 우선순위가 낮아서 사용하지 않음.
-		}
-		break;
+	}
+	break;
 	case WM_DESTROY:
 		::SetUserDataPtr(hWnd, NULL);
 		::PostQuitMessage(0);
@@ -360,7 +365,7 @@ LRESULT CFramework::WndProc(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lP
 		return self->OnProcessingWindowMessage(hWnd, nMessageID, wParam, lParam);
 	}
 	return 0;
-//	return LRESULT();
+	//	return LRESULT();
 }
 
 void CFramework::curSceneCreate()

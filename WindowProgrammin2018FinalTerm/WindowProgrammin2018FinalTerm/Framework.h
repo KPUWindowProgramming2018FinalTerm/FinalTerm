@@ -40,6 +40,7 @@ private:
 	COLORREF	m_clrBackBuffer = 0x00000000;	// 백버퍼 색깔. 검정으로 초기화
 	HBRUSH		m_hbrBackground = NULL;			// 그리는 도구. 색칠할 떄 쓴다.
 
+	bool inactive = false;
 	CGameTimer*		m_ticker = NULL;
 	
 	CObject_Player* player1 = NULL , *player2 = NULL;
