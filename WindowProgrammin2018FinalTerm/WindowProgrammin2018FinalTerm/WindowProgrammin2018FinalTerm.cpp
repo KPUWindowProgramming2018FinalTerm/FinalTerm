@@ -136,7 +136,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
 	// 클라이언트 사이즈
 	RECT rc;
-	//GetClientRect(hWnd, &rc);
+	
 	rc.left = rc.top = 0;
 	rc.right = windowX;
 	rc.bottom = windowY;

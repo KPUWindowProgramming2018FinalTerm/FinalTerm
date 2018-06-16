@@ -19,12 +19,15 @@ public:
 
 	void KeyState();
 	void CharacterState();
+	void Nevigator();
+	void AngleRender(HDC hdc);
 private:
 	CObject** ppObjects = NULL;
 	OBJECT_Coin* CoinObject = NULL;
 	int nObjects;
 
 	CImage C_Tile[3];		//타일 이미지
+	CImage C_Angle[3];
 	CImage C_Numbers[10];
 	CImage C_IngameLine;
 	CImage WinC;
@@ -45,6 +48,14 @@ private:
 	bool p1key = false;				// p1 이동키라면
 	bool p2key = false;				// p2 이동키라면
 	
+	float distanceX;
+	float distanceY;
+	float TotalDistance;
+	float rad;
+	float Angle;
+	float anX;
+	float anY;
+
 	int SkillCoolTime[2];
 	int Tileindex[100][100] = { 0 };
 	int RemainTime;

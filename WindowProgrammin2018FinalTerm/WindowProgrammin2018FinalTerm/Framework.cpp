@@ -38,7 +38,7 @@ bool CFramework::OnCreate(HINSTANCE hInstance, HWND hWnd, const RECT & rc) //생�
 	srand((unsigned int)time(NULL));
 	m_hInstance = hInstance;
 	m_hWnd = hWnd;
-	m_rcClient = rc;
+	GetClientRect(hWnd, &m_rcClient);
 	// 클라이언트 좌표 초기화
 	m_rcClient.right -= m_rcClient.left;
 	m_rcClient.bottom -= m_rcClient.top;
@@ -46,7 +46,6 @@ bool CFramework::OnCreate(HINSTANCE hInstance, HWND hWnd, const RECT & rc) //생�
 	m_rcClient.top = 0;
 
 	//
-
 	// 버퍼 생성
 	CreatebackBuffer();
 	
